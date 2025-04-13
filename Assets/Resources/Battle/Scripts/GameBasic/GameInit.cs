@@ -144,7 +144,7 @@ public class GameInit : MonoBehaviour
         if (remainingEnemies.Count == 0)
         {
             // 进入下一阶段
-            NextStep();
+            TransitionManager.Instance.StartTransition(NextStep);
             TurnManager.Instance.RefreshPlayerTurn();
         }
     }
