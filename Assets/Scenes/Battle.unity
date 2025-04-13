@@ -442,6 +442,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1524605aaf096e545b9a202d2062c77e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentStepNum: 0
+  maxStepNum: 0
 --- !u!1 &83401175
 GameObject:
   m_ObjectHideFlags: 0
@@ -1314,6 +1316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a02317734854b74c92b93c6e96e1ac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  image: {fileID: 0}
   currentHealthPoints: 0
   provisionalAttack: 0
   provisionalDefense: 0

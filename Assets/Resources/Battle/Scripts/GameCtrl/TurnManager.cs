@@ -22,6 +22,18 @@ public class TurnManager : MonoBehaviour
         }
     }
 
+    public void RefreshPlayerTurn()
+    {
+        // 当所有敌方行动完毕，开启玩家回合
+        all = Chessman.All();
+        foreach (var chessman in all)
+        {
+            chessman.enemy?.EndOfRound();
+            chessman.hero?.EndOfRound();
+        }
+        isPlayerTurn = true;
+    }
+
     // 结束玩家回合
     public void EndPlayerTurn()
     {
@@ -35,6 +47,8 @@ public class TurnManager : MonoBehaviour
             isPlayerTurn = false;
             StartEnemyTurn();
         }
+            List<Chessman> remainingEnemies = Chessman.All(Camp.Enemy);
+            Debug.Log(remainingEnemies.Count);
     }
 
     private void StartEnemyTurn()
@@ -54,13 +68,7 @@ public class TurnManager : MonoBehaviour
             }
         }
         // 当所有敌方行动完毕，开启玩家回合
-        all = Chessman.All();
-        foreach (var chessman in all)
-        {
-            chessman.enemy?.EndOfRound();
-            chessman.hero?.EndOfRound();
-        }
-        isPlayerTurn = true;
+        RefreshPlayerTurn();
     }
     
 }

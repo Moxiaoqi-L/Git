@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -145,9 +146,9 @@ public class Chessman : MonoBehaviour
         }
     }
  
-    // 使这个棋子退场
     public void ExitFromBoard()
     {
+        GameInit.Instance.OnChessmanExitHandler();
         Destroy(gameObject);
     }
 }

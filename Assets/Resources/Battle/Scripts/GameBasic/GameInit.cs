@@ -1,31 +1,64 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelLoader : MonoBehaviour
+public class GameInit : MonoBehaviour
 {
+    // 单例
+    public static GameInit Instance { get; private set; }
     // 当前波次
     public int currentStepNum;
     // 最大波次
     public int maxStepNum;
-    private void Start()
+
+    private static TextAsset jsonFile;
+    private static LevelData levelData;
+    private static StepData stepData;
+    // 确保唯一
+    private void Awake()
     {
-        // 初始波次为 1
-        currentStepNum = 1;
-        LoadLevel();
+        // 检查实例是否已经存在
+        if (Instance == null)
+        {
+            // 如果不存在，则将当前实例赋值给 Instance
+            Instance = this;
+        }
+        else
+        {
+            // 如果已经存在，则销毁当前对象
+            Destroy(gameObject);
+        }
     }
 
-    private void LoadLevel()
+    private void OnDestroy()
     {
-        // 读取JSON文件
-        TextAsset jsonFile = Resources.Load<TextAsset>("Battle/BattleLevel/Course-1");
+    }
 
+    // 棋子退场事件处理方法
+    public void OnChessmanExitHandler()
+    {
+        StartCoroutine(Check());
+    }
+
+    private void Start() {
+        // 初始波次为 1
+        currentStepNum = 1;
+        // 读取JSON文件
+        jsonFile = Resources.Load<TextAsset>("Battle/BattleLevel/Course-1");
         // 解析JSON数据
-        LevelData levelData = JsonUtility.FromJson<LevelData>(jsonFile.text);
-        StepData stepData = levelData.steps;
+        levelData = JsonUtility.FromJson<LevelData>(jsonFile.text);
+        stepData = levelData.steps;
+        // 判断最大波次
         if (stepData.step4 == null) maxStepNum = 3;
         if (stepData.step3 == null) maxStepNum = 2;
         if (stepData.step2 == null) maxStepNum = 1;
+        LoadLevel();
+    }
+
+    public void LoadLevel()
+    {
         if (currentStepNum == 1 && currentStepNum <= maxStepNum)
         {
             foreach (var enemy in stepData.step1)
@@ -90,10 +123,36 @@ public class LevelLoader : MonoBehaviour
         // 设置头像图片
         enemyChessmanInstance.GetComponent<Image>().sprite = sprite;
     }
+
+    // 进入下一阶段的方法
+    public void NextStep()
+    {
+        // 处理进入下一阶段的逻辑
+        currentStepNum += 1;
+        LoadLevel();
+        Debug.Log("进入下一阶段");
+        // 可以在这里添加场景切换、数据更新等操作
+    }
+
+    private IEnumerator Check()
+    {
+        // 等待一帧，确保 Destroy 操作完成
+        yield return null;
+        // 检查是否还有其他敌人存活
+        List<Chessman> remainingEnemies = Chessman.All(Camp.Enemy);
+        Debug.Log(remainingEnemies.Count);
+        if (remainingEnemies.Count == 0)
+        {
+            // 进入下一阶段
+            NextStep();
+            TurnManager.Instance.RefreshPlayerTurn();
+        }
+    }
+
 }
 
 // 定义对应JSON结构的类
-[System.Serializable]
+[Serializable]
 public class LevelData
 {
     public string levelName;
@@ -101,7 +160,7 @@ public class LevelData
     public StepData steps;
 }
 
-[System.Serializable]
+[Serializable]
 public class StepData
 {
     public EnemyData[] step1;
@@ -110,7 +169,7 @@ public class StepData
     public EnemyData[] step4;
 }
 
-[System.Serializable]
+[Serializable]
 public class EnemyData
 {
     public string attributes;

@@ -99,6 +99,14 @@ public class Enemy : BasicCharacter
             currentHealthPoints = 0;
             Debug.Log(enemyAttributes.name + " 鼠掉了 ");
             chessman.ExitFromBoard();
+            // 检查是否还有其他敌人存活
+            if (Chessman.AllEnemies().Count == 0)
+            {
+                // 通知 GameInit 进入下一阶段
+                GameInit.Instance.NextStep();
+                Debug.Log("进入下一阶段");
+            }
+            
             return;
         }
         Debug.Log(enemyAttributes.name + " 受到伤害！ ");
