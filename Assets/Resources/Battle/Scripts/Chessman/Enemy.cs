@@ -15,17 +15,10 @@ public class Enemy : BasicCharacter
     }
 
     // 当对象启用时调用的方法，用于初始化和执行一些操作
-    private void Start() {
-        // 初始化 BUFF 管理器
-        buffManager = new BuffManager();
-        // 初始化技能列表
-        InitializeSkills();
-        // 获取棋子自身
-        chessman = GetComponent<Chessman>();
+    private new void Start() {
+        base.Start();
         // 初始化生命值
-        currentHealthPoints = enemyAttributes.maxHealthPoints;
-        // 默认使用简单攻击动画   
-        attackAnimation = new DefaulAttackAnimation();          
+        currentHealthPoints = enemyAttributes.maxHealthPoints;       
     }
 
     // 敌方的攻击方法，用于对敌人造成伤害，新增 selfAttack 参数用于控制是否自我攻击
@@ -109,6 +102,10 @@ public class Enemy : BasicCharacter
             return;
         }
         Debug.Log(enemyAttributes.name + " 受到伤害！ ");
+        // 展示伤害动画
+        ShowDamageNumber((int)actualDamage);
+        // 受伤震动
+        GetDamageShake();
     }
 
     // 增加英雄生命值的方法

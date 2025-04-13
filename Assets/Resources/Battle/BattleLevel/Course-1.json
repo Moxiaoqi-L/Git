@@ -1,38 +1,74 @@
 {
     "levelName" : "测试关卡-1",
     "level" : "Test-1",
-    "enemies" : [
-        {
-            "attributes" : "幽灵",
-            "avatarImage" : "ghost",
-            "locationX" : 1,
-            "locationY" : 3, 
-            "rank" : 0,
-            "level" : 1
-        },
-        {
-            "attributes" : "幽灵",
-            "avatarImage" : "ghost",
-            "locationX" : 2,
-            "locationY" : 4, 
-            "rank" : 0,
-            "level" : 1
-        },
-        {
-            "attributes" : "幽灵",
-            "avatarImage" : "ghost",
-            "locationX" : 2,
-            "locationY" : 5, 
-            "rank" : 0,
-            "level" : 1
-        },
-        {
-            "attributes" : "幽灵",
-            "avatarImage" : "ghost",
-            "locationX" : 4,
-            "locationY" : 5, 
-            "rank" : 0,
-            "level" : 1
-        }
-    ]
+    "steps" : {
+        "step1" : [
+            {
+                "attributes" : "幽灵",
+                "avatarImage" : "ghost",
+                "locationX" : 1,
+                "locationY" : 3, 
+                "rank" : 0,
+                "level" : 1
+            },
+            {
+                "attributes" : "幽灵",
+                "avatarImage" : "ghost",
+                "locationX" : 2,
+                "locationY" : 4, 
+                "rank" : 0,
+                "level" : 1
+            },
+            {
+                "attributes" : "幽灵",
+                "avatarImage" : "ghost",
+                "locationX" : 2,
+                "locationY" : 5, 
+                "rank" : 0,
+                "level" : 1
+            },
+            {
+                "attributes" : "幽灵",
+                "avatarImage" : "ghost",
+                "locationX" : 4,
+                "locationY" : 5, 
+                "rank" : 0,
+                "level" : 1
+            }
+        ],
+        "step2" : [
+            {
+                "attributes" : "幽灵",
+                "avatarImage" : "ghost",
+                "locationX" : 1,
+                "locationY" : 4, 
+                "rank" : 0,
+                "level" : 1
+            },
+            {
+                "attributes" : "幽灵",
+                "avatarImage" : "ghost",
+                "locationX" : 2,
+                "locationY" : 4, 
+                "rank" : 0,
+                "level" : 1
+            },
+            {
+                "attributes" : "幽灵",
+                "avatarImage" : "ghost",
+                "locationX" : 3,
+                "locationY" : 5, 
+                "rank" : 0,
+                "level" : 1
+            },
+            {
+                "attributes" : "幽灵",
+                "avatarImage" : "ghost",
+                "locationX" : 4,
+                "locationY" : 5, 
+                "rank" : 0,
+                "level" : 1
+            }
+        ]      
+    }
 }

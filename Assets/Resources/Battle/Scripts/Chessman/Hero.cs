@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Collections;
 
 // 英雄类，代表游戏中的英雄角色，包含英雄的各种属性和行为
 public class Hero : BasicCharacter
@@ -8,7 +9,6 @@ public class Hero : BasicCharacter
     // 英雄的属性，使用 ScriptableObject 存储，可在编辑器中配置
     public HeroAttributes heroAttributes;
     // 英雄的图片
-    private Image image;
     private ChessmanMove chessmanMove;
     public bool hasAttacked;
 
@@ -19,21 +19,12 @@ public class Hero : BasicCharacter
     }
 
     // 当对象启用时调用的方法，用于初始化和执行一些操作
-    private void Start() {
-        // 初始化 BUFF 管理器
-        buffManager = new BuffManager();
-        // 初始化技能列表
-        InitializeSkills();
-        // 获取棋子自身
-        chessman = GetComponent<Chessman>();
-        // 获取头像
-        image = GetComponent<Image>();
-        // 获取移动方式
-        chessmanMove = GetComponent<ChessmanMove>();
+    private new void Start() {
+        base.Start();
         // 初始化生命值
         currentHealthPoints = heroAttributes.maxHealthPoints;
-        // 默认使用简单攻击动画
-        attackAnimation = new DefaulAttackAnimation();
+        // 获取移动方式
+        chessmanMove = GetComponent<ChessmanMove>();
         // 初始允许攻击
         hasAttacked = false;          
     }
@@ -45,6 +36,7 @@ public class Hero : BasicCharacter
         {
             return;
         }
+        // 播放攻击动画
         attackAnimation.PlayAttackAnimation(this.transform, target.transform);
         // 计算命中率
         float hitRate = heroAttributes.accuracy / (heroAttributes.accuracy + target.enemyAttributes.evasion);
@@ -83,6 +75,10 @@ public class Hero : BasicCharacter
             Debug.Log(heroAttributes.name + " 鼠掉了 ");
             chessman.ExitFromBoard();
         }
+        // 展示伤害动画
+        ShowDamageNumber((int)actualDamage);
+        // 受伤震动
+        GetDamageShake();
     }
 
     // 增加英雄生命值的方法

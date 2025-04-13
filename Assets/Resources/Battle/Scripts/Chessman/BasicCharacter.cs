@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 // 英雄类，代表游戏中的英雄角色，包含英雄的各种属性和行为
 public abstract class BasicCharacter : MonoBehaviour
@@ -13,6 +15,9 @@ public abstract class BasicCharacter : MonoBehaviour
     // 英雄拥有的技能列表
     public List<Skill> skills = new List<Skill>();
 
+    // 获取头像
+    public Image image;
+
     // 当前生命值
     public int currentHealthPoints;
     // 临时攻击力
@@ -22,6 +27,19 @@ public abstract class BasicCharacter : MonoBehaviour
     
     // 初始化英雄的技能列表
     protected abstract void InitializeSkills();
+
+    protected void Start() {
+        // 获取棋子自身
+        chessman = GetComponent<Chessman>();
+        // 获取头像
+        image = GetComponent<Image>();
+        // 初始化 BUFF 管理器
+        buffManager = new BuffManager();
+        // 初始化技能列表
+        InitializeSkills();
+        // 默认使用简单攻击动画
+        attackAnimation = new DefaulAttackAnimation();
+    }
 
     // 增加攻击力的方法
     public void IncreaseAttack(int amount)
@@ -47,5 +65,78 @@ public abstract class BasicCharacter : MonoBehaviour
     {
         // 调用 BuffManager 的 RemoveAttackBuff 方法移除攻击类 BUFF
         buffManager.RemoveBuff(buffName);
+    }
+
+    // 受伤震动
+    protected void GetDamageShake()
+    {
+        // 让图片震动
+        if (image != null)
+        {
+            // 自定义震动的频率和强度
+            float duration = 0.3f; // 震动持续时间
+            float strength = 8f;   // 震动强度
+            int vibrato = 15;      // 震动频率，每秒震动 15 次
+            float randomness = 90f; // 震动方向的随机程度
+
+            image.rectTransform.DOShakeAnchorPos(duration, strength, vibrato, randomness, false, true);
+        }
+    }
+    // 展示受伤伤害动画
+    protected void ShowDamageNumber(int damage)
+    {
+        // 加载伤害数字预制体
+        GameObject damageNumberPrefab = Resources.Load<GameObject>("Battle/Prefab/DamageNumber");
+        if (damageNumberPrefab != null)
+        {
+            // 获取 Canvas
+            Canvas canvas = FindObjectOfType<Canvas>();
+            if (canvas != null)
+            {
+                // 实例化伤害数字对象
+                GameObject damageNumber = Instantiate(damageNumberPrefab);
+                damageNumber.transform.SetParent(this.transform);
+                // 获取 Text 组件并设置伤害值
+                Text damageText = damageNumber.GetComponent<Text>();
+                if (damageText != null)
+                {
+                    damageText.text = damage.ToString();
+                }
+
+                // 可以添加一些动画效果，例如让数字向上移动并逐渐消失
+                // 这里简单使用一个协程来实现
+                StartCoroutine(MoveAndFade(damageNumber));
+            }
+        }
+    }
+
+    // 数字向上移动并逐渐消失的协程
+    protected System.Collections.IEnumerator MoveAndFade(GameObject damageNumber)
+    {
+        float duration = 0.6f; // 动画持续时间
+        float elapsedTime = 0f;
+        Vector3 startPosition = this.transform.position + new Vector3(0 ,50 ,0);
+        Vector3 endPosition = startPosition + Vector3.up * 60f; // 向上移动 1 个单位
+
+        CanvasGroup canvasGroup = damageNumber.GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = damageNumber.AddComponent<CanvasGroup>();
+        }
+        canvasGroup.alpha = 1f;
+
+        while (elapsedTime < duration)
+        {
+            // 移动数字
+            damageNumber.transform.position = Vector3.Lerp(startPosition, endPosition, elapsedTime / duration);
+            // 逐渐消失
+            canvasGroup.alpha = 1f - (elapsedTime / duration);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // 销毁数字对象
+        Destroy(damageNumber);
     }
 }    
