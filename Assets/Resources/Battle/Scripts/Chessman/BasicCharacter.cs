@@ -9,6 +9,8 @@ public abstract class BasicCharacter : MonoBehaviour
     protected Chessman chessman;
     // 管理英雄 BUFF 的对象
     protected BuffManager buffManager;
+    // 攻击动画
+    public IAttackAnimation attackAnimation;
     // 英雄拥有的技能列表
     public List<Skill> skills = new List<Skill>();
 

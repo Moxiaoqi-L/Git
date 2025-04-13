@@ -112,6 +112,9 @@ MonoBehaviour:
   provisionalAttack: 0
   provisionalDefense: 0
   enemyAttributes: {fileID: 0}
+  availableColumns:
+  - {fileID: 0}
+  targetHero: {fileID: 0}
 --- !u!114 &1774526348912996022
 MonoBehaviour:
   m_ObjectHideFlags: 0

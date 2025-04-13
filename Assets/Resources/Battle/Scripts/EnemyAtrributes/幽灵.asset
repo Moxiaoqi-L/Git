@@ -27,7 +27,7 @@ MonoBehaviour:
   defense: 0
   magicDefense: 0
   evasion: 0
-  maxHealthPoints: 10
+  maxHealthPoints: 60
   attackGrowth: 0
   defenseGrowth: 0
   maxHealthPointsGrowth: 0

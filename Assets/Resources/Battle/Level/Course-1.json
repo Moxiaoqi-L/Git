@@ -1,0 +1,27 @@
+{
+    "levelName" : "测试关卡-1",
+    "level" : "Test-1",
+    "enemies" : [
+        {
+            "prefab" : "幽灵",
+            "locationX" : 1,
+            "locationY" : 3, 
+            "rank" : 0,
+            "level" : 1
+        },
+        {
+            "prefab" : "幽灵",
+            "locationX" : 2,
+            "locationY" : 4, 
+            "rank" : 0,
+            "level" : 1
+        },
+        {
+            "prefab" : "幽灵",
+            "locationX" : 4,
+            "locationY" : 5, 
+            "rank" : 0,
+            "level" : 1
+        }
+    ]
+}

@@ -57,6 +57,36 @@ public class Chessman : MonoBehaviour
         return ret;
     }
 
+    // 获取当前场上的全部英雄
+    public static List<Hero> AllHeros()
+    {
+        List<Hero> ret = new();
+        var chessmen = FindObjectsOfType<Chessman>();
+        foreach (var chessman in chessmen)
+        {
+            if (chessman.camp == Camp.Player)
+            {
+                ret.Add(chessman.hero);
+            }
+        }
+        return ret;
+    }
+
+    // 获取当前场上的全部敌人
+    public static List<Enemy> AllEnemies()
+    {
+        List<Enemy> ret = new();
+        var chessmen = FindObjectsOfType<Chessman>();
+        foreach (var chessman in chessmen)
+        {
+            if (chessman.camp == Camp.Enemy)
+            {
+                ret.Add(chessman.enemy);
+            }
+        }
+        return ret;
+    }
+
     // 清除场上的全部棋子
     public static void ClearAll()
     {
@@ -104,9 +134,14 @@ public class Chessman : MonoBehaviour
             SelectCore.DropSelect();
             return;
         }
+        if (camp == Camp.Player)
+        {
+            SelectCore.TrySelect(this);
+            return;
+        }
         if (SelectCore.Selection.camp == Camp.Player && camp == Camp.Enemy)
         {
-            SelectCore.Selection.hero.Attack(enemy, SelectCore.Selection.hero);
+            SelectCore.Selection.hero.Attack(enemy);
         }
     }
  
