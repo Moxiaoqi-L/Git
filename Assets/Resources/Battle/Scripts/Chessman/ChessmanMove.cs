@@ -42,7 +42,7 @@ public class ChessmanMove : Button, IDragHandler, IBeginDragHandler, IEndDragHan
     public void OnEndDrag(PointerEventData _)
     {
         GameObject go = _.pointerCurrentRaycast.gameObject;
-        if(go == null || go.GetComponent<Square>().camp == Camp.Enemy){
+        if(go == null || go.GetComponent<Square>()?.camp == Camp.Enemy){
             SetPosAndParent(transform, beginParentTransform);
             transform.GetComponent<Image>().raycastTarget = true;
             return;            

@@ -1176,7 +1176,7 @@ GameObject:
   - component: {fileID: 191500617}
   m_Layer: 5
   m_Name: Chessman
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1318,6 +1318,7 @@ MonoBehaviour:
   provisionalAttack: 0
   provisionalDefense: 0
   heroAttributes: {fileID: 11400000, guid: 7b78a0ea90ae715428918beaf2f4ebeb, type: 2}
+  hasAttacked: 0
 --- !u!114 &191500616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4926,8 +4927,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2116669009}
+  m_Children: []
   m_Father: {fileID: 1789459498}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -5418,6 +5418,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: HeroChessmanPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 5739672945888862798, guid: e2204d2ee668bfd42870a98068106fe7, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 6069867279291642624, guid: e2204d2ee668bfd42870a98068106fe7, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -5475,6 +5479,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80dfa2a3a405cfd4ba02285702771c62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  heroes: []
+  all: []
   isPlayerTurn: 1
 --- !u!1 &1584232131
 GameObject:
@@ -6879,108 +6885,6 @@ MonoBehaviour:
     y: 1
   type: 0
   camp: 1
---- !u!1001 &2116669008
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1290596102}
-    m_Modifications:
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_Pivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_Pivot.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 96
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 96
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -162
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -300
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5739672945888862798, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-      propertyPath: m_Name
-      value: EnemyChessmanPrefab
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
---- !u!224 &2116669009 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 3509395576951099603, guid: 1f92b5611fe77fb4a9e1fc5123762e9b, type: 3}
-  m_PrefabInstance: {fileID: 2116669008}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

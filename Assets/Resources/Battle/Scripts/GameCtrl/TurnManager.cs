@@ -6,6 +6,8 @@ using UnityEngine.PlayerLoop;
 public class TurnManager : MonoBehaviour
 {
     public static TurnManager Instance { get; private set; }
+    public List<Chessman> heroes;
+    public List<Chessman> all;
     public bool isPlayerTurn = true; // 当前是否是玩家回合
 
     private void Awake()
@@ -20,10 +22,16 @@ public class TurnManager : MonoBehaviour
         }
     }
 
+    // 结束玩家回合
     public void EndPlayerTurn()
     {
         if (isPlayerTurn)
         {
+            heroes = Chessman.All(Camp.Player);
+            foreach (var hero in heroes)
+            {
+                hero.hero.FinishAttack();
+            }
             isPlayerTurn = false;
             StartEnemyTurn();
         }
@@ -32,8 +40,6 @@ public class TurnManager : MonoBehaviour
     private void StartEnemyTurn()
     {
         StartCoroutine(EnemyAttackSequence());
-        // 当所有敌方行动完毕，开启玩家回合
-        isPlayerTurn = true;
     }
 
     // 协程方法，控制敌人依次攻击
@@ -47,6 +53,14 @@ public class TurnManager : MonoBehaviour
                 yield return new WaitForSeconds(0.4f);
             }
         }
+        // 当所有敌方行动完毕，开启玩家回合
+        all = Chessman.All();
+        foreach (var chessman in all)
+        {
+            chessman.enemy?.EndOfRound();
+            chessman.hero?.EndOfRound();
+        }
+        isPlayerTurn = true;
     }
     
 }
