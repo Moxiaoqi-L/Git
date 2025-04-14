@@ -34,4 +34,4 @@ MonoBehaviour:
   defenseGrowth: 0
   maxHealthPointsGrowth: 0
   skills:
-  - {fileID: 11400000, guid: aa4ea538781e47e41b3624f6f1f95b8a, type: 2}
+  - {fileID: 11400000, guid: 3b44a00bd736ec04fb44f8b14b31b975, type: 2}

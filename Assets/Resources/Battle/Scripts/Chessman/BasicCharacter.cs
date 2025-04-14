@@ -84,7 +84,7 @@ public abstract class BasicCharacter : MonoBehaviour
     }
 
     // 展示受伤伤害动画
-    protected void ShowDamageNumber(int damage)
+    protected void ShowDamageNumber(int damage, bool isHeal = false)
     {
         // 加载伤害数字预制体
         GameObject damageNumberPrefab = Resources.Load<GameObject>("Battle/Prefab/DamageNumber");
@@ -99,13 +99,13 @@ public abstract class BasicCharacter : MonoBehaviour
                 damageNumber.transform.SetParent(this.transform);
                 // 获取 Text 组件并设置伤害值
                 TextMeshProUGUI damageText = damageNumber.GetComponent<TextMeshProUGUI>();
+                if (isHeal) damageText.color = Constants.HEALCOLOR;
                 if (damageText != null)
                 {
                     damageText.text = damage.ToString();
                 }
 
-                // 可以添加一些动画效果，例如让数字向上移动并逐渐消失
-                // 这里简单使用一个协程来实现
+                // 让数字向上移动并逐渐消失,使用一个协程来实现
                 StartCoroutine(MoveAndFade(damageNumber));
             }
         }

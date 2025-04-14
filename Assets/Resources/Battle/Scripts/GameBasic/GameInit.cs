@@ -37,9 +37,15 @@ public class GameInit : MonoBehaviour
     }
 
     // 棋子退场事件处理方法
-    public void OnChessmanExitHandler()
+    public void OnEnemyExitHandler()
     {
         StartCoroutine(Check());
+    }
+    // 棋子退场事件处理方法
+    public void OnHeroExitHandler(Hero hero)
+    {
+        SkillButtonManager.Get.RemoveSkillButton(hero);
+        // TODO
     }
 
     private void Start() {

@@ -61,4 +61,7 @@ public class Constants
     public static Color REDPOINT = new(0.5f, 0, 0);
     public static Color YELLOWPOINT = new(0.5f, 0.5f, 0);
     public static Color BLUEPOINT = new(0, 0, 0.5f);
+
+    // 治疗颜色
+    public static Color HEALCOLOR = new(0, 1, 0.5f);
 }

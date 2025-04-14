@@ -2,13 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "强力攻击", menuName = "技能/强力攻击")]
-public class AmplifiedAttackSkill : Skill
+public class PowerAttack : Skill
 {   
     // 技能花费
     public Color[] costs = {Constants.REDPOINT,Constants.REDPOINT};
+    public float attackDamageMultiplier;
     public override void Use(Hero hero, Enemy target = null)
     {
-        if (!ColorPointCtrl.Get.RemoveColorPointsByColors(costs)) return;
+        if (hero.hasAttacked || !ColorPointCtrl.Get.RemoveColorPointsByColors(costs)) return;
         // 技能使用逻辑
         if (target == null)
         {
@@ -32,21 +33,8 @@ public class AmplifiedAttackSkill : Skill
         }
 
         float actualAttack = hero.GetActualAttack();
-        float damage = actualAttack * 2 * (1 + hero.heroAttributes.skillPower) * (1 + hero.heroAttributes.damagePower);
+        float damage = actualAttack * (attackDamageMultiplier / 100) * (1 + hero.heroAttributes.skillPower) * (1 + hero.heroAttributes.damagePower);
         target.Defend((int)damage);
-    }
-}
-
-// 自我治疗技能
-[CreateAssetMenu(fileName = "自我治疗", menuName = "技能/自我治疗")]
-public class SelfHealingSkill : Skill
-{
-    // 技能花费
-    public Color[] costs = {Constants.BLUEPOINT,Constants.BLUEPOINT};
-    public override void Use(Hero hero, Enemy target = null)
-    {
-        if (!ColorPointCtrl.Get.RemoveColorPointsByColors(costs)) return;
-        hero.IncreaseHealthPoints(30);
-        Debug.Log(hero.heroAttributes.name + " 使用技能: " + skillName + ", 当前生命: " + hero.currentHealthPoints);
+        hero.FinishAttack();
     }
 }

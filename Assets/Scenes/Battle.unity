@@ -408,8 +408,9 @@ GameObject:
   m_Component:
   - component: {fileID: 68224458}
   - component: {fileID: 68224459}
+  - component: {fileID: 68224460}
   m_Layer: 0
-  m_Name: SkillButtonGenerator
+  m_Name: SkillButtonManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -444,6 +445,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillPrefab: {fileID: 2085770612413037759, guid: 259dfe5fb4313064bb00f66be84ed82f, type: 3}
   buttonParent: {fileID: 1584454954}
+--- !u!114 &68224460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68224457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd74014f63f51b3488208224a435a341, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonParent: {fileID: 1584454954}
 --- !u!1 &83092701
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,7 +469,7 @@ GameObject:
   - component: {fileID: 83092702}
   - component: {fileID: 83092703}
   m_Layer: 0
-  m_Name: InitEnemy
+  m_Name: GameInit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

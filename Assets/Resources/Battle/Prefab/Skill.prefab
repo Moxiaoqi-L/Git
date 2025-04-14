@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 2166651561756544868}
   - component: {fileID: 8370085385657865161}
   - component: {fileID: 5955795796325542375}
+  - component: {fileID: 259466197215157323}
   m_Layer: 5
   m_Name: Skill
   m_TagString: Untagged
@@ -157,6 +158,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &259466197215157323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2085770612413037759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11c619ab7b366d340b387a2b6cc8b1bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  associatedHero: {fileID: 0}
 --- !u!1 &6588299942274052623
 GameObject:
   m_ObjectHideFlags: 0

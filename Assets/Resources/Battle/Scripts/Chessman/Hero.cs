@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
-using System.Collections;
+using System;
 
 // 英雄类，代表游戏中的英雄角色，包含英雄的各种属性和行为
 public class Hero : BasicCharacter
@@ -10,6 +9,7 @@ public class Hero : BasicCharacter
     public HeroAttributes heroAttributes;
     // 英雄的图片
     private ChessmanMove chessmanMove;
+    // 每回合只能攻击一次
     public bool hasAttacked;
 
     protected override void InitializeSkills()
@@ -51,11 +51,11 @@ public class Hero : BasicCharacter
         attackAnimation.PlayAttackAnimation(this.transform, target.transform);
         // 计算命中率
         float hitRate = heroAttributes.accuracy / (heroAttributes.accuracy + target.enemyAttributes.evasion);
-        float randomValue = Random.value;
+        float randomValue = UnityEngine.Random.value;
         if (randomValue <= hitRate)
         {
             float actualattack = GetActualAttack();
-            bool isCritical = Random.value <= heroAttributes.criticalRate;
+            bool isCritical = UnityEngine.Random.value <= heroAttributes.criticalRate;
             float damage = actualattack;
             if (isCritical)
             {
@@ -100,6 +100,7 @@ public class Hero : BasicCharacter
     // 增加英雄生命值的方法
     public void IncreaseHealthPoints(int amount)
     {
+        ShowDamageNumber(amount, true);
         // 增加英雄的生命值
         currentHealthPoints += amount;
         currentHealthPoints = currentHealthPoints > heroAttributes.maxHealthPoints ? heroAttributes.maxHealthPoints : currentHealthPoints;
@@ -116,12 +117,6 @@ public class Hero : BasicCharacter
         hasAttacked = false;
         // 恢复位移
         chessmanMove.enabled = true;
-    }
-
-    // 当英雄对象鼠掉调用的方法
-    void OnDestroy()
-    {
-
     }
 
     public void FinishAttack(){

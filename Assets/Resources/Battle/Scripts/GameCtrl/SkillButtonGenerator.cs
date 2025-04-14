@@ -22,15 +22,14 @@ public class SkillButtonGenerator : MonoBehaviour
         {
             allSkills.AddRange(hero.skills);
         }
-        Debug.Log("英雄数量" + allHeroes.Length);
-
-        Debug.Log("技能数量：" + allSkills.Count);
         // 生成 Skill 预制体
         foreach (Skill skill in allSkills)
         {
             GameObject buttonObj = Instantiate(skillPrefab, buttonParent);
             allSkillsGameObjects.Add(buttonObj);
             Button button = buttonObj.GetComponent<Button>();
+
+            buttonObj.GetComponent<SkillButton>().associatedHero = allHeroes[allSkills.IndexOf(skill)];
 
             // 查找 TextMeshPro 组件
             TextMeshProUGUI tmpText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
