@@ -29,6 +29,9 @@ public class Hero : BasicCharacter
     // 当对象启用时调用的方法，用于初始化和执行一些操作
     private new void Start() {
         base.Start();
+        // 初始化技能列表
+        InitializeSkills();
+        Debug.Log("初始化技能列表:" + skills.Count);
         // 初始化生命值
         currentHealthPoints = heroAttributes.maxHealthPoints;
         // 获取移动方式

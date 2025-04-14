@@ -7,7 +7,7 @@ public class Enemy : BasicCharacter
     // 敌人的属性，使用 ScriptableObject 存储，可在编辑器中配置
     public EnemyAttributes enemyAttributes;
     // 攻击目标
-    public Hero targetHero; 
+    public Hero targetHero;
 
     protected override void InitializeSkills()
     {

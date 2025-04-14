@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public abstract class BasicCharacter : MonoBehaviour
 {
     // 获取棋子
-    protected Chessman chessman;
+    public Chessman chessman;
     // 管理英雄 BUFF 的对象
     protected BuffManager buffManager;
     // 攻击动画
@@ -37,8 +37,6 @@ public abstract class BasicCharacter : MonoBehaviour
         image = GetComponent<Image>();
         // 初始化 BUFF 管理器
         buffManager = new BuffManager();
-        // 初始化技能列表
-        InitializeSkills();
         // 默认使用简单攻击动画
         attackAnimation = new DefaulAttackAnimation();
     }
