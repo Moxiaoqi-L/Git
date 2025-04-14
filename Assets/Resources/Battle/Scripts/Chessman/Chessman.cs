@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -145,10 +146,14 @@ public class Chessman : MonoBehaviour
             SelectCore.Selection.hero.Attack(enemy);
         }
     }
- 
+
     public void ExitFromBoard()
     {
-        GameInit.Instance.OnChessmanExitHandler();
-        Destroy(gameObject);
+        // 播放退场动画
+        transform.DOScale(Vector3.zero, 0.5f).OnComplete(() =>
+        {
+            GameInit.Instance.OnChessmanExitHandler();
+            Destroy(gameObject);
+        });
     }
 }

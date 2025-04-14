@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // 创建一个 ScriptableObject 类来存储英雄属性
-[CreateAssetMenu(fileName = "新英雄属性", menuName = "英雄属性")]
+[CreateAssetMenu(fileName = "新英雄属性", menuName = "创建英雄属性")]
 public class HeroAttributes : ScriptableObject
 {
     // 英雄姓名
@@ -51,11 +51,13 @@ public class HeroAttributes : ScriptableObject
     // 最大生命值成长
     public float maxHealthPointsGrowth;
 
+    // 主动技能
+    public Skill[] skills;
+
     // 被动技能
     // TODO
 
-    // 主动技能
-    // TODO
+
 
     // 大招
     // TODO

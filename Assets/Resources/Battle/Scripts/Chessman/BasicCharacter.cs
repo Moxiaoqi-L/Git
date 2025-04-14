@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,8 +13,8 @@ public abstract class BasicCharacter : MonoBehaviour
     protected BuffManager buffManager;
     // 攻击动画
     public IAttackAnimation attackAnimation;
-    // 英雄拥有的技能列表
-    public List<Skill> skills = new List<Skill>();
+    // 拥有的技能列表
+    // public List<Skill> skills = new List<Skill>();
 
     // 获取头像
     public Image image;
@@ -82,6 +83,7 @@ public abstract class BasicCharacter : MonoBehaviour
             image.rectTransform.DOShakeAnchorPos(duration, strength, vibrato, randomness, false, true);
         }
     }
+
     // 展示受伤伤害动画
     protected void ShowDamageNumber(int damage)
     {
@@ -97,7 +99,7 @@ public abstract class BasicCharacter : MonoBehaviour
                 GameObject damageNumber = Instantiate(damageNumberPrefab);
                 damageNumber.transform.SetParent(this.transform);
                 // 获取 Text 组件并设置伤害值
-                Text damageText = damageNumber.GetComponent<Text>();
+                TextMeshProUGUI damageText = damageNumber.GetComponent<TextMeshProUGUI>();
                 if (damageText != null)
                 {
                     damageText.text = damage.ToString();

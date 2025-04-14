@@ -43,7 +43,7 @@ public class Hero : BasicCharacter
         float randomValue = Random.value;
         if (randomValue <= hitRate)
         {
-            float actualattack = heroAttributes.attack + heroAttributes.attack * buffManager.GetTotalAttackBuff();
+            float actualattack = GetActualAttack();
             bool isCritical = Random.value <= heroAttributes.criticalRate;
             float damage = actualattack;
             if (isCritical)
@@ -68,6 +68,8 @@ public class Hero : BasicCharacter
     public void Defend(float incomingDamage)
     {
         float actualDamage = Mathf.Max(0, incomingDamage - heroAttributes.defense);
+        // 展示伤害动画
+        ShowDamageNumber((int)actualDamage);
         currentHealthPoints -= (int)actualDamage;
         if (currentHealthPoints < 0)
         {
@@ -75,10 +77,12 @@ public class Hero : BasicCharacter
             Debug.Log(heroAttributes.name + " 鼠掉了 ");
             chessman.ExitFromBoard();
         }
-        // 展示伤害动画
-        ShowDamageNumber((int)actualDamage);
         // 受伤震动
         GetDamageShake();
+    }
+
+    public float GetActualAttack(){
+        return heroAttributes.attack + heroAttributes.attack * buffManager.GetTotalAttackBuff();
     }
 
     // 增加英雄生命值的方法

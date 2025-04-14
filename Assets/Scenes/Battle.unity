@@ -1417,7 +1417,7 @@ MonoBehaviour:
   currentHealthPoints: 0
   provisionalAttack: 0
   provisionalDefense: 0
-  heroAttributes: {fileID: 11400000, guid: 7b78a0ea90ae715428918beaf2f4ebeb, type: 2}
+  heroAttributes: {fileID: 11400000, guid: b69519aeaaefb1f49ae60a964d70e562, type: 2}
   hasAttacked: 0
 --- !u!114 &191500616
 MonoBehaviour:
@@ -5475,7 +5475,7 @@ PrefabInstance:
     - target: {fileID: 567262331771243183, guid: e2204d2ee668bfd42870a98068106fe7, type: 3}
       propertyPath: heroAttributes
       value: 
-      objectReference: {fileID: 11400000, guid: 7b78a0ea90ae715428918beaf2f4ebeb, type: 2}
+      objectReference: {fileID: 11400000, guid: b69519aeaaefb1f49ae60a964d70e562, type: 2}
     - target: {fileID: 3509395576951099603, guid: e2204d2ee668bfd42870a98068106fe7, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
