@@ -18,7 +18,7 @@ MonoBehaviour:
   rank: 0
   maxRank: 2
   xp: 0
-  maxXp: 100
+  maxXp: 60
   attack: 16
   damageType: 
   criticalRate: 0
@@ -26,7 +26,7 @@ MonoBehaviour:
   accuracy: 100
   skillPower: 0
   damagePower: 0
-  defense: 2
+  defense: 1
   magicDefense: 0
   evasion: 0
   maxHealthPoints: 60
@@ -34,4 +34,4 @@ MonoBehaviour:
   defenseGrowth: 0
   maxHealthPointsGrowth: 0
   skills:
-  - {fileID: 11400000, guid: b3b40394d1101e54bac53aeba80f4534, type: 2}
+  - {fileID: 11400000, guid: aa4ea538781e47e41b3624f6f1f95b8a, type: 2}

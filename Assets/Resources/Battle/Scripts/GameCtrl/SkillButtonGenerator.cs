@@ -54,7 +54,7 @@ public class SkillButtonGenerator : MonoBehaviour
     // 技能排列
     private void RearrangeSkills()
     {
-        float skillHeight = skillPrefab.GetComponent<RectTransform>().sizeDelta.y + 40;
+        float skillHeight = skillPrefab.GetComponent<RectTransform>().sizeDelta.y + 100;
         float totalHeight = skillHeight * allSkills.Count;
         float startY = -totalHeight / 2f + skillHeight / 2f;
 
