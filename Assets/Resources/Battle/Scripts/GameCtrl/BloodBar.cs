@@ -19,18 +19,26 @@ public class DelayedHealthSystem : MonoBehaviour
     private float delayedHealth;
 
     private Hero hero;
+    private Enemy enemy;
 
     void Start()
     {
+        
         hero = GetComponent<Hero>();
-        maxHealth = hero.heroAttributes.maxHealthPoints;
+        enemy = GetComponent<Enemy>();
+        Debug.Log(hero);
+        Debug.Log(enemy);
+        if (hero != null) maxHealth = hero.heroAttributes.maxHealthPoints;
+        else if (enemy != null) maxHealth = enemy.enemyAttributes.maxHealthPoints;
         currentHealth = delayedHealth = maxHealth;
         immediateBar.maxValue = delayedBar.maxValue = maxHealth;
+        
     }
 
     void Update()
     {
-        currentHealth = hero.currentHealthPoints;
+        if (hero != null) currentHealth = hero.currentHealthPoints;
+        else if (enemy != null) currentHealth = enemy.currentHealthPoints;
         UpdateBars();
         UpdateBarColors();
     }
@@ -56,6 +64,11 @@ public class DelayedHealthSystem : MonoBehaviour
         else
         {
             ShowBloodBars();
+        }
+
+        if (currentHealth <= 0)
+        {
+            HideBloodBars();
         }
     }
 

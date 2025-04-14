@@ -93,6 +93,10 @@ public class Enemy : BasicCharacter
     public void Defend(float incomingDamage)
     {
         float actualDamage = Mathf.Max(0, incomingDamage - enemyAttributes.defense);
+        // 展示伤害动画
+        ShowDamageNumber((int)actualDamage);
+        // 受伤震动
+        GetDamageShake();
         currentHealthPoints -= (int) actualDamage;
         if (currentHealthPoints < 0)
         {
@@ -110,10 +114,6 @@ public class Enemy : BasicCharacter
             return;
         }
         Debug.Log(enemyAttributes.name + " 受到伤害！ ");
-        // 展示伤害动画
-        ShowDamageNumber((int)actualDamage);
-        // 受伤震动
-        GetDamageShake();
     }
 
     // 增加英雄生命值的方法

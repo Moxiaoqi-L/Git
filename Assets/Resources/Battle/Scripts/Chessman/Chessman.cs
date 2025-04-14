@@ -149,6 +149,12 @@ public class Chessman : MonoBehaviour
 
     public void ExitFromBoard()
     {
+        StartCoroutine(WaitForExit());
+    }
+    private IEnumerator WaitForExit()
+    {
+        // 等待一帧，确保 Destroy 操作完成
+        yield return new WaitForSeconds(0.5f);
         // 播放退场动画
         transform.DOScale(Vector3.zero, 0.5f).OnComplete(() =>
         {

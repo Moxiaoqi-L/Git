@@ -14,8 +14,7 @@ public class Hero : BasicCharacter
 
     protected override void InitializeSkills()
     {
-        // skills.Add(new AmplifiedAttackSkill());
-        // skills.Add(new SelfHealingSkill());
+        
     }
 
     // 当对象启用时调用的方法，用于初始化和执行一些操作
@@ -70,6 +69,8 @@ public class Hero : BasicCharacter
         float actualDamage = Mathf.Max(0, incomingDamage - heroAttributes.defense);
         // 展示伤害动画
         ShowDamageNumber((int)actualDamage);
+        // 受伤震动
+        GetDamageShake();
         currentHealthPoints -= (int)actualDamage;
         if (currentHealthPoints < 0)
         {
@@ -77,8 +78,7 @@ public class Hero : BasicCharacter
             Debug.Log(heroAttributes.name + " 鼠掉了 ");
             chessman.ExitFromBoard();
         }
-        // 受伤震动
-        GetDamageShake();
+
     }
 
     public float GetActualAttack(){
