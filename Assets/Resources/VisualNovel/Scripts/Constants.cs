@@ -1,3 +1,7 @@
+
+
+using UnityEngine;
+
 public class Constants
 {
     // 故事路径
@@ -52,4 +56,9 @@ public class Constants
     public static float DURATION_TIME = 0.5f;
 
     public static string COLON = ": ";
+
+    // 颜色点数 RGB
+    public static Color REDPOINT = new(0.5f, 0, 0);
+    public static Color YELLOWPOINT = new(0.5f, 0.5f, 0);
+    public static Color BLUEPOINT = new(0, 0, 0.5f);
 }
