@@ -2,7 +2,9 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "强力攻击", menuName = "技能/强力攻击")]
 public class AmplifiedAttackSkill : Skill
-{
+{   
+    // 技能花费
+    public Color[] costs = {Constants.REDPOINT,Constants.REDPOINT};
     public override void Use(Hero hero, Enemy target = null)
     {
         // 技能使用逻辑
@@ -21,6 +23,8 @@ public class AmplifiedAttackSkill : Skill
 [CreateAssetMenu(fileName = "自我治疗", menuName = "技能/自我治疗")]
 public class SelfHealingSkill : Skill
 {
+    // 技能花费
+    public Color[] costs = {Constants.BLUEPOINT,Constants.BLUEPOINT};
     public override void Use(Hero hero, Enemy target = null)
     {
         hero.IncreaseHealthPoints(100);

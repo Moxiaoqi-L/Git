@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
@@ -14,7 +15,7 @@ public abstract class BasicCharacter : MonoBehaviour
     // 攻击动画
     public IAttackAnimation attackAnimation;
     // 拥有的技能列表
-    // public List<Skill> skills = new List<Skill>();
+    public List<Skill> skills = new();
 
     // 获取头像
     public Image image;
@@ -113,7 +114,7 @@ public abstract class BasicCharacter : MonoBehaviour
     }
 
     // 数字向上移动并逐渐消失的协程
-    protected System.Collections.IEnumerator MoveAndFade(GameObject damageNumber)
+    protected IEnumerator MoveAndFade(GameObject damageNumber)
     {
         float duration = 0.6f; // 动画持续时间
         float elapsedTime = 0f;

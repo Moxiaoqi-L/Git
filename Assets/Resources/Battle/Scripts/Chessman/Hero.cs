@@ -14,7 +14,16 @@ public class Hero : BasicCharacter
 
     protected override void InitializeSkills()
     {
-        
+        if (heroAttributes.skills != null)
+        {
+            foreach (Skill skill in heroAttributes.skills)
+            {
+                if (skill != null)
+                {
+                    skills.Add(skill);
+                }
+            }  
+        }
     }
 
     // 当对象启用时调用的方法，用于初始化和执行一些操作
