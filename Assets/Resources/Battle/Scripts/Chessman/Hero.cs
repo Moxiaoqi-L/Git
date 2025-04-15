@@ -94,7 +94,7 @@ public class Hero : BasicCharacter
     }
 
     public float GetActualAttack(){
-        return heroAttributes.attack + heroAttributes.attack * buffManager.GetTotalAttackBuff();
+        return heroAttributes.attack;
     }
 
     // 增加英雄生命值的方法
@@ -110,7 +110,7 @@ public class Hero : BasicCharacter
     public void EndOfRound()
     {
         // 处理 BUFF 的剩余回合数
-        buffManager.EndOfRound();
+        // buffManager.EndOfRound();
         // 恢复头像
         RestoreImageColor();
         // 设置允许攻击

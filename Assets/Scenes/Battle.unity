@@ -444,6 +444,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillPrefab: {fileID: 2085770612413037759, guid: 259dfe5fb4313064bb00f66be84ed82f, type: 3}
+  needsColorPrefab: {fileID: 450816380128893795, guid: e0aa7aee27b6baa43acf8d47fdbac1df, type: 3}
   buttonParent: {fileID: 1584454954}
 --- !u!114 &68224460
 MonoBehaviour:

@@ -73,7 +73,7 @@ public class Enemy : BasicCharacter
         float randomValue = Random.value;
         if (randomValue <= hitRate)
         {
-            float actualattack = enemyAttributes.attack + enemyAttributes.attack * buffManager.GetTotalAttackBuff() + provisionalAttack;
+            float actualattack = enemyAttributes.attack + provisionalAttack;
             bool isCritical = Random.value <= enemyAttributes.criticalRate;
             float damage = actualattack;
             if (isCritical)
@@ -128,7 +128,7 @@ public class Enemy : BasicCharacter
     public void EndOfRound()
     {
         // 处理 BUFF 的剩余回合数
-        buffManager.EndOfRound();
+        // buffManager.EndOfRound();
     }
 
     // 敌人回合

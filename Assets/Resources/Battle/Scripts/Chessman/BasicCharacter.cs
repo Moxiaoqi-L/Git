@@ -57,14 +57,14 @@ public abstract class BasicCharacter : MonoBehaviour
     public void AddBuff(string buffName, int duration)
     {
         // 调用 BuffManager 的 AddBuff 方法添加 BUFF
-        buffManager.AddBuff(buffName, duration);
+        // buffManager.AddBuff(buffName, duration);
     }
 
     // 移除 BUFF 的方法，通过 BUFF 名称调用 BuffManager 的移除方法
     public void RemoveBuff(string buffName)
     {
         // 调用 BuffManager 的 RemoveAttackBuff 方法移除攻击类 BUFF
-        buffManager.RemoveBuff(buffName);
+        // buffManager.RemoveBuff(buffName);
     }
 
     // 受伤震动
