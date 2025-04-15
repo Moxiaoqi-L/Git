@@ -26,10 +26,8 @@ public class DelayedHealthSystem : MonoBehaviour
         
         hero = GetComponent<Hero>();
         enemy = GetComponent<Enemy>();
-        Debug.Log(hero);
-        Debug.Log(enemy);
-        if (hero != null) maxHealth = hero.heroAttributes.maxHealthPoints;
-        else if (enemy != null) maxHealth = enemy.enemyAttributes.maxHealthPoints;
+        if (hero != null) maxHealth = hero.characterAttributes.maxHealthPoints;
+        else if (enemy != null) maxHealth = enemy.characterAttributes.maxHealthPoints;
         currentHealth = delayedHealth = maxHealth;
         immediateBar.maxValue = delayedBar.maxValue = maxHealth;
         

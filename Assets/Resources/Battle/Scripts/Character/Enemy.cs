@@ -4,8 +4,6 @@ using System.Collections.Generic;
 // 英雄类，代表游戏中的英雄角色，包含英雄的各种属性和行为
 public class Enemy : BasicCharacter
 {
-    // 敌人的属性，使用 ScriptableObject 存储，可在编辑器中配置
-    public EnemyAttributes enemyAttributes;
     // 攻击目标
     public Hero targetHero;
 
@@ -18,7 +16,7 @@ public class Enemy : BasicCharacter
     private new void Start() {
         base.Start();
         // 初始化生命值
-        currentHealthPoints = enemyAttributes.maxHealthPoints;       
+        currentHealthPoints = characterAttributes.maxHealthPoints;       
     }
 
     // 敌方的攻击方法，用于对敌人造成伤害，新增 selfAttack 参数用于控制是否自我攻击
@@ -69,66 +67,24 @@ public class Enemy : BasicCharacter
         attackAnimation.PlayAttackAnimation(this.transform, targetHero.transform, true);
 
         // 计算命中率
-        float hitRate = enemyAttributes.accuracy / (enemyAttributes.accuracy + targetHero.heroAttributes.evasion);
+        float hitRate = characterAttributes.accuracy / (characterAttributes.accuracy + targetHero.characterAttributes.evasion);
         float randomValue = Random.value;
         if (randomValue <= hitRate)
         {
-            float actualattack = enemyAttributes.attack + provisionalAttack;
-            bool isCritical = Random.value <= enemyAttributes.criticalRate;
+            float actualattack = characterAttributes.attack + provisionalAttack;
+            bool isCritical = Random.value <= characterAttributes.criticalRate;
             float damage = actualattack;
             if (isCritical)
             {
-                damage *= enemyAttributes.criticalDamageMultiplier;
-                Debug.Log(enemyAttributes.name + " 暴击了！ ");
+                damage *= characterAttributes.criticalDamageMultiplier;
+                Debug.Log(characterAttributes.name + " 暴击了！ ");
             }
             targetHero.Defend(damage);
         }
         else
         {
-            Debug.Log(enemyAttributes.name + " 攻击落空！ ");
+            Debug.Log(characterAttributes.name + " 攻击落空！ ");
         }
-    }
-
-    // 防御方法，用于处理受到的伤害
-    public void Defend(float incomingDamage)
-    {
-        float actualDamage = Mathf.Max(0, incomingDamage - enemyAttributes.defense);
-        // 展示伤害动画
-        ShowDamageNumber((int)actualDamage);
-        // 受伤震动
-        GetDamageShake();
-        currentHealthPoints -= (int) actualDamage;
-        if (currentHealthPoints < 0)
-        {
-            currentHealthPoints = 0;
-            Debug.Log(enemyAttributes.name + " 鼠掉了 ");
-            chessman.ExitFromBoard();
-            // 检查是否还有其他敌人存活
-            if (Chessman.AllEnemies().Count == 0)
-            {
-                // 通知 GameInit 进入下一阶段
-                GameInit.Instance.NextStep();
-                Debug.Log("进入下一阶段");
-            }
-            
-            return;
-        }
-        Debug.Log(enemyAttributes.name + " 受到伤害！ ");
-    }
-
-    // 增加英雄生命值的方法
-    public void IncreaseHealthPoints(int amount)
-    {
-        // 增加英雄的生命值
-        currentHealthPoints += amount;
-        currentHealthPoints = currentHealthPoints > enemyAttributes.maxHealthPoints ? enemyAttributes.maxHealthPoints : currentHealthPoints;
-    }
-
-    // 每回合结束时调用
-    public void EndOfRound()
-    {
-        // 处理 BUFF 的剩余回合数
-        // buffManager.EndOfRound();
     }
 
     // 敌人回合
@@ -136,7 +92,8 @@ public class Enemy : BasicCharacter
     {
         // 实施攻击
         Attack(this);
-        EndOfRound();
     }
+
+    protected override void OnDeath(){}
 
 }    

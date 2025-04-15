@@ -48,7 +48,6 @@ public class TurnManager : MonoBehaviour
             StartEnemyTurn();
         }
             List<Chessman> remainingEnemies = Chessman.All(Camp.Enemy);
-            Debug.Log(remainingEnemies.Count);
     }
 
     private void StartEnemyTurn()

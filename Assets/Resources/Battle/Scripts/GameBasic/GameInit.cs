@@ -125,7 +125,7 @@ public class GameInit : MonoBehaviour
         // 设置 Chessman Location
         enemyChessmanInstance.GetComponent<Chessman>().location = location;
         // 设置 Enemy Attributes
-        enemyChessmanInstance.GetComponent<Enemy>().enemyAttributes = enemyAttributes;
+        enemyChessmanInstance.GetComponent<Enemy>().characterAttributes = enemyAttributes;
         // 设置头像图片
         enemyChessmanInstance.GetComponent<Image>().sprite = sprite;
     }

@@ -1,11 +1,12 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-// 创建一个 ScriptableObject 类来存储英雄属性
-[CreateAssetMenu(fileName = "新敌人属性", menuName = "敌人属性")]
-public class EnemyAttributes : ScriptableObject
+// 角色属性基类（Hero/Enemy通用）
+public abstract class CharacterAttributes : ScriptableObject
 {
-    // 敌人姓名
-    public string enemyName = "Default";
+    // 姓名
+    public string characterName = "Default";
     // 等级
     public int level = 1;
     // 最大等级             45/65/90
@@ -47,22 +48,15 @@ public class EnemyAttributes : ScriptableObject
     // 最大生命值成长
     public float maxHealthPointsGrowth;
 
-    // 被动技能
-    // TODO
-
     // 主动技能
+    public Skill[] skills;
+
+    // 被动技能
     // TODO
 
     // 大招
     // TODO
 
-    // 根据等级初始化属性
-    public void InitAttributes()
-    {
-        maxLevel = 45 + (rank >= 1 ? 20 : 0) + (rank >= 2 ? 30 : 0);
-
-        attack += (int)(level * attackGrowth + (rank >= 1 ? 45 : 0) * attackGrowth + (rank >= 2 ? 65 : 0) * attackGrowth);
-        defense += (int)(level * defenseGrowth + (rank >= 1 ? 45 : 0) * defenseGrowth + (rank >= 2 ? 65 : 0) * defenseGrowth);
-        maxHealthPoints += (int)(level * maxHealthPointsGrowth + (rank >= 1 ? 45 : 0) * maxHealthPointsGrowth + (rank >= 2 ? 65 : 0) * maxHealthPointsGrowth);
-    }
-}    
+    // 初始化属性（子类实现具体逻辑）
+    public abstract void InitAttributes();
+}

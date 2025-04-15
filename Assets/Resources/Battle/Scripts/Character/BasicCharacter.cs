@@ -10,6 +10,8 @@ public abstract class BasicCharacter : MonoBehaviour
 {
     // 获取棋子
     public Chessman chessman;
+    // 统一属性基类（替代原Hero/Enemy特有的属性类）
+    public CharacterAttributes characterAttributes;
     // 管理英雄 BUFF 的对象
     protected BuffManager buffManager;
     // 攻击动画
@@ -36,11 +38,29 @@ public abstract class BasicCharacter : MonoBehaviour
         // 获取头像
         image = GetComponent<Image>();
         // 初始化 BUFF 管理器
-        buffManager = new BuffManager();
+        buffManager = new BuffManager(this);
         // 默认使用简单攻击动画
         attackAnimation = new DefaulAttackAnimation();
     }
 
+    // 通用防御方法，用于处理受到的伤害
+    public virtual void Defend(float incomingDamage)
+    {
+        float actualDamage = Mathf.Max(0, incomingDamage - characterAttributes.defense);
+        // 展示伤害动画
+        ShowDamageNumber((int)actualDamage);
+        // 受伤震动
+        GetDamageShake();
+        currentHealthPoints -= (int)actualDamage;
+        if (currentHealthPoints < 0)
+        {
+            // 死亡回调
+            OnDeath();
+            currentHealthPoints = 0;
+            chessman.ExitFromBoard();
+        }
+
+    }
     // 增加攻击力的方法
     public void IncreaseAttack(int amount)
     {
@@ -53,18 +73,25 @@ public abstract class BasicCharacter : MonoBehaviour
         provisionalDefense += amount;
     }
 
-    // 添加 BUFF 的方法，通过 BUFF 名称调用 BuffManager 的添加方法
-    public void AddBuff(string buffName, int duration)
+    // 增加生命值的方法
+    public void IncreaseHealthPoints(int amount)
     {
-        // 调用 BuffManager 的 AddBuff 方法添加 BUFF
-        // buffManager.AddBuff(buffName, duration);
+        ShowDamageNumber(amount, true);
+        // 增加英雄的生命值
+        currentHealthPoints += amount;
+        currentHealthPoints = currentHealthPoints > characterAttributes.maxHealthPoints ? characterAttributes.maxHealthPoints : currentHealthPoints;
     }
 
-    // 移除 BUFF 的方法，通过 BUFF 名称调用 BuffManager 的移除方法
+    // BUFF 添加方法
+    public void AddBuff(string buffName, params object[] args)
+    {
+        buffManager.AddBuff(buffName, args);
+    }
+
+    // BUFF 移除方法
     public void RemoveBuff(string buffName)
     {
-        // 调用 BuffManager 的 RemoveAttackBuff 方法移除攻击类 BUFF
-        // buffManager.RemoveBuff(buffName);
+        buffManager.RemoveBuff(buffName);
     }
 
     // 受伤震动
@@ -140,4 +167,13 @@ public abstract class BasicCharacter : MonoBehaviour
         // 销毁数字对象
         Destroy(damageNumber);
     }
+
+    public virtual void EndOfRound()
+    {
+        // 处理 BUFF 的剩余回合数
+        buffManager.OnCharacterRoundEnd();
+    }
+
+    // 死亡回调（子类实现具体逻辑）
+    protected abstract void OnDeath();
 }    

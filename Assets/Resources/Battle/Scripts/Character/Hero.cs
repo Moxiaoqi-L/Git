@@ -5,8 +5,6 @@ using System;
 // 英雄类，代表游戏中的英雄角色，包含英雄的各种属性和行为
 public class Hero : BasicCharacter
 {
-    // 英雄的属性，使用 ScriptableObject 存储，可在编辑器中配置
-    public HeroAttributes heroAttributes;
     // 英雄的图片
     private ChessmanMove chessmanMove;
     // 每回合只能攻击一次
@@ -14,9 +12,9 @@ public class Hero : BasicCharacter
 
     protected override void InitializeSkills()
     {
-        if (heroAttributes.skills != null)
+        if (characterAttributes.skills != null)
         {
-            foreach (Skill skill in heroAttributes.skills)
+            foreach (Skill skill in characterAttributes.skills)
             {
                 if (skill != null)
                 {
@@ -31,9 +29,8 @@ public class Hero : BasicCharacter
         base.Start();
         // 初始化技能列表
         InitializeSkills();
-        Debug.Log("初始化技能列表:" + skills.Count);
         // 初始化生命值
-        currentHealthPoints = heroAttributes.maxHealthPoints;
+        currentHealthPoints = characterAttributes.maxHealthPoints;
         // 获取移动方式
         chessmanMove = GetComponent<ChessmanMove>();
         // 初始允许攻击
@@ -50,24 +47,24 @@ public class Hero : BasicCharacter
         // 播放攻击动画
         attackAnimation.PlayAttackAnimation(this.transform, target.transform);
         // 计算命中率
-        float hitRate = heroAttributes.accuracy / (heroAttributes.accuracy + target.enemyAttributes.evasion);
+        float hitRate = characterAttributes.accuracy / (characterAttributes.accuracy + target.characterAttributes.evasion);
         float randomValue = UnityEngine.Random.value;
         if (randomValue <= hitRate)
         {
             float actualattack = GetActualAttack();
-            bool isCritical = UnityEngine.Random.value <= heroAttributes.criticalRate;
+            bool isCritical = UnityEngine.Random.value <= characterAttributes.criticalRate;
             float damage = actualattack;
             if (isCritical)
             {
-                damage *= heroAttributes.criticalDamageMultiplier;
-                Debug.Log(heroAttributes.name + " 暴击了！ ");
+                damage *= characterAttributes.criticalDamageMultiplier;
+                Debug.Log(characterAttributes.name + " 暴击了！ ");
             }
-            Debug.Log(heroAttributes.name + " 攻击了！ ");
+            Debug.Log(characterAttributes.name + " 攻击了！ ");
             target.Defend(damage);
         }
         else
         {
-            Debug.Log(heroAttributes.name + " 攻击落空！ ");
+            Debug.Log(characterAttributes.name + " 攻击落空！ ");
         }
         // 获取攻击点数
         ColorPointCtrl.Get.GetColorPoint(this.transform, this.chessman.location.y);
@@ -75,42 +72,14 @@ public class Hero : BasicCharacter
         FinishAttack();
     }
 
-    // 防御方法，用于处理受到的伤害
-    public void Defend(float incomingDamage)
-    {
-        float actualDamage = Mathf.Max(0, incomingDamage - heroAttributes.defense);
-        // 展示伤害动画
-        ShowDamageNumber((int)actualDamage);
-        // 受伤震动
-        GetDamageShake();
-        currentHealthPoints -= (int)actualDamage;
-        if (currentHealthPoints < 0)
-        {
-            currentHealthPoints = 0;
-            Debug.Log(heroAttributes.name + " 鼠掉了 ");
-            chessman.ExitFromBoard();
-        }
-
-    }
-
     public float GetActualAttack(){
-        return heroAttributes.attack;
-    }
-
-    // 增加英雄生命值的方法
-    public void IncreaseHealthPoints(int amount)
-    {
-        ShowDamageNumber(amount, true);
-        // 增加英雄的生命值
-        currentHealthPoints += amount;
-        currentHealthPoints = currentHealthPoints > heroAttributes.maxHealthPoints ? heroAttributes.maxHealthPoints : currentHealthPoints;
+        return characterAttributes.attack;
     }
 
     // 每回合结束时调用，
-    public void EndOfRound()
+    public override void EndOfRound()
     {
-        // 处理 BUFF 的剩余回合数
-        // buffManager.EndOfRound();
+        base.EndOfRound();
         // 恢复头像
         RestoreImageColor();
         // 设置允许攻击
@@ -142,4 +111,7 @@ public class Hero : BasicCharacter
         Color normalColor = Color.white;
         image.DOColor(normalColor, 0.5f);
     }
+
+    protected override void OnDeath(){}
+
 }    
