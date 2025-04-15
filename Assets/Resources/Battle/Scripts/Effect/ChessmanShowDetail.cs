@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class CheesemanShowDetail : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public GameObject detailUI;
+    private GameObject detailUI;
     public GameObject buffDetail;
 
     private Hero hero;
@@ -14,6 +14,13 @@ public class CheesemanShowDetail : MonoBehaviour, IPointerEnterHandler, IPointer
 
     private void Start()
     {
+        detailUI = transform.GetChild(1).gameObject;
+        detailUI.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0.5f);
+        detailUI.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0.5f);
+        detailUI.GetComponent<RectTransform>().sizeDelta = new Vector2(300, 400);
+        detailUI.GetComponent<RectTransform>().pivot = new Vector2(0, 0.5f);
+        detailUI.GetComponent<RectTransform>().localPosition = new Vector2(100, 0);
+        detailUI.GetComponent<Canvas>().overrideSorting = true;
         hero = GetComponent<Hero>();
         enemy = GetComponent<Enemy>();
     }
@@ -21,7 +28,28 @@ public class CheesemanShowDetail : MonoBehaviour, IPointerEnterHandler, IPointer
     // 鼠标放上来时实例化
     public void OnPointerEnter(PointerEventData eventData)
     {
-
+        if (hero != null)
+        {
+            foreach (var buff in hero.buffManager.activeBuffs)
+            {
+                GameObject stat = Instantiate(buffDetail, detailUI.transform);
+                stat.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = buff.Value.buffName;
+                stat.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = buff.Value.stackLayers.ToString();
+                stat.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = buff.Value.buffDetail;
+            }
+        }
+        if (enemy != null)
+        {
+            Debug.Log("触发!");
+            foreach (var buff in enemy.buffManager.activeBuffs)
+            {
+                Debug.Log("内部触发!");
+                GameObject stat = Instantiate(buffDetail, detailUI.transform);
+                stat.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = buff.Value.buffName;
+                stat.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = buff.Value.stackLayers.ToString();
+                stat.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = buff.Value.buffDetail;
+            }     
+        }
     }
     
     // 摧毁所有子元素

@@ -214,6 +214,7 @@ GameObject:
   - component: {fileID: 525244632342884291}
   - component: {fileID: 1774526348912996022}
   - component: {fileID: 2960575401827140833}
+  - component: {fileID: 8188707218807977507}
   m_Layer: 5
   m_Name: EnemyChessmanPrefab
   m_TagString: Untagged
@@ -234,7 +235,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7307693986133902972}
-  - {fileID: 8873424263132324054}
+  - {fileID: 778709801404401090}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -311,12 +312,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chessman: {fileID: 0}
+  characterAttributes: {fileID: 0}
   skills: []
   image: {fileID: 0}
   currentHealthPoints: 0
   provisionalAttack: 0
   provisionalDefense: 0
-  enemyAttributes: {fileID: 0}
   targetHero: {fileID: 0}
 --- !u!114 &1774526348912996022
 MonoBehaviour:
@@ -383,6 +384,19 @@ MonoBehaviour:
   healSpeed: 8
   reduceSpeed: 20
   addSpeed: 20
+--- !u!114 &8188707218807977507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5739672945888862798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5be19edfe5340d34dbfb31db28eed3c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buffDetail: {fileID: 2141158010716729696, guid: 5ddf73e6e88a10448a91a00711b43ecc, type: 3}
 --- !u!1 &5912452181643168529
 GameObject:
   m_ObjectHideFlags: 0
@@ -583,7 +597,7 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1001 &811463521229620837
+--- !u!1001 &8838545093906588529
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -591,6 +605,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3509395576951099603}
     m_Modifications:
+    - target: {fileID: 5092292016881426313, guid: cbe11dab6d779a94788a523a3c055e09, type: 3}
+      propertyPath: m_OverrideSorting
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6183520423011194869, guid: cbe11dab6d779a94788a523a3c055e09, type: 3}
       propertyPath: m_Name
       value: chessmanDetailUI
@@ -657,7 +675,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8099259521089791667, guid: cbe11dab6d779a94788a523a3c055e09, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8099259521089791667, guid: cbe11dab6d779a94788a523a3c055e09, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -680,8 +698,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cbe11dab6d779a94788a523a3c055e09, type: 3}
---- !u!224 &8873424263132324054 stripped
+--- !u!224 &778709801404401090 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8099259521089791667, guid: cbe11dab6d779a94788a523a3c055e09, type: 3}
-  m_PrefabInstance: {fileID: 811463521229620837}
+  m_PrefabInstance: {fileID: 8838545093906588529}
   m_PrefabAsset: {fileID: 0}

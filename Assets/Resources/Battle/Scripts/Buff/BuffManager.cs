@@ -6,7 +6,7 @@ using UnityEngine;
 public class BuffManager
 {
     private BasicCharacter character; // 关联的角色实例
-    private Dictionary<string, Buff> activeBuffs = new Dictionary<string, Buff>(); // 当前生效的 BUFF
+    public Dictionary<string, Buff> activeBuffs = new Dictionary<string, Buff>(); // 当前生效的 BUFF
 
     // BUFF 类型注册表（名称到类型的映射）
     private static Dictionary<string, Type> buffTypeRegistry = new Dictionary<string, Type>

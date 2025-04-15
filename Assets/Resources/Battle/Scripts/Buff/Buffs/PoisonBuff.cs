@@ -5,10 +5,11 @@ public class PoisonBuff : Buff
 
     public PoisonBuff(int damagePerLayer, int initialLayers)
     {
-        buffName = "中毒";
+        buffName = "<color=#8470FF>中毒</color>";
         this.damagePerLayer = damagePerLayer;
         stackLayers = initialLayers;
         duration = 0; // 无固定持续时间，依赖层数
+        buffDetail = "回合结束时受到<color=#8470FF>" + damagePerLayer * stackLayers + "</color>点伤害";
     }
 
     public override void Apply(BasicCharacter character)
@@ -29,10 +30,13 @@ public class PoisonBuff : Buff
             character.Defend(damageAmount); // 调用角色受伤方法
         }
         base.OnRoundEnd(character); // 减少层数
+        buffDetail = "回合结束时受到<color=#8470FF>" + damagePerLayer * stackLayers + "</color>点伤害";
+
     }
 
     public override void Refresh(Buff newBuff)
     {
         stackLayers += newBuff.stackLayers; // 叠加层数
+        buffDetail = "回合结束时受到<color=#8470FF>" + damagePerLayer * stackLayers + "</color>点伤害";
     }
 }

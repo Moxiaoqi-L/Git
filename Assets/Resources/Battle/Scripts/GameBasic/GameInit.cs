@@ -13,6 +13,9 @@ public class GameInit : MonoBehaviour
     // 最大波次
     public int maxStepNum;
 
+    // 预制体
+    public GameObject enemyChessmanPrefab;
+
     private static TextAsset jsonFile;
     private static LevelData levelData;
     private static StepData stepData;
@@ -99,8 +102,7 @@ public class GameInit : MonoBehaviour
     public void InstantiateEnemyChessman(Location location,string avatarImageFileName, string attributeFileName)
     {
         // 加载预制体 , 配置文件, 图片
-        GameObject enemyChessmanPrefab = Resources.Load<GameObject>("Battle/Prefab/EnemyChessmanPrefab");
-        EnemyAttributes enemyAttributes = Resources.Load<EnemyAttributes>("Battle/Scripts/EnemyAttributes/" + attributeFileName);
+        EnemyAttributes enemyAttributes = Resources.Load<EnemyAttributes>("Battle/Scripts/CharacterAttributes/EnemyAttributes/" + attributeFileName);
         Sprite sprite = Resources.Load<Sprite>("Battle/Image/Avatar/" + avatarImageFileName);
 
         if (enemyChessmanPrefab == null)

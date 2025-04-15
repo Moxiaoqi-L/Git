@@ -17,4 +17,9 @@ MonoBehaviour:
   costs:
   - {r: 0, g: 0, b: 0.5, a: 1}
   - {r: 0, g: 0, b: 0.5, a: 1}
+  costs:
+  - {r: 0, g: 0, b: 0.5, a: 1}
+  - {r: 0, g: 0, b: 0.5, a: 1}
   healPoints: 20
+  healPerLayer: 4
+  layers: 2

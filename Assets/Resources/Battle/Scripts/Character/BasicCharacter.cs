@@ -13,7 +13,7 @@ public abstract class BasicCharacter : MonoBehaviour
     // 统一属性基类（替代原Hero/Enemy特有的属性类）
     public CharacterAttributes characterAttributes;
     // 管理英雄 BUFF 的对象
-    protected BuffManager buffManager;
+    public BuffManager buffManager;
     // 攻击动画
     public IAttackAnimation attackAnimation;
     // 拥有的技能列表

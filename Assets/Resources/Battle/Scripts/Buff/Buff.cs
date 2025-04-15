@@ -4,6 +4,7 @@ using UnityEngine;
 public abstract class Buff
 {
     public string buffName;         // BUFF 唯一名称
+    public string buffDetail;
     public int duration;            // 持续时间（秒，0 表示永久）
     public int stackLayers;         // 叠加层数
 
@@ -21,7 +22,6 @@ public abstract class Buff
     }
 
     // 回合结束时触发（用于持续回合生效的BUFF）
-
     public virtual void OnRoundEnd(BasicCharacter character)
     {
         stackLayers = Mathf.Max(0, stackLayers - 1); // 减少层数

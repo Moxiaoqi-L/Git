@@ -289,6 +289,7 @@ GameObject:
   - component: {fileID: 156508293287355267}
   - component: {fileID: 567262331771243183}
   - component: {fileID: 356240706307179592}
+  - component: {fileID: 2458510552060454137}
   m_Layer: 5
   m_Name: HeroChessmanPrefab
   m_TagString: Untagged
@@ -431,12 +432,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chessman: {fileID: 0}
+  characterAttributes: {fileID: 0}
   skills: []
   image: {fileID: 0}
   currentHealthPoints: 100
   provisionalAttack: 0
   provisionalDefense: 0
-  heroAttributes: {fileID: 0}
   hasAttacked: 0
 --- !u!114 &356240706307179592
 MonoBehaviour:
@@ -459,6 +460,20 @@ MonoBehaviour:
   healSpeed: 8
   reduceSpeed: 20
   addSpeed: 20
+--- !u!114 &2458510552060454137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5739672945888862798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5be19edfe5340d34dbfb31db28eed3c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detailUI: {fileID: 6183520423011194869, guid: cbe11dab6d779a94788a523a3c055e09, type: 3}
+  buffDetail: {fileID: 2141158010716729696, guid: 5ddf73e6e88a10448a91a00711b43ecc, type: 3}
 --- !u!1 &7039159411699518091
 GameObject:
   m_ObjectHideFlags: 0
