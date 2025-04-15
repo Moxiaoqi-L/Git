@@ -22,6 +22,7 @@ public class Enemy : BasicCharacter
     // 敌方的攻击方法，用于对敌人造成伤害，新增 selfAttack 参数用于控制是否自我攻击
     public void Attack(Enemy self)
     {
+        if (isStunned) return;
         // 获取所有 Hero 棋子
         List<Chessman> allHeroes = Chessman.All(Camp.Player);
         // 将要攻击的目标英雄

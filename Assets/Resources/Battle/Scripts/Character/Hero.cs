@@ -40,7 +40,7 @@ public class Hero : BasicCharacter
     // 英雄的攻击方法，用于对敌人造成伤害，新增 selfAttack 参数用于控制是否自我攻击
     public void Attack(Enemy target)
     {
-        if (hasAttacked)
+        if (hasAttacked || isStunned)
         {
             return;
         }

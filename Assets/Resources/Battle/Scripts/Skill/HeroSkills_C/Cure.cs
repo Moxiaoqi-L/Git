@@ -18,6 +18,8 @@ public class SelfHealingSkill : Skill
         {
             hero.IncreaseHealthPoints(healPoints);
             hero.AddBuff("自愈", healPerLayer, layers);
+            hero.AddBuff("中毒", 3, 3);
+            
         }
         else
         {

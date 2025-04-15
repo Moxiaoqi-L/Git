@@ -30,24 +30,28 @@ public class CheesemanShowDetail : MonoBehaviour, IPointerEnterHandler, IPointer
     {
         if (hero != null)
         {
+            int i = 0;
             foreach (var buff in hero.buffManager.activeBuffs)
             {
                 GameObject stat = Instantiate(buffDetail, detailUI.transform);
+                stat.transform.localPosition += new Vector3(0, -i * 100, 0);
                 stat.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = buff.Value.buffName;
                 stat.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = buff.Value.stackLayers.ToString();
                 stat.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = buff.Value.buffDetail;
+                i++;
             }
         }
         if (enemy != null)
         {
-            Debug.Log("触发!");
+            int i = 0;
             foreach (var buff in enemy.buffManager.activeBuffs)
             {
-                Debug.Log("内部触发!");
                 GameObject stat = Instantiate(buffDetail, detailUI.transform);
+                stat.transform.localPosition += new Vector3(0, -i * 100, 0);
                 stat.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = buff.Value.buffName;
                 stat.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = buff.Value.stackLayers.ToString();
                 stat.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = buff.Value.buffDetail;
+                i++;
             }     
         }
     }

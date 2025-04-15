@@ -472,8 +472,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5be19edfe5340d34dbfb31db28eed3c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detailUI: {fileID: 6183520423011194869, guid: cbe11dab6d779a94788a523a3c055e09, type: 3}
   buffDetail: {fileID: 2141158010716729696, guid: 5ddf73e6e88a10448a91a00711b43ecc, type: 3}
+  canvas: {fileID: 0}
 --- !u!1 &7039159411699518091
 GameObject:
   m_ObjectHideFlags: 0

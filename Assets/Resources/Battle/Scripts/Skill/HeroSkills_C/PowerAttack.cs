@@ -34,7 +34,7 @@ public class PowerAttack : Skill
 
         float actualAttack = hero.GetActualAttack();
         float damage = actualAttack * (attackDamageMultiplier / 100) * (1 + hero.characterAttributes.skillPower) * (1 + hero.characterAttributes.damagePower);
-        target.AddBuff("中毒", 3, 3);
+        target.AddBuff("眩晕", 1);
         target.Defend((int)damage);
         hero.FinishAttack();
     }

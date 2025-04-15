@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +13,8 @@ public class BuffManager
     private static Dictionary<string, Type> buffTypeRegistry = new Dictionary<string, Type>
     {
         { "自愈", typeof(HealBuff) },
-        { "中毒", typeof(PoisonBuff) }
+        { "中毒", typeof(PoisonBuff) },
+        { "眩晕", typeof(StunBuff) }
     };
 
     public BuffManager(BasicCharacter character)
@@ -108,6 +110,16 @@ public class BuffManager
     // 角色回合结束时调用（处理回合生效的BUFF）
     public void OnCharacterRoundEnd()
     {
+        character.StartCoroutine(WaitForBuffStackLayers());
+    }
+
+    private IEnumerator WaitForBuffDuration(Buff buff)
+    {
+        yield return new WaitForSeconds(buff.duration);
+        RemoveBuff(buff.buffName); // 持续时间结束后自动移除
+    }
+    private IEnumerator WaitForBuffStackLayers()
+    {
         List<string> buffsToCheck = new List<string>(activeBuffs.Keys);
         foreach (string buffName in buffsToCheck)
         {
@@ -117,12 +129,7 @@ public class BuffManager
             {
                 RemoveBuff(buffName); // 层数为0时移除
             }
+            yield return new WaitForSeconds(0.5f);
         }
-    }
-
-    private System.Collections.IEnumerator WaitForBuffDuration(Buff buff)
-    {
-        yield return new WaitForSeconds(buff.duration);
-        RemoveBuff(buff.buffName); // 持续时间结束后自动移除
     }
 }

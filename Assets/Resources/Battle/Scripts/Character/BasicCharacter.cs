@@ -28,6 +28,9 @@ public abstract class BasicCharacter : MonoBehaviour
     public int provisionalAttack;
     // 临时防御
     public int provisionalDefense;
+
+    // 眩晕状态
+    public bool isStunned = false;
     
     // 初始化英雄的技能列表
     protected abstract void InitializeSkills();

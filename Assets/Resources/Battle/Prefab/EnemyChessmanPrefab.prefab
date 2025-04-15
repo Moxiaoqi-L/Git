@@ -397,6 +397,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buffDetail: {fileID: 2141158010716729696, guid: 5ddf73e6e88a10448a91a00711b43ecc, type: 3}
+  canvas: {fileID: 0}
 --- !u!1 &5912452181643168529
 GameObject:
   m_ObjectHideFlags: 0
