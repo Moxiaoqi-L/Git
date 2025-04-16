@@ -8,7 +8,8 @@ public class TransitionManager : MonoBehaviour
 {
     public static TransitionManager Instance { get; private set; }
 
-    public Image transitionImage; // 转场用的UI元素，如黑色遮罩
+    public GameObject transitionImagePrefab; // 转场用的UI元素，如黑色遮罩
+    private GameObject img = null;
     public float transitionDuration = 1f; // 转场动画持续时间
 
     private void Awake()
@@ -16,6 +17,7 @@ public class TransitionManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -26,6 +28,8 @@ public class TransitionManager : MonoBehaviour
     // 开始转场动画
     public void StartTransition(Action onTransitionComplete)
     {
+        if (img == null) img = Instantiate(transitionImagePrefab, GameObject.Find("Canvas").transform);
+        Image transitionImage = img.GetComponent<Image>();
         // 显示转场UI
         transitionImage.gameObject.SetActive(true);
         transitionImage.color = new Color(0, 0, 0, 0);
@@ -46,8 +50,11 @@ public class TransitionManager : MonoBehaviour
     }
 
     // 带场景加载的转场方法
-    public void StartTransition(string targetSceneName)
+    public void StartTransition(string targetSceneName, bool isStoryMode = false)
     {
+        GameObject img = Instantiate(transitionImagePrefab, GameObject.Find("Canvas").transform);
+        Image transitionImage = img.GetComponent<Image>();
+        Debug.Log("带场景加载的转场方法");
         transitionImage.gameObject.SetActive(true);
         transitionImage.color = new Color(0, 0, 0, 0);
 

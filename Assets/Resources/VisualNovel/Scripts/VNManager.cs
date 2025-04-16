@@ -3,11 +3,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class VNManager : MonoBehaviour
 {
+    public static VNManager Get = null;
     public TextMeshProUGUI speakerName;
     public TextMeshProUGUI speakerContent;
     public TypewriterEffect typewriterEffect;
@@ -48,6 +50,17 @@ public class VNManager : MonoBehaviour
     private bool isAutoPlay = false;
     private bool isSkip = false;
 
+    private void Awake() {
+        if (Get == null)
+        {
+            Get = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -87,7 +100,7 @@ public class VNManager : MonoBehaviour
         LoadStoryFromFile(fileName);
         DisplayNextLine();
     }
-    void Initialize()
+    public void Initialize()
     {
         currentLine = Constants.DEFAULT_START_LINE;
 
@@ -97,11 +110,10 @@ public class VNManager : MonoBehaviour
         characterImage2.gameObject.SetActive(false);
         choicePanel.SetActive(false);
     }
-    void LoadStoryFromFile(string fileName)
+    public void LoadStoryFromFile(string fileName)
     {
         currentStoryFileName = fileName;
-        var path = storyPath + fileName + excelFileExtension;
-        storyData = ExcelReader.ReadExcel(path);
+        storyData = ExcelReader.ReadExcel(currentStoryFileName);
         if (storyData == null || storyData.Count == 0)
         {
             // DEBUG

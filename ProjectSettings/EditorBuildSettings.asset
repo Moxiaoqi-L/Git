@@ -12,9 +12,15 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 271d4f2035e960d4f870b77d4e2aa927
   - enabled: 1
-    path: Assets/Scenes/Battle.unity
+    path: Assets/Scenes/StorysMenu.unity
+    guid: 41f6214e3c34a9345b4551b0c6ef7698
+  - enabled: 1
+    path: Assets/Scenes/ReuseScene/VisualNovel.unity
+    guid: b678a0020df00df469c82df18586cb08
+  - enabled: 1
+    path: Assets/Scenes/ReuseScene/Battle.unity
     guid: b1c246d496be7d148b55aa4b1818bd3b
   - enabled: 1
-    path: Assets/Scenes/VisualNovel.unity
-    guid: b678a0020df00df469c82df18586cb08
+    path: Assets/Scenes/Chapter 0.unity
+    guid: b00660b970eecb144bc65d54e02a46e5
   m_configObjects: {}

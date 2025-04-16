@@ -5,9 +5,9 @@ using UnityEngine;
 public class Constants
 {
     // 故事路径
-    public static string STORY_PATH = "Assets/Resources/VisualNovel/Story/MainStory/Chapter 1/";
+    public static string STORY_PATH = "VisualNovel/Story/MainStory/Chapter 0/"; // 仅文件名部分
     // 默认故事文件名
-    public static string DEFAULT_STORY_FILE_NAME = "Chapter1-0_zh";
+    public static string DEFAULT_STORY_FILE_NAME = "Clip 0_zh";
     // 文件后缀名
     public static string EXCEL_FILE_EXTENSION = ".xlsx";
     // 默认开始行数
