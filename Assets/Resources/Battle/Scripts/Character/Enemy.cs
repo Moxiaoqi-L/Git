@@ -7,11 +7,6 @@ public class Enemy : BasicCharacter
     // 攻击目标
     public Hero targetHero;
 
-    protected override void InitializeSkills()
-    {
-
-    }
-
     // 当对象启用时调用的方法，用于初始化和执行一些操作
     private new void Start() {
         base.Start();
@@ -22,6 +17,7 @@ public class Enemy : BasicCharacter
     // 敌方的攻击方法，用于对敌人造成伤害，新增 selfAttack 参数用于控制是否自我攻击
     public void Attack(Enemy self)
     {
+        // 眩晕不攻击
         if (isStunned) return;
         // 获取所有 Hero 棋子
         List<Chessman> allHeroes = Chessman.All(Camp.Player);
@@ -81,6 +77,7 @@ public class Enemy : BasicCharacter
                 Debug.Log(characterAttributes.name + " 暴击了！ ");
             }
             targetHero.Defend(damage);
+            targetHero.AddBuff("眩晕", 1);
         }
         else
         {

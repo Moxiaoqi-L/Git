@@ -9,6 +9,7 @@ public class PowerAttack : Skill
     public float attackDamageMultiplier;
     public override void Use(Hero hero, Enemy target = null)
     {
+        if (hero.isStunned) return;
         if (hero.hasAttacked || !ColorPointCtrl.Get.RemoveColorPointsByColors(costs)) return;
         // 技能使用逻辑
         if (target == null)
@@ -34,7 +35,6 @@ public class PowerAttack : Skill
 
         float actualAttack = hero.GetActualAttack();
         float damage = actualAttack * (attackDamageMultiplier / 100) * (1 + hero.characterAttributes.skillPower) * (1 + hero.characterAttributes.damagePower);
-        target.AddBuff("眩晕", 1);
         target.Defend((int)damage);
         hero.FinishAttack();
     }

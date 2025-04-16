@@ -29,11 +29,25 @@ public abstract class BasicCharacter : MonoBehaviour
     // 临时防御
     public int provisionalDefense;
 
+    // 每回合只能攻击一次
+    public bool hasAttacked;
     // 眩晕状态
     public bool isStunned = false;
     
     // 初始化英雄的技能列表
-    protected abstract void InitializeSkills();
+    protected void InitializeSkills()
+    {
+        if (characterAttributes.skills != null)
+        {
+            foreach (Skill skill in characterAttributes.skills)
+            {
+                if (skill != null)
+                {
+                    skills.Add(skill);
+                }
+            }  
+        }
+    }
 
     protected void Start() {
         // 获取棋子自身
@@ -95,6 +109,18 @@ public abstract class BasicCharacter : MonoBehaviour
     public void RemoveBuff(string buffName)
     {
         buffManager.RemoveBuff(buffName);
+    }
+
+    // 重置自身状态
+    public void ClearAllBuffs()
+    {
+        buffManager.RemoveAllBuffs(); // 调用BuffManager的清除方法
+    }
+
+    public virtual void RefreshSelf()
+    {
+        ClearAllBuffs();
+        hasAttacked = false; // 重置攻击状态
     }
 
     // 受伤震动

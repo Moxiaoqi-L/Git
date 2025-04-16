@@ -21,6 +21,11 @@ public class StunBuff : Buff
         originalColor = character.image.color; // 初始化时保存原始颜色
         PlayStunAnimation(character.image);
         character.isStunned = true;
+        // 禁止移动
+        if (character is Hero hero) // 确保是英雄对象
+        {
+            hero.chessmanMove.enabled = false; // 禁用移动组件
+        }
     }
 
     public override void Remove(BasicCharacter character)
@@ -28,6 +33,11 @@ public class StunBuff : Buff
         StopStunAnimation(character.image);
         // 移除时：清除眩晕状态
         character.isStunned = false;
+        // 允许移动
+        if (character is Hero hero) // 确保是英雄对象
+        {
+            hero.chessmanMove.enabled = true; // 启用移动组件
+        }
     }
 
     public override void OnRoundEnd(BasicCharacter character)

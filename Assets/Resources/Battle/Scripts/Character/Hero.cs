@@ -6,23 +6,7 @@ using System;
 public class Hero : BasicCharacter
 {
     // 英雄的图片
-    private ChessmanMove chessmanMove;
-    // 每回合只能攻击一次
-    public bool hasAttacked;
-
-    protected override void InitializeSkills()
-    {
-        if (characterAttributes.skills != null)
-        {
-            foreach (Skill skill in characterAttributes.skills)
-            {
-                if (skill != null)
-                {
-                    skills.Add(skill);
-                }
-            }  
-        }
-    }
+    public ChessmanMove chessmanMove;
 
     // 当对象启用时调用的方法，用于初始化和执行一些操作
     private new void Start() {
@@ -76,16 +60,20 @@ public class Hero : BasicCharacter
         return characterAttributes.attack;
     }
 
+    public void StartOfTurn()
+    {
+        // 设置允许攻击
+        hasAttacked = false;
+        // 恢复位移
+        chessmanMove.enabled = true;        
+    }
+
     // 每回合结束时调用，
     public override void EndOfRound()
     {
         base.EndOfRound();
         // 恢复头像
         RestoreImageColor();
-        // 设置允许攻击
-        hasAttacked = false;
-        // 恢复位移
-        chessmanMove.enabled = true;
     }
 
     public void FinishAttack(){
@@ -95,6 +83,15 @@ public class Hero : BasicCharacter
         MakeImageGray();
         // 禁止位移
         chessmanMove.enabled = false;
+    }
+
+    public override void RefreshSelf()
+    {
+        base.RefreshSelf();
+        // 恢复头像
+        RestoreImageColor();
+        // 恢复位移
+        chessmanMove.enabled = true;
     }
 
     // 图片变灰的方法
@@ -107,7 +104,6 @@ public class Hero : BasicCharacter
     // 图片恢复正常的方法
     public void RestoreImageColor()
     {
-        hasAttacked = false; // 重置攻击状态
         Color normalColor = Color.white;
         image.DOColor(normalColor, 0.5f);
     }

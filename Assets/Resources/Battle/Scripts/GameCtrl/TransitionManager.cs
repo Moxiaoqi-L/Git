@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
+using System;
 
 public class TransitionManager : MonoBehaviour
 {
@@ -22,7 +24,7 @@ public class TransitionManager : MonoBehaviour
     }
 
     // 开始转场动画
-    public void StartTransition(System.Action onTransitionComplete)
+    public void StartTransition(Action onTransitionComplete)
     {
         // 显示转场UI
         transitionImage.gameObject.SetActive(true);
@@ -41,5 +43,20 @@ public class TransitionManager : MonoBehaviour
                 transitionImage.gameObject.SetActive(false);
             });
         });
+    }
+
+    // 带场景加载的转场方法
+    public void StartTransition(string targetSceneName)
+    {
+        transitionImage.gameObject.SetActive(true);
+        transitionImage.color = new Color(0, 0, 0, 0);
+
+        // 淡入动画
+        transitionImage.DOFade(1, transitionDuration / 2)
+            .OnComplete(() => 
+            {
+                // 动画完成后加载场景
+                SceneManager.LoadScene(targetSceneName);
+            });
     }
 }

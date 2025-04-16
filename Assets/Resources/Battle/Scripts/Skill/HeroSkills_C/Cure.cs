@@ -11,6 +11,7 @@ public class SelfHealingSkill : Skill
 
     public override void Use(Hero hero, Enemy target = null)
     {
+        if (hero.isStunned) return;
         if (hero.hasAttacked || !ColorPointCtrl.Get.RemoveColorPointsByColors(costs)) return;
         // 获取前方的 hero
         Hero targetHero = MethodsForSkills.GetFrontHero(hero.chessman.location);

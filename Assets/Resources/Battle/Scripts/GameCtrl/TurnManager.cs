@@ -21,17 +21,32 @@ public class TurnManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    public void RefreshPlayerTurn()
+    
+    // 开启玩家回合
+    public void StartPlayerTurn()
     {
         // 当所有敌方行动完毕，开启玩家回合
         all = Chessman.All();
-        foreach (var chessman in all)
+        foreach (var chessman in Chessman.All(Camp.Enemy))
         {
-            chessman.enemy?.EndOfRound();
-            chessman.hero?.EndOfRound();
+            chessman.enemy.EndOfRound();
+        }
+        List<Hero> allHeroes = Chessman.AllHeros();
+        foreach (Hero hero in allHeroes)
+        {
+            hero.StartOfTurn();
         }
         isPlayerTurn = true;
+    }
+
+    // 刷新玩家回合
+    public void RefreshPlayerTurn()
+    {
+        List<Hero> allHeroes = Chessman.AllHeros();
+        foreach (Hero hero in allHeroes)
+        {
+            hero.RefreshSelf();
+        }
     }
 
     // 结束玩家回合
@@ -39,20 +54,21 @@ public class TurnManager : MonoBehaviour
     {
         if (isPlayerTurn)
         {
-            heroes = Chessman.All(Camp.Player);
-            foreach (var hero in heroes)
-            {
-                hero.hero.FinishAttack();
-            }
+            StartCoroutine(WaitForBuffSettlement());
             isPlayerTurn = false;
-            StartEnemyTurn();
         }
-            List<Chessman> remainingEnemies = Chessman.All(Camp.Enemy);
     }
 
+    // 开始敌人回合
     private void StartEnemyTurn()
     {
         StartCoroutine(EnemyAttackSequence());
+    }
+
+    // 结束敌人回合
+    private void EndEnemyTurn()
+    {
+
     }
 
     // 协程方法，控制敌人依次攻击
@@ -66,8 +82,42 @@ public class TurnManager : MonoBehaviour
                 yield return new WaitForSeconds(0.4f);
             }
         }
+        // 当所有敌方行动完毕，结束敌人回合
+        EndEnemyTurn();
         // 当所有敌方行动完毕，开启玩家回合
-        RefreshPlayerTurn();
+        StartPlayerTurn();
+    }
+
+    // 协程方法, 玩家回合结束时等待buff结算完毕
+    private IEnumerator WaitForBuffSettlement()
+    {
+        // 获取所有英雄并触发回合结束逻辑
+        List<Hero> allHeroes = Chessman.AllHeros();
+        foreach (Hero hero in allHeroes)
+        {
+            hero.FinishAttack();
+            hero.EndOfRound(); // 触发英雄的回合结束（包括Buff结算）
+            yield return new WaitForSeconds(0.1f); // 等待Buff协程开始
+        }
+
+        // 等待所有英雄的BuffManager完成回合结算（根据实际协程逻辑调整）
+        // 假设BuffManager使用协程处理层数，这里需要确保协程完成
+        yield return new WaitUntil(() => AreAllBuffsSettled(allHeroes));
+
+        StartEnemyTurn(); // 所有Buff结算完成后启动敌人回合
+    }
+
+    // 检查所有英雄的BuffManager是否无正在处理的协程
+    private bool AreAllBuffsSettled(List<Hero> heroes)
+    {
+        // 检查所有英雄的BuffManager是否无正在处理的协程
+        // 实际需根据BuffManager的状态判断
+        foreach (Hero hero in heroes)
+        {
+            if (hero.buffManager.IsProcessingRoundEnd) // 假设添加状态标记
+                return false;
+        }
+        return true;
     }
     
 }

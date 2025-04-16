@@ -151,8 +151,13 @@ public class GameInit : MonoBehaviour
         Debug.Log(remainingEnemies.Count);
         if (remainingEnemies.Count == 0)
         {
+            if(currentStepNum >= maxStepNum)
+            {
+                TransitionManager.Instance.StartTransition("MainMenu");
+            }
             // 进入下一阶段
             TransitionManager.Instance.StartTransition(NextStep);
+            // 刷新 hero 状态
             TurnManager.Instance.RefreshPlayerTurn();
         }
     }

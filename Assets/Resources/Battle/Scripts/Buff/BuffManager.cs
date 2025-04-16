@@ -6,6 +6,7 @@ using UnityEngine;
 // 管理角色 BUFF 的类
 public class BuffManager
 {
+    public bool IsProcessingRoundEnd { get; private set; } // 当前是否在处理回合结束结算
     private BasicCharacter character; // 关联的角色实例
     public Dictionary<string, Buff> activeBuffs = new Dictionary<string, Buff>(); // 当前生效的 BUFF
 
@@ -64,6 +65,16 @@ public class BuffManager
         }
     }
 
+    // 移除所有 BUFF
+    public void RemoveAllBuffs()
+    {
+        List<string> buffKeys = new List<string>(activeBuffs.Keys);
+        foreach (string key in buffKeys)
+        {
+            RemoveBuff(key); // 调用单个BUFF移除逻辑
+        }
+    }
+
     // 创建 BUFF 实例
     private Buff CreateBuffInstance(Type type, object[] args)
     {
@@ -103,22 +114,25 @@ public class BuffManager
         if (buff.duration > 0)
         {
             // 使用协程处理持续时间（需在 Character 中调用 StartCoroutine）
-            character.StartCoroutine(WaitForBuffDuration(buff));
+            character.StartCoroutine(ProcessRoundEndBuffs(buff));
         }
     }
 
     // 角色回合结束时调用（处理回合生效的BUFF）
     public void OnCharacterRoundEnd()
     {
-        character.StartCoroutine(WaitForBuffStackLayers());
+        IsProcessingRoundEnd = true; // 开始处理时标记为true
+        character.StartCoroutine(ProcessRoundEndBuffs());
     }
 
-    private IEnumerator WaitForBuffDuration(Buff buff)
+    private IEnumerator ProcessRoundEndBuffs(Buff buff)
     {
         yield return new WaitForSeconds(buff.duration);
         RemoveBuff(buff.buffName); // 持续时间结束后自动移除
     }
-    private IEnumerator WaitForBuffStackLayers()
+
+    // 等待
+    private IEnumerator ProcessRoundEndBuffs()
     {
         List<string> buffsToCheck = new List<string>(activeBuffs.Keys);
         foreach (string buffName in buffsToCheck)
@@ -131,5 +145,6 @@ public class BuffManager
             }
             yield return new WaitForSeconds(0.5f);
         }
+        IsProcessingRoundEnd = false;
     }
 }
