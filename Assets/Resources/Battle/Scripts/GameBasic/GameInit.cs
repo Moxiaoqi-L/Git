@@ -15,6 +15,8 @@ public class GameInit : MonoBehaviour
 
     // 预制体
     public GameObject enemyChessmanPrefab;
+    // 场景加载的实例
+    private SceneLoaderWithAnimation sceneLoader;
 
     private static TextAsset jsonFile;
     private static LevelData levelData;
@@ -23,16 +25,9 @@ public class GameInit : MonoBehaviour
     private void Awake()
     {
         // 检查实例是否已经存在
-        if (Instance == null)
-        {
-            // 如果不存在，则将当前实例赋值给 Instance
-            Instance = this;
-        }
-        else
-        {
-            // 如果已经存在，则销毁当前对象
-            Destroy(gameObject);
-        }
+        if (Instance == null) Instance = this;
+        // 获取场景加载
+        sceneLoader = FindObjectOfType<SceneLoaderWithAnimation>();
     }
 
     private void OnDestroy()
@@ -153,12 +148,15 @@ public class GameInit : MonoBehaviour
         {
             if(currentStepNum >= maxStepNum)
             {
-                TransitionManager.Instance.StartTransition("MainMenu");
+                sceneLoader.LoadScene("MainMenu");
             }
-            // 进入下一阶段
-            TransitionManager.Instance.StartTransition(NextStep);
-            // 刷新 hero 状态
-            TurnManager.Instance.RefreshPlayerTurn();
+            else
+            {
+                // 进入下一阶段
+                sceneLoader.LoadScene(null, NextStep);
+                // 刷新 hero 状态
+                TurnManager.Instance.RefreshPlayerTurn();
+            }
         }
     }
 

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Chessman
   - Square
+  - Shade
   layers:
   - Default
   - TransparentFX
