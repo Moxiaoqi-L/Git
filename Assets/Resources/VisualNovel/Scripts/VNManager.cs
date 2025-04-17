@@ -15,9 +15,9 @@ public class VNManager : MonoBehaviour
     public TypewriterEffect typewriterEffect;
     public GameObject historyScrollView; 
 
-    public AudioSource vocalAudio;
-    public AudioSource backgroundMusic;
-    public AudioSource soundAudio;
+    private AudioSource vocalAudio;
+    private AudioSource backgroundMusic;
+    private AudioSource soundAudio;
 
     public Image avatarImage;
     public Image backgroundImage;
@@ -65,6 +65,7 @@ public class VNManager : MonoBehaviour
     void Start()
     {
         topButtonsAddListener();
+        GetAudioSource();
         InitializeAndLoadStory(defaultStoryFileName);
     }
     // Update is called once per frame
@@ -78,6 +79,18 @@ public class VNManager : MonoBehaviour
             }
         }
     }
+
+    // 获取音频
+    private void GetAudioSource()
+    {
+        vocalAudio = GameObject.Find("Vocal").GetComponent<AudioSource>();
+        backgroundMusic = GameObject.Find("BGM").GetComponent<AudioSource>();
+        soundAudio = GameObject.Find("Sound").GetComponent<AudioSource>();   
+        Debug.Log(vocalAudio);    
+        Debug.Log(backgroundMusic);   
+        Debug.Log(soundAudio);    
+    }
+
     void RecordHistory(string speaker, string content)
     {
         string historyNameRecord = speaker;
@@ -323,6 +336,12 @@ public class VNManager : MonoBehaviour
             audioSource.DOFade(0, 2f);
         }
     }
+    void StopAllAudio()
+    {
+        vocalAudio.Stop();
+        backgroundMusic.Stop();
+        soundAudio.Stop();
+    }
     bool IsHittingTopButtons()
     {
         return RectTransformUtility.RectangleContainsScreenPoint(
@@ -342,7 +361,10 @@ public class VNManager : MonoBehaviour
     }
     void OnSkipButtonClick()
     {
-        // TODO
+        // 弹出确认退出？
+        SceneLoaderWithAnimation sceneLoaderWithAnimation = FindObjectOfType<SceneLoaderWithAnimation>();
+        sceneLoaderWithAnimation.LoadScene("Chapter 0");
+        StopAllAudio();
     }
     void OnHistoryButtonClick()
     {

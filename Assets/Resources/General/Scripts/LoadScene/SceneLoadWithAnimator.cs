@@ -13,6 +13,12 @@ public class SceneLoaderWithAnimation : MonoBehaviour
     private void Awake() {
         // 获取动画组件
         animator = GetComponent<Animator>();
+        SceneLoaderWithAnimation[] sceneLoaderWithAnimation = FindObjectsByType<SceneLoaderWithAnimation>(FindObjectsSortMode.None);
+        if (sceneLoaderWithAnimation.Length > 1) 
+        {
+            Destroy(gameObject);
+            return;
+        }
         // 阻止切换场景是销毁
         DontDestroyOnLoad(gameObject);
     }
