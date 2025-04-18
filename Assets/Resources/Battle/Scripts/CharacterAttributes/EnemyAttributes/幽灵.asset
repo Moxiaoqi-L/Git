@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 260e587f9b80877458106056bd31f243, type: 3}
   m_Name: "\u5E7D\u7075"
   m_EditorClassIdentifier: 
-  enemyName: "\u5E7D\u7075"
+  characterName: Default
   level: 1
   maxLevel: 45
   rank: 0
@@ -31,3 +31,15 @@ MonoBehaviour:
   attackGrowth: 0
   defenseGrowth: 0
   maxHealthPointsGrowth: 0
+  skills: []
+  attackRange:
+  - x: 0
+    y: -1
+  - x: 0
+    y: -2
+  - x: 0
+    y: -3
+  - x: 0
+    y: -4
+  - x: 0
+    y: -5
