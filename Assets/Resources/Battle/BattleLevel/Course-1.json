@@ -6,6 +6,7 @@
             {
                 "attributes" : "幽灵",
                 "avatarImage" : "ghost",
+                "rarityImage" : "Rarity Enemy 0",
                 "locationX" : 1,
                 "locationY" : 3, 
                 "rank" : 0,
@@ -16,6 +17,7 @@
             {
                 "attributes" : "幽灵",
                 "avatarImage" : "ghost",
+                "rarityImage" : "Rarity Enemy 0",
                 "locationX" : 1,
                 "locationY" : 4, 
                 "rank" : 0,
@@ -24,6 +26,7 @@
             {
                 "attributes" : "幽灵",
                 "avatarImage" : "ghost",
+                "rarityImage" : "Rarity Enemy 0",
                 "locationX" : 2,
                 "locationY" : 4, 
                 "rank" : 0,

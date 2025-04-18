@@ -5,7 +5,7 @@ using UnityEngine;
 public class PowerAttack : Skill
 {   
     // 技能花费
-    public Color[] costs = {Constants.REDPOINT,Constants.REDPOINT};
+    // public new Color[] costs = {Constants.REDPOINT,Constants.REDPOINT};
     public float attackDamageMultiplier;
     public override void Use(Hero hero, Enemy target = null)
     {

@@ -129,21 +129,70 @@ public class Chessman : MonoBehaviour
         if (SelectCore.Selection == null)
         {
             SelectCore.TrySelect(this);
+            if (camp == Camp.Player)
+            {
+                ShowAttackRange(hero);
+            }
             return;
         }
+        // 重复点击棋子,取消选中
         if (SelectCore.Selection == this)
         {
             SelectCore.DropSelect();
+            // 如果是玩家,取消显示攻击范围
+            if (camp == Camp.Player)
+            {
+                CancelShowAttackRange(hero);
+            }
             return;
         }
+
         if (camp == Camp.Player)
         {
+            if (SelectCore.Selection.camp == Camp.Player)
+            {
+                CancelShowAttackRange(SelectCore.Selection.hero);
+            }
+            ShowAttackRange(hero);
             SelectCore.TrySelect(this);
             return;
         }
         if (SelectCore.Selection.camp == Camp.Player && camp == Camp.Enemy)
         {
-            SelectCore.Selection.hero.Attack(enemy);
+            // 获取当前选中英雄的攻击范围
+            Hero selectedHero = SelectCore.Selection.hero;
+            // 检查目标敌人的位置是否在攻击范围内
+            if (selectedHero.GetAttackRange().Contains(enemy.chessman.location))
+            {
+                selectedHero.Attack(enemy); // 执行攻击
+            }
+            else
+            {
+                Debug.LogWarning("目标超出攻击范围！");
+                // 可在此添加UI提示（如红色提示文字）
+            }
+        }
+    }
+
+    public void ShowAttackRange(Hero hero)
+    {
+        foreach (Square square in BoardCtrl.Get.squares)
+        {
+            if (hero.GetAttackRange().Contains(square.location))
+            {
+                square.SetAttackRangeHighlight(true);
+            }
+        }
+    }
+
+    public void CancelShowAttackRange(Hero hero)
+    {
+        foreach (Square square in BoardCtrl.Get.squares)
+        {
+            if (hero.GetAttackRange().Contains(square.location))
+            {
+                square.SetAttackRangeHighlight(false);
+            }
         }
     }
 

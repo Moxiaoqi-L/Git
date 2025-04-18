@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "治疗", menuName = "技能/治疗")]
 public class SelfHealingSkill : Skill
 {
-    public Color[] costs = {Constants.BLUEPOINT,Constants.BLUEPOINT};
+    // public new Color[] costs = {Constants.BLUEPOINT,Constants.BLUEPOINT};
     public int healPoints;
     public int healPerLayer;
     public int layers;

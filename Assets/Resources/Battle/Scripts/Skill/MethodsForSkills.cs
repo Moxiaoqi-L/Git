@@ -18,8 +18,24 @@ public class MethodsForSkills : MonoBehaviour
                 enemiesInSameColumn.Add(enemy);
             }
         }
-
         return enemiesInSameColumn;
+    }
+
+    // 查找与敌人相同列的所有英雄
+    public static List<Hero> GetHeroInSameColumn(Enemy enemy)
+    {
+        List<Hero> heroesInSameColumn = new List<Hero>();
+        int enemyColumn = enemy.chessman.location.x;
+
+        foreach (Hero hero in FindObjectsOfType<Hero>())
+        {
+            int heroColumn = hero.chessman.location.x;
+            if (heroColumn == enemyColumn)
+            {
+                heroesInSameColumn.Add(hero);
+            }
+        }
+        return heroesInSameColumn;
     }
 
     // 查找距离英雄最近的一个敌人

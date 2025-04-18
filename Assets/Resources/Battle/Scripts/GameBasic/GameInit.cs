@@ -67,38 +67,39 @@ public class GameInit : MonoBehaviour
         {
             foreach (var enemy in stepData.step1)
             {
-                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.attributes);
+                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.rarityImage, enemy.attributes);
             }
         }
         if (currentStepNum == 2 && currentStepNum <= maxStepNum)
         {
             foreach (var enemy in stepData.step2)
             {
-                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.attributes);
+                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.rarityImage, enemy.attributes);
             }
         }
         if (currentStepNum == 3 && currentStepNum <= maxStepNum)
         {
             foreach (var enemy in stepData.step3)
             {
-                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.attributes);
+                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.rarityImage, enemy.attributes);
             }
         }
         if (currentStepNum == 4 && currentStepNum <= maxStepNum)
         {
             foreach (var enemy in stepData.step4)
             {
-                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.attributes);
+                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.rarityImage, enemy.attributes);
             }
         }
     }
 
     // 实例化敌方预制体
-    public void InstantiateEnemyChessman(Location location,string avatarImageFileName, string attributeFileName)
+    public void InstantiateEnemyChessman(Location location,string avatarImageFileName, string rarityImageFileName, string attributeFileName)
     {
         // 加载预制体 , 配置文件, 图片
         EnemyAttributes enemyAttributes = Resources.Load<EnemyAttributes>("Battle/Scripts/CharacterAttributes/EnemyAttributes/" + attributeFileName);
-        Sprite sprite = Resources.Load<Sprite>("Battle/Image/Avatar/" + avatarImageFileName);
+        Sprite avatarSprite = Resources.Load<Sprite>("Battle/Image/Avatar/" + avatarImageFileName);
+        Sprite raritySprite = Resources.Load<Sprite>("Battle/Image/Rarity/" + rarityImageFileName);
 
         if (enemyChessmanPrefab == null)
         {
@@ -124,7 +125,9 @@ public class GameInit : MonoBehaviour
         // 设置 Enemy Attributes
         enemyChessmanInstance.GetComponent<Enemy>().characterAttributes = enemyAttributes;
         // 设置头像图片
-        enemyChessmanInstance.GetComponent<Image>().sprite = sprite;
+        enemyChessmanInstance.transform.Find("Avatar").GetComponent<Image>().sprite = avatarSprite;
+        // 设置稀有度图片
+        enemyChessmanInstance.transform.Find("Rarity").GetComponent<Image>().sprite = raritySprite;
     }
 
     // 进入下一阶段的方法
@@ -185,6 +188,7 @@ public class EnemyData
 {
     public string attributes;
     public string avatarImage;
+    public string rarityImage;
     public int locationX;
     public int locationY;
     public int rank;

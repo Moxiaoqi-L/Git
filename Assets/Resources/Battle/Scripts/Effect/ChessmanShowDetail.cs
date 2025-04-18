@@ -14,7 +14,7 @@ public class CheesemanShowDetail : MonoBehaviour, IPointerEnterHandler, IPointer
 
     private void Start()
     {
-        detailUI = transform.GetChild(1).gameObject;
+        detailUI = transform.GetChild(2).gameObject;
         detailUI.GetComponent<RectTransform>().anchorMin = new Vector2(0, 0.5f);
         detailUI.GetComponent<RectTransform>().anchorMax = new Vector2(0, 0.5f);
         detailUI.GetComponent<RectTransform>().sizeDelta = new Vector2(300, 400);

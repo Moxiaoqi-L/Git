@@ -11,10 +11,19 @@ public class Square : MonoBehaviour
     public Camp camp;
     // 通过此属性，可以访问位于此方格上的棋子
     public Chessman Chessman => Chessman.GetChessman(location);
+
+    // 原始图片
+    private Sprite originalImage;
+    // 攻击范围图片
+    public Sprite attackImage;
+    // 组件
+    private Image image;
  
     private void Start()
     {
         GetComponent<Button>().onClick.AddListener(OnSquareClicked);
+        image = GetComponent<Image>();
+        originalImage = image.sprite;
     }
 
     // 默认输出
@@ -39,5 +48,11 @@ public class Square : MonoBehaviour
     public void RemoveChessman()
     {
         Chessman?.ExitFromBoard();
+    }
+
+    // 新增：设置高亮状态
+    public void SetAttackRangeHighlight(bool isHighlighted)
+    {
+        image.sprite = isHighlighted ? attackImage : originalImage;
     }
 }

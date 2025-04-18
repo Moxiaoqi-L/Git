@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 // 创建一个 ScriptableObject 类来存储英雄属性

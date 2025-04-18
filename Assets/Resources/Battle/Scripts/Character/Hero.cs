@@ -52,6 +52,10 @@ public class Hero : BasicCharacter
         }
         // 获取攻击点数
         ColorPointCtrl.Get.GetColorPoint(this.transform, this.chessman.location.y);
+        // 隐藏攻击范围
+        chessman.CancelShowAttackRange(this);
+        // 取消选中
+        SelectCore.DropSelect();
         // 完成攻击
         FinishAttack();
     }
@@ -65,7 +69,7 @@ public class Hero : BasicCharacter
         // 设置允许攻击
         hasAttacked = false;
         // 恢复位移
-        chessmanMove.enabled = true;        
+        if (!isStunned) chessmanMove.enabled = true;    
     }
 
     // 每回合结束时调用，

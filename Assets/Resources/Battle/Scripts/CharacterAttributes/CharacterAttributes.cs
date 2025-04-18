@@ -57,6 +57,9 @@ public abstract class CharacterAttributes : ScriptableObject
     // 大招
     // TODO
 
+    // 攻击范围的相对偏移量（x,y相对于当前位置）
+    public Location[] attackRange;
+
     // 初始化属性（子类实现具体逻辑）
     public abstract void InitAttributes();
 }

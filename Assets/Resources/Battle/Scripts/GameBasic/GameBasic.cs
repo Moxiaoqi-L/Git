@@ -26,7 +26,7 @@ public struct Location
         this.y = y;
         if (!IsValid(x, y))
         {
-            Debug.LogWarning($"正在创建一个超出棋盘范围的方格:({x},{y})");
+            // Debug.LogWarning($"正在创建一个超出棋盘范围的方格:({x},{y})");
         }
     }
  

@@ -29,6 +29,9 @@ public abstract class BasicCharacter : MonoBehaviour
     // 临时防御
     public int provisionalDefense;
 
+    // 通过characterAttributes获取攻击范围
+    public Location[] AttackRange => characterAttributes.attackRange;
+
     // 每回合只能攻击一次
     public bool hasAttacked;
     // 眩晕状态
@@ -52,12 +55,46 @@ public abstract class BasicCharacter : MonoBehaviour
     protected void Start() {
         // 获取棋子自身
         chessman = GetComponent<Chessman>();
-        // 获取头像
-        image = GetComponent<Image>();
         // 初始化 BUFF 管理器
         buffManager = new BuffManager(this);
         // 默认使用简单攻击动画
         attackAnimation = new DefaulAttackAnimation();
+    }
+
+    public List<Location> GetAttackRange()
+    {
+        List<Location> attackLocations = new List<Location>();
+        Location currentLocation = chessman.location;
+        
+        foreach (var location in characterAttributes.attackRange)
+        {
+            Location targetLocation = new Location(
+                currentLocation.x + location.x,
+                currentLocation.y + location.y
+            );
+            if (targetLocation.IsValid())
+            {
+                attackLocations.Add(targetLocation);
+            }
+        }
+        return attackLocations;
+    }
+
+    public List<Location> GetAttackRangeFromLocation(Location origin)
+    {
+        List<Location> attackLocations = new List<Location>();
+        foreach (var location in characterAttributes.attackRange)
+        {
+            Location targetLocation = new Location(
+                origin.x + location.x,
+                origin.y + location.y
+            );
+            if (targetLocation.IsValid())
+            {
+                attackLocations.Add(targetLocation);
+            }
+        }
+        return attackLocations;
     }
 
     // 通用防御方法，用于处理受到的伤害
