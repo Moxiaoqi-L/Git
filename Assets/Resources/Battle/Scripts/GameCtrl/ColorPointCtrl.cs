@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,7 +52,7 @@ public class ColorPointCtrl : MonoBehaviour
 
         GameObject newPoint = GetColorGameObject(attacker, row);
         // 让圆球飞向点数区域
-        newPoint.transform.DOMove(pointArea.position, 0.5f).OnComplete(() =>
+        newPoint.transform.DOMove(pointArea.position, 0.4f).OnComplete(() =>
         {
             // 将红色圆球移动到点数区域内
             newPoint.transform.SetParent(pointArea);
@@ -71,24 +72,23 @@ public class ColorPointCtrl : MonoBehaviour
 
             // 重新排列点数
             RearrangePoints();
-            Debug.Log(points[0]);
         });
     }
 
     private void RearrangePoints()
     {
-        float pointWidth = redPointPrefab.GetComponent<RectTransform>().sizeDelta.x + 20;
+        float pointWidth = redPointPrefab.GetComponent<RectTransform>().sizeDelta.x + 40;
         float totalWidth = pointWidth * points.Count;
         float startX = -totalWidth / 2f + pointWidth / 2f;
 
         for (int i = 0; i < points.Count; i++)
         {
             Vector3 targetPosition = new(startX + i * pointWidth, 0, 0);
-            points[i].transform.DOLocalMove(targetPosition, 0.5f);
+            points[i].transform.DOLocalMove(targetPosition, 0.3f);
         }
     }
 
-    // 新增移除颜色点数的方法
+    // 移除颜色点数的方法
     public void RemoveColorPoint(GameObject pointToRemove)
     {
         if (points.Contains(pointToRemove))
@@ -105,67 +105,57 @@ public class ColorPointCtrl : MonoBehaviour
         }
     }
 
-    // 根据多个颜色移除点数的方法
-    public bool RemoveColorPointsByColors(Color[] colors)
+    // 根据颜色移除颜色
+    public bool RemoveColorPointsByColors(List<Color> targetColors)
     {
-        // 统计每种颜色需要移除的数量
+        // 统计每种目标颜色需要移除的数量（原逻辑）
         Dictionary<Color, int> colorCountToRemove = new Dictionary<Color, int>();
-        foreach (Color color in colors)
+        foreach (Color color in targetColors)
         {
-            if (colorCountToRemove.TryGetValue(color, out int count))
-            {
-                colorCountToRemove[color] = count + 1;
-            }
-            else
-            {
-                colorCountToRemove[color] = 1;
-            }
+            colorCountToRemove[color] = colorCountToRemove.GetValueOrDefault(color, 0) + 1;
         }
-        // 用于存储需要移除的点数
+
         List<GameObject> pointsToRemove = new List<GameObject>();
-        // 用于记录每种颜色已匹配到的点数
-        Dictionary<Color, int> matchedColorCount = new Dictionary<Color, int>();
-        // 提前计算需要移除的总点数
-        int totalPointsToRemove = 0;
-        foreach (int count in colorCountToRemove.Values)
-        {
-            totalPointsToRemove += count;
-        }
-        // 遍历点数列表
+        Dictionary<Color, int> matchedColorCount = new Dictionary<Color, int>(); // 记录目标颜色已匹配的数量
+        int totalPointsToRemove = colorCountToRemove.Values.Sum();
+
         foreach (GameObject point in points)
         {
             Image pointImage = point.GetComponent<Image>();
-            if (pointImage != null)
+            if (pointImage == null) continue;
+            Color pointColor = pointImage.color;
+
+            // 遍历所有目标颜色，检查是否在容差范围内相等
+            foreach (Color targetColor in colorCountToRemove.Keys)
             {
-                Color pointColor = pointImage.color;
-                if (colorCountToRemove.TryGetValue(pointColor, out int requiredCount))
+                if (AreColorsEqual(pointColor, targetColor))
                 {
-                    if (!matchedColorCount.TryGetValue(pointColor, out int currentCount))
-                    {
-                        currentCount = 0;
-                    }
-                    if (currentCount < requiredCount)
+                    int requiredCount = colorCountToRemove[targetColor];
+                    int currentMatched = matchedColorCount.GetValueOrDefault(targetColor, 0);
+
+                    if (currentMatched < requiredCount)
                     {
                         pointsToRemove.Add(point);
-                        matchedColorCount[pointColor] = currentCount + 1;
-                        // 检查是否已找到所有需要移除的点数
-                        if (pointsToRemove.Count == totalPointsToRemove)
-                        {
-                            break;
-                        }
+                        matchedColorCount[targetColor] = currentMatched + 1;
+                        // 达到总移除数量时提前终止
+                        if (pointsToRemove.Count == totalPointsToRemove) break;
                     }
                 }
             }
+
+            if (pointsToRemove.Count == totalPointsToRemove) break; // 提前退出循环
         }
-        // 检查是否所有颜色的点数都足够
-        foreach (KeyValuePair<Color, int> kvp in colorCountToRemove)
+
+        // 检查所有目标颜色是否满足数量要求
+        foreach (var kvp in colorCountToRemove)
         {
-            if (!matchedColorCount.TryGetValue(kvp.Key, out int actualCount) || actualCount < kvp.Value)
+            if (matchedColorCount.GetValueOrDefault(kvp.Key, 0) < kvp.Value)
             {
-                return false; // 有指定颜色的点数不足，不进行移除操作
+                return false;
             }
         }
-        // 移除所有匹配的点数
+
+        // 执行移除操作（与原逻辑一致）
         foreach (GameObject point in pointsToRemove)
         {
             RemoveColorPoint(point);
@@ -176,7 +166,7 @@ public class ColorPointCtrl : MonoBehaviour
     // 比较两个颜色是否相等（考虑浮点数误差）
     private bool AreColorsEqual(Color color1, Color color2)
     {
-        const float tolerance = 0.001f;
+        const float tolerance = 0.02f;
         return Mathf.Abs(color1.r - color2.r) < tolerance &&
                Mathf.Abs(color1.g - color2.g) < tolerance &&
                Mathf.Abs(color1.b - color2.b) < tolerance &&

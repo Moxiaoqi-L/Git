@@ -12,13 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d822985c61bd904381d24749844e5e9, type: 3}
   m_Name: "\u7530\u9038\u5C18"
   m_EditorClassIdentifier: 
-  characterName: Default
+  characterName: "\u7530\u9038\u5C18"
+  characterImage: "\u7530\u9038\u5C18"
+  avatarImage: "\u7530\u9038\u5C18"
+  passiveSkillImage: durable
   level: 1
   maxLevel: 45
   rank: 0
   maxRank: 2
   attack: 10
-  damageType: 
+  damageType: 0
   criticalRate: 0
   criticalDamageMultiplier: 0
   accuracy: 100
@@ -33,6 +36,7 @@ MonoBehaviour:
   maxHealthPointsGrowth: 0
   skills:
   - {fileID: 11400000, guid: b3b40394d1101e54bac53aeba80f4534, type: 2}
+  passiveSkill: {fileID: 11400000, guid: f735af35333957741beaa9b4936df5ea, type: 2}
   attackRange:
   - x: 0
     y: 1

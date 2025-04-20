@@ -91,7 +91,6 @@ public class Enemy : BasicCharacter
     // 命令进攻
     private void ExecuteAttack(Hero targetHero)
     {
-        Debug.Log(targetHero);
         // 攻击动画
         attackAnimation.PlayAttackAnimation(this.transform, targetHero.transform, true);
 
@@ -109,7 +108,6 @@ public class Enemy : BasicCharacter
                 Debug.Log(characterAttributes.name + " 暴击了！ ");
             }
             targetHero.Defend(damage);
-            targetHero.AddBuff("眩晕", 1);
         }
         else
         {

@@ -571,6 +571,8 @@ MonoBehaviour:
   camp: 1
   hero: {fileID: 0}
   enemy: {fileID: 0}
+  skillButtonPrefab: {fileID: 5855110912970571299, guid: 415591ef923cbde47a87cfde37988a99, type: 3}
+  canvas: {fileID: 0}
 --- !u!114 &567262331771243183
 MonoBehaviour:
   m_ObjectHideFlags: 0

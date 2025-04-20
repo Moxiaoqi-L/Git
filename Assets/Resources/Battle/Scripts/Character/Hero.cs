@@ -7,18 +7,30 @@ public class Hero : BasicCharacter
 {
     // 英雄的图片
     public ChessmanMove chessmanMove;
+    // 攻击完成事件（在造成伤害后触发）
+    public event Action<Hero, Enemy> OnAttackCompleted;
 
     // 当对象启用时调用的方法，用于初始化和执行一些操作
     private new void Start() {
         base.Start();
-        // 初始化技能列表
-        InitializeSkills();
         // 初始化生命值
         currentHealthPoints = characterAttributes.maxHealthPoints;
         // 获取移动方式
         chessmanMove = GetComponent<ChessmanMove>();
         // 初始允许攻击
-        hasAttacked = false;          
+        hasAttacked = false;    
+        // 初始化技能列表
+        InitializeSkills();      
+    }
+
+    protected override void InitializeSkills()
+    {
+        base.InitializeSkills();
+        if (characterAttributes.passiveSkill != null)
+        {
+
+            characterAttributes.passiveSkill.Setup(this);
+        }
     }
 
     // 英雄的攻击方法，用于对敌人造成伤害，新增 selfAttack 参数用于控制是否自我攻击
@@ -53,15 +65,11 @@ public class Hero : BasicCharacter
         // 获取攻击点数
         ColorPointCtrl.Get.GetColorPoint(this.transform, this.chessman.location.y);
         // 隐藏攻击范围
-        chessman.CancelShowAttackRange(this);
+        chessman.HighlightAttackRange(this, false);
         // 取消选中
         SelectCore.DropSelect();
         // 完成攻击
-        FinishAttack();
-    }
-
-    public float GetActualAttack(){
-        return characterAttributes.attack;
+        FinishAttack(target);
     }
 
     public void StartOfTurn()
@@ -80,13 +88,15 @@ public class Hero : BasicCharacter
         RestoreImageColor();
     }
 
-    public void FinishAttack(){
+    public void FinishAttack(Enemy targetEnemy = null){
         // 设置已经攻击
         hasAttacked = true;
         // 头像变灰
         MakeImageGray();
         // 禁止位移
         chessmanMove.enabled = false;
+        // 攻击完成事件
+        OnAttackCompleted?.Invoke(this, targetEnemy);
     }
 
     public override void RefreshSelf()

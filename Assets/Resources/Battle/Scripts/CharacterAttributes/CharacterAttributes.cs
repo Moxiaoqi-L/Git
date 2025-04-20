@@ -7,6 +7,12 @@ public abstract class CharacterAttributes : ScriptableObject
 {
     // 姓名
     public string characterName = "Default";
+    // 立绘
+    public string characterImage;
+    // 头像
+    public string avatarImage;
+    // 被动技能图片
+    public string passiveSkillImage;
     // 等级
     public int level = 1;
     // 最大等级             45/65/90
@@ -19,7 +25,7 @@ public abstract class CharacterAttributes : ScriptableObject
     // 攻击力
     public int attack;
     // 伤害类型
-    public string damageType;
+    public DamageType damageType;
     // 暴击几率
     public float criticalRate = 0;
     // 暴击伤害
@@ -53,7 +59,7 @@ public abstract class CharacterAttributes : ScriptableObject
 
     // 被动技能
     // TODO
-
+    public Skill passiveSkill;
     // 大招
     // TODO
 
@@ -62,4 +68,12 @@ public abstract class CharacterAttributes : ScriptableObject
 
     // 初始化属性（子类实现具体逻辑）
     public abstract void InitAttributes();
+}
+
+public enum DamageType
+{
+    // 物理伤害
+    Physical,
+    // 精神伤害
+    Mental
 }

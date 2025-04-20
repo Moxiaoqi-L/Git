@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,8 +18,10 @@ public abstract class BasicCharacter : MonoBehaviour
     public BuffManager buffManager;
     // 攻击动画
     public IAttackAnimation attackAnimation;
-    // 拥有的技能列表
-    public List<Skill> skills = new();
+    // 拥有的主动技能
+    public Skill activeSkill;
+    // 拥有的被动技能
+    public Skill passiveSkill;
 
     // 获取头像
     public Image image;
@@ -36,20 +40,31 @@ public abstract class BasicCharacter : MonoBehaviour
     public bool hasAttacked;
     // 眩晕状态
     public bool isStunned = false;
+
+    // 缓存立绘, 头像, 技能图片等
+    public Sprite damageTypeImage;
+    public Sprite characterImage;
+    public Sprite avatarImage;
+    public Sprite activeSkillImage;
+    public Sprite passiveSkillImage;
+
+    // 监听血量变化事件
+    public event Action<BasicCharacter> OnHealthPointsChanged;
+    // 监听防御变化事件
+    public event Action<BasicCharacter> OnDefenseChanged;
+    // 监听攻击变化事件
+    public event Action<BasicCharacter> OnAttackChanged;
+
     
     // 初始化英雄的技能列表
-    protected void InitializeSkills()
+    protected virtual void InitializeSkills()
     {
         if (characterAttributes.skills != null)
         {
-            foreach (Skill skill in characterAttributes.skills)
-            {
-                if (skill != null)
-                {
-                    skills.Add(skill);
-                }
-            }  
+            activeSkill = characterAttributes.skills[0];
         }
+        
+        passiveSkill = characterAttributes.passiveSkill;
     }
 
     protected void Start() {
@@ -59,6 +74,11 @@ public abstract class BasicCharacter : MonoBehaviour
         buffManager = new BuffManager(this);
         // 默认使用简单攻击动画
         attackAnimation = new DefaulAttackAnimation();
+
+        // 缓存图片
+        characterImage = Resources.Load<Sprite>("General/Image/CharacterImage/" + characterAttributes.characterImage);
+        damageTypeImage = Resources.Load<Sprite>("General/Image/DamagetypeImage/" + characterAttributes.damageType);
+        passiveSkillImage = Resources.Load<Sprite>("General/Image/PassiveSkillImage/" + characterAttributes.passiveSkillImage);
     }
 
     public List<Location> GetAttackRange()
@@ -98,19 +118,23 @@ public abstract class BasicCharacter : MonoBehaviour
     }
 
     // 通用防御方法，用于处理受到的伤害
-    public virtual void Defend(float incomingDamage)
+    public virtual void Defend(float incomingDamage, bool ignoreDefense = false)
     {
-        float actualDamage = Mathf.Max(0, incomingDamage - characterAttributes.defense);
+        float actualDamage;
+        if (ignoreDefense) actualDamage = incomingDamage;
+        else actualDamage = Mathf.Max(0, incomingDamage - (characterAttributes.defense + provisionalDefense));
         // 展示伤害动画
         ShowDamageNumber((int)actualDamage);
         // 受伤震动
         GetDamageShake();
         currentHealthPoints -= (int)actualDamage;
-        if (currentHealthPoints < 0)
+        if (currentHealthPoints <= 0) currentHealthPoints = 0;
+        // 受伤事件
+        OnHealthPointsChanged?.Invoke(this);
+        if (currentHealthPoints <= 0)
         {
-            // 死亡回调
+            // 死亡回调  TODO 死亡事件
             OnDeath();
-            currentHealthPoints = 0;
             chessman.ExitFromBoard();
         }
 
@@ -119,22 +143,57 @@ public abstract class BasicCharacter : MonoBehaviour
     public void IncreaseAttack(int amount)
     {
         provisionalAttack += amount;
+        OnAttackChanged?.Invoke(this);
     }
 
     // 增加防御力的方法
     public void IncreaseDefense(int amount)
     {
         provisionalDefense += amount;
+        OnDefenseChanged?.Invoke(this);
     }
 
     // 增加生命值的方法
     public void IncreaseHealthPoints(int amount)
     {
-        ShowDamageNumber(amount, true);
+        ShowDamageNumber(amount, Constants.HEAL_COLOR);
         // 增加英雄的生命值
         currentHealthPoints += amount;
         currentHealthPoints = currentHealthPoints > characterAttributes.maxHealthPoints ? characterAttributes.maxHealthPoints : currentHealthPoints;
+        // 血量变化事件
+        OnHealthPointsChanged?.Invoke(this);
     }
+
+    // 获取实际攻击力
+    public int GetActualAttack()
+    {
+        return characterAttributes.attack + provisionalAttack;
+    }
+
+    // 获取实际防御力
+    public int GetActualDefense()
+    {  
+        return characterAttributes.defense + provisionalDefense;
+    }
+
+    // 获取实际精神抗性
+    public int GetActualMagicDefense()
+    {
+        return characterAttributes.magicDefense;
+    }
+
+    // 获取当前 HP
+    public int GetActualHP()
+    {
+        return currentHealthPoints;
+    }
+
+    // 获取实际最大 HP
+    public int GetActualMaxHP()
+    {
+        return characterAttributes.maxHealthPoints;
+    }
+
 
     // BUFF 添加方法
     public void AddBuff(string buffName, params object[] args)
@@ -177,7 +236,7 @@ public abstract class BasicCharacter : MonoBehaviour
     }
 
     // 展示受伤伤害动画
-    protected void ShowDamageNumber(int damage, bool isHeal = false)
+    protected void ShowDamageNumber(int damage, Color color = new())
     {
         // 加载伤害数字预制体
         GameObject damageNumberPrefab = Resources.Load<GameObject>("Battle/Prefab/DamageNumber");
@@ -192,12 +251,11 @@ public abstract class BasicCharacter : MonoBehaviour
                 damageNumber.transform.SetParent(this.transform);
                 // 获取 Text 组件并设置伤害值
                 TextMeshProUGUI damageText = damageNumber.GetComponent<TextMeshProUGUI>();
-                if (isHeal) damageText.color = Constants.HEALCOLOR;
                 if (damageText != null)
                 {
                     damageText.text = damage.ToString();
                 }
-
+                if (color != new Color()) damageText.color = color;
                 // 让数字向上移动并逐渐消失,使用一个协程来实现
                 StartCoroutine(MoveAndFade(damageNumber));
             }
@@ -224,7 +282,7 @@ public abstract class BasicCharacter : MonoBehaviour
             // 移动数字
             damageNumber.transform.position = Vector3.Lerp(startPosition, endPosition, elapsedTime / duration);
             // 逐渐消失
-            canvasGroup.alpha = 1f - (elapsedTime / duration);
+            canvasGroup.alpha = 1.2f - (elapsedTime / duration);
 
             elapsedTime += Time.deltaTime;
             yield return null;

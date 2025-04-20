@@ -3,14 +3,42 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "强力攻击", menuName = "技能/强力攻击")]
 public class PowerAttack : Skill
-{   
-    // 技能花费
-    // public new Color[] costs = {Constants.REDPOINT,Constants.REDPOINT};
+{
+    public override string SkillName
+    {
+        get
+        {
+            return "强力攻击";
+        }
+    }
+    public override string SkillDetail
+    {
+        get
+        {
+            return "对正前方敌人造成 <color=#ff2e63>" + attackDamageMultiplier + "%攻击力 </color>的伤害\n"
+            + "并 <color=#ff9a00>击晕</color> 敌人";
+        }
+    }
+    public override List<Color> Costs
+    {
+        get
+        {
+            return new List<Color> { Constants.REDPOINT, Constants.REDPOINT};
+        }
+    }
+    
     public float attackDamageMultiplier;
+
+
+    public override void Setup(Hero hero = null, Enemy enemy = null)
+    {
+        // 无需Setup
+    }
+
     public override void Use(Hero hero, Enemy target = null)
     {
         if (hero.isStunned) return;
-        if (hero.hasAttacked || !ColorPointCtrl.Get.RemoveColorPointsByColors(costs)) return;
+        if (hero.hasAttacked || !ColorPointCtrl.Get.RemoveColorPointsByColors(Costs)) return;
         // 技能使用逻辑
         if (target == null)
         {
@@ -19,11 +47,6 @@ public class PowerAttack : Skill
             if (enemiesInSameColumn.Count > 0)
             {
                 target = enemiesInSameColumn[0];
-            }
-            else
-            {
-                // 如果该列没有敌人，选择最近的敌人
-                target = MethodsForSkills.GetNearestEnemy(hero);
             }
         }
 
@@ -36,6 +59,7 @@ public class PowerAttack : Skill
         float actualAttack = hero.GetActualAttack();
         float damage = actualAttack * (attackDamageMultiplier / 100) * (1 + hero.characterAttributes.skillPower) * (1 + hero.characterAttributes.damagePower);
         target.Defend((int)damage);
-        hero.FinishAttack();
+        target.AddBuff("眩晕", 1);
+        hero.FinishAttack(target);
     }
 }

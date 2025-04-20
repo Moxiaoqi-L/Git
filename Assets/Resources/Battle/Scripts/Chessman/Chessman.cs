@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-public class Chessman : MonoBehaviour
+public class Chessman : MonoBehaviour, IPointerClickHandler 
 {
     // 棋子的坐标
     public Location location;
@@ -13,9 +15,22 @@ public class Chessman : MonoBehaviour
     public Camp camp;
     // 棋子所在的方格
     public Square Square => BoardCtrl.Get[location];
+    // 选择边框
+    private Image selectionBorder;
 
     public Hero hero;
     public Enemy enemy;
+
+    // 最高层级UI
+    public Transform topUI;
+
+    // 技能按钮实例化
+    public GameObject skillButtonPrefab;
+    // 当前技能按钮
+    private GameObject currentSkillButton;
+
+    // 新增：移动完成事件（供Hero监听）
+    public event System.Action<Hero> OnMoveCompleted;
 
 
     // 初始化棋子
@@ -35,7 +50,23 @@ public class Chessman : MonoBehaviour
             enemy = GetComponent<Enemy>();
         }
         InitMove(location);
-        GetComponent<Button>().onClick.AddListener(OnChessmanClicked);
+        selectionBorder = GameObject.Find("Rarity").GetComponentInChildren<Image>();
+        topUI = GameObject.Find("Canvas/TopUI").transform;
+    }
+
+    // 点击事件
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            // 右键点击逻辑
+            OnRightClick();
+        }
+        else if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            // 原有左键逻辑
+            OnChessmanClicked();
+        }        
     }
  
     // 默认输出
@@ -121,81 +152,115 @@ public class Chessman : MonoBehaviour
         location = target;
         // 瞬间移动
         transform.position = square.transform.position;
+
+        // 触发移动完成事件（仅英雄需要）
+        if (camp == Camp.Player && hero != null)
+        {
+            OnMoveCompleted?.Invoke(hero); // 调用事件
+        }
     }
- 
-    // 棋子被选中时
+
+    // 棋子选中
     private void OnChessmanClicked()
     {
-        if (SelectCore.Selection == null)
+        Debug.Log("OnChessmanClicked");
+        // 处理自身选中状态
+        HandleSelfSelection();
+        // 处理跨阵营交互（如玩家选中敌人）
+        HandleCrossCampInteraction();
+    }
+
+    private void OnRightClick()
+    {
+        if (camp == Camp.Player && hero != null)
         {
-            SelectCore.TrySelect(this);
-            if (camp == Camp.Player)
-            {
-                ShowAttackRange(hero);
-            }
-            return;
-        }
-        // 重复点击棋子,取消选中
+
+            ShowSkill(hero);
+        }   
+    }
+
+    // 处理自身选中状态
+    private void HandleSelfSelection()
+    {
         if (SelectCore.Selection == this)
         {
-            SelectCore.DropSelect();
-            // 如果是玩家,取消显示攻击范围
-            if (camp == Camp.Player)
-            {
-                CancelShowAttackRange(hero);
-            }
-            return;
+            // 重复点击：取消选中
+            DeselectSelf();
         }
+        else
+        {
+            // 首次点击：选中并处理玩家专属逻辑
+            SelectSelf();
+        }
+    }
 
-        if (camp == Camp.Player)
+    // 处理跨阵营选取
+    private void HandleCrossCampInteraction()
+    {
+        // 玩家点击敌人：触发攻击逻辑（仅当当前选中的是玩家英雄）
+        if (camp == Camp.Enemy && SelectCore.Selection != null && 
+            SelectCore.Selection.camp == Camp.Player && 
+            SelectCore.Selection.hero != null)
         {
-            if (SelectCore.Selection.camp == Camp.Player)
-            {
-                CancelShowAttackRange(SelectCore.Selection.hero);
-            }
-            ShowAttackRange(hero);
-            SelectCore.TrySelect(this);
-            return;
-        }
-        if (SelectCore.Selection.camp == Camp.Player && camp == Camp.Enemy)
-        {
-            // 获取当前选中英雄的攻击范围
             Hero selectedHero = SelectCore.Selection.hero;
-            // 检查目标敌人的位置是否在攻击范围内
-            if (selectedHero.GetAttackRange().Contains(enemy.chessman.location))
+            if (selectedHero.GetAttackRange().Contains(location))
             {
                 selectedHero.Attack(enemy); // 执行攻击
             }
             else
             {
-                Debug.LogWarning("目标超出攻击范围！");
-                // 可在此添加UI提示（如红色提示文字）
+                Debug.LogWarning($"目标 {enemy.characterAttributes.name} 超出攻击范围！");
+                // 播放提示音效或显示UI警告
             }
         }
     }
 
-    public void ShowAttackRange(Hero hero)
+  // 选择棋子
+    private void SelectSelf()
     {
+        if (SelectCore.Selection != null && camp == Camp.Enemy) return;
+
+
+        if (SelectCore.Selection != null && SelectCore.Selection != this)
+        {
+            HighlightAttackRange(SelectCore.Selection.hero, false);
+        }
+
+        SelectCore.TrySelect(this);
+        
+        if (camp == Camp.Player && hero != null)
+        {
+            HighlightAttackRange(hero, true); // 显示玩家攻击范围
+        }
+    }
+
+    // 取消选择
+    private void DeselectSelf()
+    {
+        SelectCore.DropSelect();
+        
+        if (camp == Camp.Player && hero != null)
+        {
+            HighlightAttackRange(hero, false); // 隐藏攻击范围
+        }
+    }
+
+    // 高亮显示攻击范围
+    public void HighlightAttackRange(Hero hero, bool isActive)
+    {
+        if (hero == null || BoardCtrl.Get == null) return; 
+        
         foreach (Square square in BoardCtrl.Get.squares)
         {
-            if (hero.GetAttackRange().Contains(square.location))
+            bool shouldHighlight = hero.GetAttackRange().Contains(square.location);
+            if (shouldHighlight)
             {
-                square.SetAttackRangeHighlight(true);
+                square.SetAttackRangeHighlight(isActive);
             }
         }
     }
 
-    public void CancelShowAttackRange(Hero hero)
-    {
-        foreach (Square square in BoardCtrl.Get.squares)
-        {
-            if (hero.GetAttackRange().Contains(square.location))
-            {
-                square.SetAttackRangeHighlight(false);
-            }
-        }
-    }
-
+    // 棋子退场的逻辑
     public void ExitFromBoard()
     {
         StartCoroutine(WaitForExit());
@@ -218,5 +283,47 @@ public class Chessman : MonoBehaviour
             }
 
         });
+    }
+
+    private void ShowSkill(Hero hero)
+    {
+        // 销毁已存在的技能按钮（如果有）
+        if (currentSkillButton != null)
+        {
+            // 让按钮出现在人物上方
+            currentSkillButton.transform.DOMoveY(transform.position.y, 0.2f).OnComplete(() =>{
+                Destroy(currentSkillButton);
+            });
+            return;
+        }
+        if (hero.activeSkill != null)
+        {
+            // 实例化技能按钮预制体
+            GameObject buttonObj = Instantiate(skillButtonPrefab, topUI.transform);
+            // 设定技能按钮的位置
+            buttonObj.GetComponent<RectTransform>().position = transform.position;
+            // 让按钮出现在人物上方
+            buttonObj.transform.DOMoveY(transform.position.y + 80, 0.2f);
+            // 配置按钮文本和点击事件
+            buttonObj.GetComponentInChildren<TextMeshProUGUI>().text = hero.activeSkill.SkillName;
+            buttonObj.GetComponent<Button>().onClick.AddListener(() => UseSkill(hero.activeSkill, hero));
+            currentSkillButton = buttonObj;
+        }
+    }
+
+    public void DestroySkillButton()
+    {
+        if (currentSkillButton != null)
+        {
+            Destroy(currentSkillButton);
+        }
+    }
+
+    private void UseSkill(Skill skill, Hero hero)
+    {
+        skill.Use(hero);
+        
+        // 隐藏技能菜单（点击后销毁按钮）
+        Destroy(currentSkillButton);
     }
 }

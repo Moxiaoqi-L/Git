@@ -58,10 +58,12 @@ public class Constants
     public static string COLON = ": ";
 
     // 颜色点数 RGB
-    public static Color REDPOINT = new(0.5f, 0, 0);
-    public static Color YELLOWPOINT = new(0.5f, 0.5f, 0);
-    public static Color BLUEPOINT = new(0, 0, 0.5f);
+    public static Color REDPOINT = new(0.51f, 0.22f, 0.21f);
+    public static Color YELLOWPOINT = new(0.87f, 0.61f, 0,32f);
+    public static Color BLUEPOINT = new(0.54f, 0.74f, 0.7f);
 
     // 治疗颜色
-    public static Color HEALCOLOR = new(0, 1, 0.5f);
+    public static Color HEAL_COLOR = new(0.19f, 0.89f, 0.79f);
+    // 中毒颜色
+    public static Color POISON_COLOR = new(0.66f, 0.59f, 0.85f);
 }

@@ -376,6 +376,8 @@ MonoBehaviour:
   camp: 2
   hero: {fileID: 0}
   enemy: {fileID: 0}
+  topUI: {fileID: 0}
+  skillButtonPrefab: {fileID: 0}
 --- !u!114 &525244632342884291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -390,13 +392,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chessman: {fileID: 0}
   characterAttributes: {fileID: 0}
-  skills: []
-  image: {fileID: 0}
+  skill: {fileID: 0}
+  image: {fileID: 3987374663784930148}
   currentHealthPoints: 0
   provisionalAttack: 0
   provisionalDefense: 0
   hasAttacked: 0
   isStunned: 0
+  characterImage: {fileID: 0}
+  avatarImage: {fileID: 0}
+  activeSkillImage: {fileID: 0}
+  passiveSkillImage: {fileID: 0}
   targetHero: {fileID: 0}
 --- !u!114 &1774526348912996022
 MonoBehaviour:

@@ -13,6 +13,8 @@ public class ChessmanMove : Button, IDragHandler, IBeginDragHandler, IEndDragHan
     private Transform beginParentTransform; //记录开始拖动时的父级对象
     private Transform topOfUiT;
     public Chessman chessman;
+    // 新增：移动完成事件（供Hero监听）
+    public event Action<Hero> OnMoveCompleted;
 
 
     protected override void Start()
@@ -30,10 +32,16 @@ public class ChessmanMove : Button, IDragHandler, IBeginDragHandler, IEndDragHan
         beginParentTransform = transform.parent;
         transform.SetParent(topOfUiT);
         // 取消显示攻击范围（当前Hero的攻击范围）
+        // 同时取消显示技能按钮
         if (chessman.camp == Camp.Player && chessman.hero != null)
         {
             Chessman targetChessman = chessman;
-            targetChessman.CancelShowAttackRange(targetChessman.hero); // 调用Chessman的取消方法
+            chessman.DestroySkillButton();
+            // 调用Chessman的取消方法
+            if (SelectCore.Selection == chessman) targetChessman.HighlightAttackRange(targetChessman.hero, false);
+            else if (SelectCore.Selection && SelectCore.Selection != chessman) SelectCore.Selection.HighlightAttackRange(SelectCore.Selection.hero, false);
+            
+            
         }
     }
 
@@ -58,11 +66,13 @@ public class ChessmanMove : Button, IDragHandler, IBeginDragHandler, IEndDragHan
             SetPosAndParent(transform, go.transform);
             transform.GetComponent<Image>().raycastTarget = true;
             chessman.location = go.GetComponent<Square>().location;
+            // 触发英雄位移事件
+            OnMoveCompleted?.Invoke(chessman.hero);
             // 重新显示新位置的攻击范围（仅当是玩家阵营时）
             if (chessman != null && SelectCore.Selection != null && chessman.camp == Camp.Player && chessman.hero != null && SelectCore.Selection.hero == chessman.hero)
             {
                 Chessman targetChessman = chessman;
-                targetChessman.ShowAttackRange(targetChessman.hero); // 调用Chessman的显示方法
+                targetChessman.HighlightAttackRange(targetChessman.hero, true); // 调用Chessman的显示方法
             }
         }
         else //其他任何情况，物体回归原始位置
@@ -75,7 +85,7 @@ public class ChessmanMove : Button, IDragHandler, IBeginDragHandler, IEndDragHan
             if (chessman != null && SelectCore.Selection != null && chessman.camp == Camp.Player && chessman.hero != null && SelectCore.Selection.hero == chessman.hero)
             {
                 Chessman targetChessman = chessman;
-                targetChessman.ShowAttackRange(targetChessman.hero); // 调用Chessman的显示方法
+                targetChessman.HighlightAttackRange(targetChessman.hero, true); // 调用Chessman的显示方法
             }
         }
     }

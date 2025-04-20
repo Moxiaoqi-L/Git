@@ -9,9 +9,9 @@ public class ImageScrollAligner : MonoBehaviour
     public ScrollRect scrollRect;
     public RectTransform content;
     public RectTransform pointer;
-    public float smoothSpeed = 5f;
+    public float smoothSpeed = 3f;
 
-    private List<RectTransform> imageList = new List<RectTransform>();
+    private List<RectTransform> imageList = new();
 
     private void Start()
     {
@@ -19,6 +19,7 @@ public class ImageScrollAligner : MonoBehaviour
         UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(content);
         CollectImages();
         AddClickListeners();
+        // 初始指向第一张照片
         StartCoroutine(SmoothScrollTo(-275));
     }
 
@@ -48,14 +49,12 @@ public class ImageScrollAligner : MonoBehaviour
     {
         // 计算指针在屏幕空间的Y坐标（假设指针垂直对齐，X固定）
         float pointerY = pointer.position.y;
-        
         // 计算图片中心在屏幕空间的Y坐标
         float imgScreenCenterY = clickedImage.position.y + clickedImage.rect.height * 0.5f;
-        
         // 计算content需要移动的Y距离（使图片中心Y对齐指针Y）
         float deltaY = pointerY - imgScreenCenterY;
         float targetY = content.anchoredPosition.y + deltaY;
-
+        // 移动照片
         StartCoroutine(SmoothScrollTo(targetY + 115));
     }
 
