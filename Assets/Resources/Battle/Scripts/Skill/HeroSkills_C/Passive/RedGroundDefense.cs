@@ -57,7 +57,7 @@ public class RedGroundDefense : Skill
         // 离开目标地块：移除加成
         else if (!isOnTargetGround && isActive)
         {
-            hero.provisionalDefense -= defenseBonus;
+            hero.IncreaseDefense(-defenseBonus);
             isActive = false;
         }
     }

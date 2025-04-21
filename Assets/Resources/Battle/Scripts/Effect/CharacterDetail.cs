@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -31,6 +33,9 @@ public class CharacterDetail : MonoBehaviour
     private Hero hero;
     private Enemy enemy;
 
+    // 无技能图片缓存
+    private Sprite noSkillSprite;
+
     // 记录上一帧选中的棋子
     private Chessman lastSelectedChessman; 
     // 属性变化触发更新标记
@@ -38,21 +43,34 @@ public class CharacterDetail : MonoBehaviour
 
     // 对象池
     private ObjectPool colorPointPool;
+    // 监听图片变化
+    public Action spriteChanged;
+
+    // BUFF 图标父容器
+    public Transform buffIconContainer;
+    // BUFF 图标预制体（需在Inspector赋值）
+    public GameObject buffIconPrefab;
+    // 缓存已生成的图标实例（避免重复创建）
+    private Dictionary<string, GameObject> existingBuffIcons = new();
 
     private void Start()
     {
         // 初始化对象
         colorPointPool = new ObjectPool(needColorPointPrefab, 4, needColorPointField.transform);
+        noSkillSprite = Resources.Load<Sprite>("General/Image/UI/NoSkill");
     }
 
     // 更新技能消耗时复用对象
     private void UpdateSkillCostDisplay()
     {
         colorPointPool.ReturnAll(); // 隐藏所有闲置对象
-        foreach (Color color in hero.activeSkill.Costs)
+        if (hero != null)
         {
-            GameObject point = colorPointPool.Get();
-            point.GetComponent<Image>().color = color;
+            foreach (Color color in hero.activeSkill.Costs)
+            {
+                GameObject point = colorPointPool.Get();
+                point.GetComponent<Image>().color = color;
+            }
         }
     }
     
@@ -75,7 +93,7 @@ public class CharacterDetail : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log("开始监听了！");
+        // Debug.Log("开始监听了！");
         if (hero != null) 
         {
             hero.OnHealthPointsChanged += UpdateHPDisplay;
@@ -83,17 +101,29 @@ public class CharacterDetail : MonoBehaviour
             hero.OnAttackChanged += UpdateAttackDisplay;
             // hero.OnMDefenseChanged += UpdateMDefenseDisplay;
         }
-        // if (enemy != null) enemy.OnHealthPointsChanged += UpdateHPDisplay;
+        if (enemy != null) 
+        {
+            enemy.OnHealthPointsChanged += UpdateHPDisplay;
+            enemy.OnDefenseChanged += UpdateDefenseDisplay;
+            enemy.OnAttackChanged += UpdateAttackDisplay;
+        }
     }
 
     private void OnDisable()
     {
-        Debug.Log("取消监听了！");
+        // Debug.Log("取消监听了！");
         if (hero != null) 
         {
             hero.OnHealthPointsChanged -= UpdateHPDisplay;
+            hero.OnDefenseChanged -= UpdateDefenseDisplay;
+            hero.OnAttackChanged -= UpdateAttackDisplay;
         }
-        // if (enemy != null) enemy.OnHealthPointsChanged -= UpdateHPDisplay;
+        if (enemy != null) 
+        {
+            enemy.OnHealthPointsChanged -= UpdateHPDisplay;
+            enemy.OnDefenseChanged -= UpdateDefenseDisplay;
+            enemy.OnAttackChanged -= UpdateAttackDisplay;
+        }
     }
 
     private void UpdateHPDisplay(BasicCharacter character)
@@ -109,7 +139,7 @@ public class CharacterDetail : MonoBehaviour
 
     private void UpdateMDefenseDisplay(BasicCharacter character)
     {
-        magicDefense.text = "精神抗性：" + hero.GetActualMagicDefense().ToString();
+        magicDefense.text = "精神抗性：" + character.GetActualMagicDefense().ToString();
     }
 
     private void UpdateAttackDisplay(BasicCharacter character)
@@ -121,7 +151,14 @@ public class CharacterDetail : MonoBehaviour
     private void RefreshCharacterDetails()
     {
         hero = SelectCore.Selection.hero;
-        // enemy = SelectCore.Selection.enemy;
+        enemy = SelectCore.Selection.enemy;
+
+        // 清空旧图标
+        existingBuffIcons.Clear();
+        foreach (Transform child in buffIconContainer)
+        {
+            Destroy(child.gameObject);
+        }
 
         // 基础属性更新（仅在选中时执行一次）
         if (hero != null)
@@ -131,19 +168,98 @@ public class CharacterDetail : MonoBehaviour
             UpdateDefenseDisplay(hero);
             UpdateAttackDisplay(hero);
             UpdateMDefenseDisplay(hero);
-
             UpdateSkillCostDisplay();
+
+            GenerateBuffIcons(hero.buffManager.activeBuffs);
+
             // 静态属性仅在选中时更新一次
             damageTypeImage.sprite = hero.damageTypeImage;
 
             characterName.text = hero.characterAttributes.name;
             characterImage.sprite = hero.characterImage;
+            spriteChanged?.Invoke();
+            if (hero.activeSkill)
+            {
+                activeSkillName.text = hero.activeSkill.SkillName;
+                activeSkillDetail.text = hero.activeSkill.SkillDetail;
+            }
+            if (hero.passiveSkill)
+            {
+                passiveSkillName.text = hero.passiveSkill.SkillName;
+                passiveSkillDetail.text = hero.passiveSkill.SkillDetail; 
+                passiveSkillImage.sprite = hero.passiveSkillImage;
+            }
+        }
+        if (enemy != null)
+        {
+            OnEnable();
+            UpdateHPDisplay(enemy);
+            UpdateDefenseDisplay(enemy);
+            UpdateAttackDisplay(enemy);
+            UpdateMDefenseDisplay(enemy);
+            UpdateSkillCostDisplay();
 
-            activeSkillName.text = hero.activeSkill.SkillName;
-            activeSkillDetail.text = hero.activeSkill.SkillDetail;
-            passiveSkillName.text = hero.passiveSkill.SkillName;
-            passiveSkillDetail.text = hero.passiveSkill.SkillDetail; 
-            passiveSkillImage.sprite = hero.passiveSkillImage;
+            GenerateBuffIcons(enemy.buffManager.activeBuffs);
+
+            // 静态属性仅在选中时更新一次
+            damageTypeImage.sprite = enemy.damageTypeImage;
+            characterName.text = enemy.characterAttributes.name;
+            characterImage.sprite = enemy.characterImage;
+            spriteChanged?.Invoke();
+            if (enemy.activeSkill)
+            {
+                activeSkillName.text = enemy.activeSkill.SkillName;
+                activeSkillDetail.text = enemy.activeSkill.SkillDetail;
+            }
+            else
+            {
+                activeSkillName.text = "";
+                activeSkillDetail.text = "";
+                activeSkillImage.sprite = noSkillSprite;
+            }
+            if (enemy.passiveSkill)
+            {
+                passiveSkillName.text = enemy.passiveSkill.SkillName;
+                passiveSkillDetail.text = enemy.passiveSkill.SkillDetail; 
+                passiveSkillImage.sprite = enemy.passiveSkillImage;
+            }
+            else
+            {
+                passiveSkillName.text = "";
+                passiveSkillDetail.text = "";         
+                passiveSkillImage.sprite = noSkillSprite;
+            }
         }
     }
+    // 生成 BUFF 图标
+    private void GenerateBuffIcons(Dictionary<string, Buff> activeBuffs)
+    {
+        int index = 0;
+        foreach (var buffEntry in activeBuffs)
+        {
+            Buff buff = buffEntry.Value;
+            GameObject iconInstance = Instantiate(buffIconPrefab, buffIconContainer);
+            
+            // 设置图标（假设每个 BUFF 有对应的图标资源，路径为 "BuffIcons/{buffName}"）
+            Sprite buffSprite = buff.buffSprite;
+            if (buffSprite != null)
+            {
+                iconInstance.GetComponent<Image>().sprite = buffSprite;
+            }
+            
+            // 显示层数（如果有）
+            TextMeshProUGUI layerText = iconInstance.GetComponentInChildren<TextMeshProUGUI>();
+            if (layerText != null && buff.stackLayers > 1)
+            {
+                layerText.text = buff.stackLayers.ToString();
+            }
+            else
+            {
+                layerText.gameObject.SetActive(false); // 层数为1时隐藏数字
+            }
+            // 缓存实例（用于刷新时快速查找）
+            existingBuffIcons[buffEntry.Key] = iconInstance;
+            index++;
+        }
+    }   
 }

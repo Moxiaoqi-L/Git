@@ -8,12 +8,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // 英雄类，代表游戏中的英雄角色，包含英雄的各种属性和行为
-public abstract class BasicCharacter : MonoBehaviour
+public abstract class BasicCharacter : CharacterProvisionalAttributes
 {
     // 获取棋子
     public Chessman chessman;
-    // 统一属性基类（替代原Hero/Enemy特有的属性类）
-    public CharacterAttributes characterAttributes;
     // 管理英雄 BUFF 的对象
     public BuffManager buffManager;
     // 攻击动画
@@ -25,13 +23,6 @@ public abstract class BasicCharacter : MonoBehaviour
 
     // 获取头像
     public Image image;
-
-    // 当前生命值
-    public int currentHealthPoints;
-    // 临时攻击力
-    public int provisionalAttack;
-    // 临时防御
-    public int provisionalDefense;
 
     // 通过characterAttributes获取攻击范围
     public Location[] AttackRange => characterAttributes.attackRange;
@@ -59,7 +50,7 @@ public abstract class BasicCharacter : MonoBehaviour
     // 初始化英雄的技能列表
     protected virtual void InitializeSkills()
     {
-        if (characterAttributes.skills != null)
+        if (characterAttributes.skills.Length > 0)
         {
             activeSkill = characterAttributes.skills[0];
         }
@@ -74,13 +65,11 @@ public abstract class BasicCharacter : MonoBehaviour
         buffManager = new BuffManager(this);
         // 默认使用简单攻击动画
         attackAnimation = new DefaulAttackAnimation();
-
-        // 缓存图片
-        characterImage = Resources.Load<Sprite>("General/Image/CharacterImage/" + characterAttributes.characterImage);
+        // 图片缓存
         damageTypeImage = Resources.Load<Sprite>("General/Image/DamagetypeImage/" + characterAttributes.damageType);
-        passiveSkillImage = Resources.Load<Sprite>("General/Image/PassiveSkillImage/" + characterAttributes.passiveSkillImage);
     }
 
+    // 获取攻击范围
     public List<Location> GetAttackRange()
     {
         List<Location> attackLocations = new List<Location>();
@@ -100,6 +89,7 @@ public abstract class BasicCharacter : MonoBehaviour
         return attackLocations;
     }
 
+    // 从坐标获取攻击范围
     public List<Location> GetAttackRangeFromLocation(Location origin)
     {
         List<Location> attackLocations = new List<Location>();
@@ -118,13 +108,14 @@ public abstract class BasicCharacter : MonoBehaviour
     }
 
     // 通用防御方法，用于处理受到的伤害
-    public virtual void Defend(float incomingDamage, bool ignoreDefense = false)
+    public virtual void Defend(float incomingDamage, bool ignoreDefense = false, Color color = new())
     {
         float actualDamage;
         if (ignoreDefense) actualDamage = incomingDamage;
-        else actualDamage = Mathf.Max(0, incomingDamage - (characterAttributes.defense + provisionalDefense));
+        else actualDamage = Mathf.Max(incomingDamage * 0.1f, 
+        incomingDamage * (GetActualDamageTakenMultiplier() / 100f) - (characterAttributes.defense + provisionalDefense));
         // 展示伤害动画
-        ShowDamageNumber((int)actualDamage);
+        ShowDamageNumber((int)actualDamage, color);
         // 受伤震动
         GetDamageShake();
         currentHealthPoints -= (int)actualDamage;
@@ -137,24 +128,26 @@ public abstract class BasicCharacter : MonoBehaviour
             OnDeath();
             chessman.ExitFromBoard();
         }
-
+        // 受伤台词
+        TriggerLine(LineEventType.Defense);
     }
+
     // 增加攻击力的方法
-    public void IncreaseAttack(int amount)
+    public override void IncreaseAttack(int amount)
     {
-        provisionalAttack += amount;
+        base.IncreaseAttack(amount);
         OnAttackChanged?.Invoke(this);
     }
 
     // 增加防御力的方法
-    public void IncreaseDefense(int amount)
+    public override void IncreaseDefense(int amount)
     {
-        provisionalDefense += amount;
+        base.IncreaseDefense(amount);
         OnDefenseChanged?.Invoke(this);
     }
 
     // 增加生命值的方法
-    public void IncreaseHealthPoints(int amount)
+    public void IncreaseHealthPoints(int amount, Color color = new())
     {
         ShowDamageNumber(amount, Constants.HEAL_COLOR);
         // 增加英雄的生命值
@@ -163,37 +156,6 @@ public abstract class BasicCharacter : MonoBehaviour
         // 血量变化事件
         OnHealthPointsChanged?.Invoke(this);
     }
-
-    // 获取实际攻击力
-    public int GetActualAttack()
-    {
-        return characterAttributes.attack + provisionalAttack;
-    }
-
-    // 获取实际防御力
-    public int GetActualDefense()
-    {  
-        return characterAttributes.defense + provisionalDefense;
-    }
-
-    // 获取实际精神抗性
-    public int GetActualMagicDefense()
-    {
-        return characterAttributes.magicDefense;
-    }
-
-    // 获取当前 HP
-    public int GetActualHP()
-    {
-        return currentHealthPoints;
-    }
-
-    // 获取实际最大 HP
-    public int GetActualMaxHP()
-    {
-        return characterAttributes.maxHealthPoints;
-    }
-
 
     // BUFF 添加方法
     public void AddBuff(string buffName, params object[] args)
@@ -207,19 +169,61 @@ public abstract class BasicCharacter : MonoBehaviour
         buffManager.RemoveBuff(buffName);
     }
 
-    // 重置自身状态
+    // 清除BUFF
     public void ClearAllBuffs()
     {
         buffManager.RemoveAllBuffs(); // 调用BuffManager的清除方法
     }
 
+    // 重置自身状态
     public virtual void RefreshSelf()
     {
         ClearAllBuffs();
         hasAttacked = false; // 重置攻击状态
     }
 
-    // 受伤震动
+
+    // 触发事件台词
+    public void TriggerLine(LineEventType eventType)
+    {
+        // 根据事件类型设置触发概率
+        float triggerChance = 0;
+
+        if (eventType == LineEventType.Attack)
+        {
+            triggerChance = 0.1f; // Attack台词25%概率
+        }
+        else if (eventType == LineEventType.SkillActive)
+        {
+            triggerChance = 1f; // Skill台词100%概率
+        }
+        else if (eventType == LineEventType.Defense)
+        {
+            triggerChance = 0.05f; // Defense台词100%概率
+        }
+        // 概率判定
+        if (UnityEngine.Random.value > triggerChance) return;
+
+        CharacterLineData line = LineManager.Get.GetRandomLine(characterAttributes.characterName, eventType);
+        if (line != null)
+        {
+            // 解析颜色（处理格式错误）
+            Color color = Color.white;
+            if (!ColorUtility.TryParseHtmlString(line.textColor, out color))
+            {
+                Debug.LogWarning($"颜色格式错误：{line.textColor}，使用默认白色");
+            }
+
+            // 显示到UI列表（假设已有TextListManager）
+            TextListManager.Get.AddLine(
+                characterName: characterAttributes.characterName,
+                lineText: line.lineText,
+                textColor: color
+            );
+        }
+    }
+
+    // 受伤震动动画
     protected void GetDamageShake()
     {
         // 让图片震动
@@ -262,6 +266,19 @@ public abstract class BasicCharacter : MonoBehaviour
         }
     }
 
+    // 自己的回合结束
+    public virtual void EndOfRound()
+    {
+        // 处理 BUFF 的剩余回合数
+        buffManager.OnCharacterRoundEnd();
+    }
+
+    // 死亡回调（子类实现具体逻辑）
+    protected virtual void OnDeath()
+    {
+        TriggerLine(LineEventType.Death);
+    }
+
     // 数字向上移动并逐渐消失的协程
     protected IEnumerator MoveAndFade(GameObject damageNumber)
     {
@@ -276,7 +293,6 @@ public abstract class BasicCharacter : MonoBehaviour
             canvasGroup = damageNumber.AddComponent<CanvasGroup>();
         }
         canvasGroup.alpha = 1f;
-
         while (elapsedTime < duration)
         {
             // 移动数字
@@ -287,17 +303,7 @@ public abstract class BasicCharacter : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
         // 销毁数字对象
         Destroy(damageNumber);
     }
-
-    public virtual void EndOfRound()
-    {
-        // 处理 BUFF 的剩余回合数
-        buffManager.OnCharacterRoundEnd();
-    }
-
-    // 死亡回调（子类实现具体逻辑）
-    protected abstract void OnDeath();
 }    

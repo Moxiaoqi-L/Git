@@ -13,6 +13,10 @@ public class Hero : BasicCharacter
     // 当对象启用时调用的方法，用于初始化和执行一些操作
     private new void Start() {
         base.Start();
+        // 缓存图片
+        characterImage = Resources.Load<Sprite>("General/Image/CharacterImage/" + characterAttributes.characterImage);
+        passiveSkillImage = Resources.Load<Sprite>("General/Image/PassiveSkillImage/" + characterAttributes.passiveSkillImage);
+
         // 初始化生命值
         currentHealthPoints = characterAttributes.maxHealthPoints;
         // 获取移动方式
@@ -40,6 +44,7 @@ public class Hero : BasicCharacter
         {
             return;
         }
+        TriggerLine(LineEventType.Attack);
         // 播放攻击动画
         attackAnimation.PlayAttackAnimation(this.transform, target.transform);
         // 计算命中率
@@ -48,14 +53,13 @@ public class Hero : BasicCharacter
         if (randomValue <= hitRate)
         {
             float actualattack = GetActualAttack();
-            bool isCritical = UnityEngine.Random.value <= characterAttributes.criticalRate;
+            bool isCritical = UnityEngine.Random.value * 100 <= characterAttributes.criticalRate;
             float damage = actualattack;
             if (isCritical)
             {
-                damage *= characterAttributes.criticalDamageMultiplier;
+                damage *= characterAttributes.criticalDamageMultiplier / 100;
                 Debug.Log(characterAttributes.name + " 暴击了！ ");
             }
-            Debug.Log(characterAttributes.name + " 攻击了！ ");
             target.Defend(damage);
         }
         else

@@ -27,15 +27,15 @@ public abstract class CharacterAttributes : ScriptableObject
     // 伤害类型
     public DamageType damageType;
     // 暴击几率
-    public float criticalRate = 0;
+    public int criticalRate = 0;
     // 暴击伤害
-    public float criticalDamageMultiplier = 0;
+    public int criticalDamageMultiplier = 150;
     // 命中率
     public int accuracy = 100;
     // 技能增幅
-    public float skillPower = 0;
+    public int skillPower = 0;
     // 伤害增幅
-    public float damagePower = 0;
+    public int damagePower = 0;
 
     // 防御力
     public int defense;
@@ -43,6 +43,8 @@ public abstract class CharacterAttributes : ScriptableObject
     public int magicDefense;
     // 闪避率
     public int evasion = 0;
+    // 伤害修改
+    public int damageTakenMultiplier = 100;
 
     // 最大生命值
     public int maxHealthPoints;

@@ -62,43 +62,44 @@ public class GameInit : MonoBehaviour
 
     public void LoadLevel()
     {
+        LineManager.Get.LoadAllCharacterLines();
         if (currentStepNum == 1 && currentStepNum <= maxStepNum)
         {
             foreach (var enemy in stepData.step1)
             {
-                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.rarityImage, enemy.attributes);
+                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.rarity, enemy.attributes);
             }
         }
         if (currentStepNum == 2 && currentStepNum <= maxStepNum)
         {
             foreach (var enemy in stepData.step2)
             {
-                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.rarityImage, enemy.attributes);
+                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.rarity, enemy.attributes);
             }
         }
         if (currentStepNum == 3 && currentStepNum <= maxStepNum)
         {
             foreach (var enemy in stepData.step3)
             {
-                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.rarityImage, enemy.attributes);
+                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.rarity, enemy.attributes);
             }
         }
         if (currentStepNum == 4 && currentStepNum <= maxStepNum)
         {
             foreach (var enemy in stepData.step4)
             {
-                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.rarityImage, enemy.attributes);
+                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.rarity, enemy.attributes);
             }
         }
     }
 
     // 实例化敌方预制体
-    public void InstantiateEnemyChessman(Location location,string avatarImageFileName, string rarityImageFileName, string attributeFileName)
+    public void InstantiateEnemyChessman(Location location,string avatarImageFileName, int rarityIndex, string attributeFileName)
     {
         // 加载预制体 , 配置文件, 图片
         EnemyAttributes enemyAttributes = Resources.Load<EnemyAttributes>("Battle/Scripts/CharacterAttributes/EnemyAttributes/" + attributeFileName);
         Sprite avatarSprite = Resources.Load<Sprite>("Battle/Image/Avatar/" + avatarImageFileName);
-        Sprite raritySprite = Resources.Load<Sprite>("Battle/Image/Rarity/" + rarityImageFileName);
+        Sprite raritySprite = Resources.Load<Sprite>("Battle/Image/Rarity/Rarity Enemy " + rarityIndex);
 
         if (enemyChessmanPrefab == null)
         {
@@ -145,7 +146,6 @@ public class GameInit : MonoBehaviour
         yield return null;
         // 检查是否还有其他敌人存活
         List<Chessman> remainingEnemies = Chessman.All(Camp.Enemy);
-        Debug.Log(remainingEnemies.Count);
         if (remainingEnemies.Count == 0)
         {
             if(currentStepNum >= maxStepNum)
@@ -187,6 +187,7 @@ public class EnemyData
 {
     public string attributes;
     public string avatarImage;
+    public int rarity;
     public string rarityImage;
     public int locationX;
     public int locationY;

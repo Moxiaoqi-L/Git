@@ -46,7 +46,16 @@ public class PowerAttack : Skill
             List<Enemy> enemiesInSameColumn = MethodsForSkills.GetEnemiesInSameColumn(hero);
             if (enemiesInSameColumn.Count > 0)
             {
-                target = enemiesInSameColumn[0];
+                int minY = 5;
+                foreach (Enemy enemy in enemiesInSameColumn)
+                {
+                    int currentY = enemy.chessman.location.y;
+                    if (currentY < minY)
+                    {
+                        minY = currentY;
+                        target = enemy;
+                    }
+                }
             }
         }
 

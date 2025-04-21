@@ -1,0 +1,11 @@
+{
+    "characterName": "狐光羽",
+    "lines": [
+      {
+        "eventType": "SkillActive",
+        "lineText": "这个能让你好起来...也许~",
+        "voice": "voice/hero_a_attack.mp3",
+        "textColor": "#FF69B4"
+      }
+    ]
+  }

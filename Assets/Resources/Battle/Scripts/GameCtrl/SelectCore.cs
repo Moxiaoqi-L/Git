@@ -10,7 +10,7 @@ public class SelectCore : MonoBehaviour
 
     public GameObject characterDetailField;
 
-    public static GameObject _characterDetailField;
+    private static CanvasGroup canvasGroup;
 
     [SerializeField]
     private Chessman selection;
@@ -19,7 +19,7 @@ public class SelectCore : MonoBehaviour
     private void Awake()
     {
         Get = this;
-        _characterDetailField = characterDetailField;
+        canvasGroup = characterDetailField.GetComponent<CanvasGroup>();
     }
 
     // 选中
@@ -28,7 +28,7 @@ public class SelectCore : MonoBehaviour
         // 获取选中的棋子
         Get.selection = chessman;
         // 展示该棋子信息
-        _characterDetailField.GetComponent<CanvasGroup>().DOFade(1, 0.2f);
+        canvasGroup.DOFade(1, 0.2f);
     }
 
     // 取消选中
@@ -37,6 +37,6 @@ public class SelectCore : MonoBehaviour
         // 取消选中棋子
         Get.selection = null;
         // 隐藏信息
-        _characterDetailField.GetComponent<CanvasGroup>().DOFade(0, 0.2f);
+        canvasGroup.DOFade(0, 0.2f);
     }
 }

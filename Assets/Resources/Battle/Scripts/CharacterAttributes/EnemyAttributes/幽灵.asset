@@ -13,12 +13,15 @@ MonoBehaviour:
   m_Name: "\u5E7D\u7075"
   m_EditorClassIdentifier: 
   characterName: Default
+  characterImage: ghost
+  avatarImage: 
+  passiveSkillImage: 
   level: 1
   maxLevel: 45
   rank: 0
   maxRank: 2
   attack: 8
-  damageType: 
+  damageType: 0
   criticalRate: 0
   criticalDamageMultiplier: 0
   accuracy: 100
@@ -27,11 +30,13 @@ MonoBehaviour:
   defense: 0
   magicDefense: 0
   evasion: 0
-  maxHealthPoints: 60
+  damageTakenMultiplier: 100
+  maxHealthPoints: 100
   attackGrowth: 0
   defenseGrowth: 0
   maxHealthPointsGrowth: 0
   skills: []
+  passiveSkill: {fileID: 11400000, guid: c024add19bdc40246a54bca889548cf4, type: 2}
   attackRange:
   - x: 0
     y: -1

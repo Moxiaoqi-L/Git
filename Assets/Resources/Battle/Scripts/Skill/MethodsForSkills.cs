@@ -7,7 +7,7 @@ public class MethodsForSkills : MonoBehaviour
     // 查找与英雄相同列的所有敌人
     public static List<Enemy> GetEnemiesInSameColumn(Hero hero)
     {
-        List<Enemy> enemiesInSameColumn = new List<Enemy>();
+        List<Enemy> enemiesInSameColumn = new();
         int heroColumn = hero.chessman.location.x;
 
         foreach (Enemy enemy in FindObjectsOfType<Enemy>())

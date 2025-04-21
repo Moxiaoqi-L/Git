@@ -1,4 +1,6 @@
 // Battle/Scripts/Chessman/Buff/PoisonBuff.cs
+using UnityEngine;
+
 public class PoisonBuff : Buff
 {
     private int damagePerLayer; // 每层伤害量
@@ -6,6 +8,7 @@ public class PoisonBuff : Buff
     public PoisonBuff(int damagePerLayer, int initialLayers)
     {
         buffName = "<color=#8470FF>中毒</color>";
+        buffSprite = Resources.Load<Sprite>($"Battle/Image/Buff/中毒");
         this.damagePerLayer = damagePerLayer;
         stackLayers = initialLayers;
         duration = 0; // 无固定持续时间，依赖层数
@@ -27,7 +30,7 @@ public class PoisonBuff : Buff
         if (stackLayers > 0)
         {
             int damageAmount = damagePerLayer * stackLayers;
-            character.Defend(damageAmount); // 调用角色受伤方法
+            character.Defend(damageAmount, true, Constants.POISON_COLOR); // 调用角色受伤方法
         }
         base.OnRoundEnd(character); // 减少层数
         buffDetail = "回合结束时受到<color=#8470FF>" + damagePerLayer * stackLayers + "</color>点伤害";

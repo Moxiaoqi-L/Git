@@ -35,13 +35,7 @@ public class Square : MonoBehaviour
     // 点击方格触发的事件
     public void OnSquareClicked()
     {
-        var selection = SelectCore.Selection;
-        //如果当前没有选中任何棋子，则点击棋盘方格后无事发生
-        if(!selection)
-        {
-            return;
-        }
-        //如果当前有选中棋子，则点击棋盘方格后，被选中的棋子将移动到被点击的方格处
+        // TODO
     }
 
     // 移除棋盘方格上的棋子(如果有的话)

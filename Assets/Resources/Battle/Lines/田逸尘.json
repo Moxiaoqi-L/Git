@@ -1,0 +1,35 @@
+{
+    "characterName": "田逸尘",
+    "lines": [
+      {
+        "eventType": "Attack",
+        "lineText": "看我的攻击！",
+        "voice": "voice/hero_a_attack.mp3",
+        "textColor": "#FFD700"
+      },
+      {
+        "eventType": "Attack",
+        "lineText": "在这里！",
+        "voice": "voice/hero_a_attack.mp3",
+        "textColor": "#FFD700"
+      },
+      {
+        "eventType": "Defense",
+        "lineText": "啧...",
+        "voice": "voice/hero_a_attack.mp3",
+        "textColor": "#FFD700"
+      },
+      {
+        "eventType": "Defense",
+        "lineText": "好疼！",
+        "voice": "voice/hero_a_attack.mp3",
+        "textColor": "#FFD700"
+      },
+      {
+        "eventType": "SkillActive",
+        "lineText": "强力一击！",
+        "voice": "voice/hero_a_attack.mp3",
+        "textColor": "#FFD700"
+      }
+    ]
+  }

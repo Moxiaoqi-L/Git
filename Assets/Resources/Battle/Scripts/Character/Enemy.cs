@@ -3,18 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using System.Collections;
+using System;
 
 // 英雄类，代表游戏中的英雄角色，包含英雄的各种属性和行为
 public class Enemy : BasicCharacter
 {
     // 攻击目标
     public Hero targetHero;
+    // 攻击完成事件（在造成伤害后触发）
+    public event Action<Hero, Enemy> OnAttackCompleted;
 
     // 当对象启用时调用的方法，用于初始化和执行一些操作
     private new void Start() {
         base.Start();
+        // 缓存图片
+        characterImage = Resources.Load<Sprite>("General/Image/CharacterImage/" + characterAttributes.characterImage);
         // 初始化生命值
-        currentHealthPoints = characterAttributes.maxHealthPoints;       
+        currentHealthPoints = characterAttributes.maxHealthPoints;
+        // 初始化技能列表
+        InitializeSkills();           
+    }
+
+    protected override void InitializeSkills()
+    {
+        base.InitializeSkills();
+        if (characterAttributes.passiveSkill != null)
+        {
+
+            characterAttributes.passiveSkill.Setup(null, this);
+        }
     }
 
     // 敌方的攻击方法，用于对敌人造成伤害，新增 selfAttack 参数用于控制是否自我攻击
@@ -39,7 +56,7 @@ public class Enemy : BasicCharacter
         int maxY = 0;
         foreach (Hero hero in heroesInRange)
         {
-            if (hero.chessman.location.x == enemyColumn && hero.chessman.location.y > maxY)
+            if (hero.chessman.location.x == enemyColumn && hero.chessman.location.y >= maxY)
             {
                 targetHero = hero;
                 maxY = hero.chessman.location.y;
@@ -96,18 +113,19 @@ public class Enemy : BasicCharacter
 
         // 计算命中率
         float hitRate = characterAttributes.accuracy / (characterAttributes.accuracy + targetHero.characterAttributes.evasion);
-        float randomValue = Random.value;
+        float randomValue = UnityEngine.Random.value;
         if (randomValue <= hitRate)
         {
             float actualattack = characterAttributes.attack + provisionalAttack;
-            bool isCritical = Random.value <= characterAttributes.criticalRate;
+            bool isCritical = UnityEngine.Random.value * 100 <= characterAttributes.criticalRate;
             float damage = actualattack;
             if (isCritical)
             {
-                damage *= characterAttributes.criticalDamageMultiplier;
+                damage *= characterAttributes.criticalDamageMultiplier / 100;
                 Debug.Log(characterAttributes.name + " 暴击了！ ");
             }
             targetHero.Defend(damage);
+            OnAttackCompleted?.Invoke(targetHero, this);
         }
         else
         {

@@ -163,11 +163,13 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
     // 棋子选中
     private void OnChessmanClicked()
     {
-        Debug.Log("OnChessmanClicked");
-        // 处理自身选中状态
-        HandleSelfSelection();
         // 处理跨阵营交互（如玩家选中敌人）
-        HandleCrossCampInteraction();
+        if (!HandleCrossCampInteraction())
+        {
+            // 处理自身选中状态
+            HandleSelfSelection();
+        }
+
     }
 
     private void OnRightClick()
@@ -195,7 +197,7 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
     }
 
     // 处理跨阵营选取
-    private void HandleCrossCampInteraction()
+    private bool HandleCrossCampInteraction()
     {
         // 玩家点击敌人：触发攻击逻辑（仅当当前选中的是玩家英雄）
         if (camp == Camp.Enemy && SelectCore.Selection != null && 
@@ -206,20 +208,27 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
             if (selectedHero.GetAttackRange().Contains(location))
             {
                 selectedHero.Attack(enemy); // 执行攻击
+                return true;
             }
             else
             {
                 Debug.LogWarning($"目标 {enemy.characterAttributes.name} 超出攻击范围！");
+                return false;
                 // 播放提示音效或显示UI警告
             }
         }
+        return false;
     }
 
-  // 选择棋子
+    // 选择棋子
     private void SelectSelf()
     {
-        if (SelectCore.Selection != null && camp == Camp.Enemy) return;
 
+        if (SelectCore.Selection != null && SelectCore.Selection.camp == Camp.Enemy && camp == Camp.Enemy) 
+        {
+            SelectCore.TrySelect(this);
+            return;
+        }
 
         if (SelectCore.Selection != null && SelectCore.Selection != this)
         {
@@ -322,7 +331,8 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
     private void UseSkill(Skill skill, Hero hero)
     {
         skill.Use(hero);
-        
+        // 触发台词
+        hero.TriggerLine(LineEventType.SkillActive);
         // 隐藏技能菜单（点击后销毁按钮）
         Destroy(currentSkillButton);
     }

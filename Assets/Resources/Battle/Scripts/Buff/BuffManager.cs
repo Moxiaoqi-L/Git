@@ -15,7 +15,8 @@ public class BuffManager
     {
         { "自愈", typeof(HealBuff) },
         { "中毒", typeof(PoisonBuff) },
-        { "眩晕", typeof(StunBuff) }
+        { "眩晕", typeof(StunBuff) },
+        { "失魂", typeof(SoulLossBuff) }
     };
 
     public BuffManager(BasicCharacter character)
