@@ -57,16 +57,17 @@ public abstract class CharacterAttributes : ScriptableObject
     public float maxHealthPointsGrowth;
 
     // 主动技能
-    public Skill[] skills;
+    public List<string> activeSkills = new List<string>{};
 
     // 被动技能
-    // TODO
-    public Skill passiveSkill;
+    public List<string> passiveSkills = new List<string>{};
     // 大招
     // TODO
 
+    // public int test;
+
     // 攻击范围的相对偏移量（x,y相对于当前位置）
-    public Location[] attackRange;
+    public List<Location> attackRange;
 
     // 初始化属性（子类实现具体逻辑）
     public abstract void InitAttributes();

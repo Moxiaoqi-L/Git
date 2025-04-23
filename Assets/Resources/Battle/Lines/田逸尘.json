@@ -3,33 +3,39 @@
     "lines": [
       {
         "eventType": "Attack",
-        "lineText": "看我的攻击！",
+        "lineText": "瞄准这里！",
         "voice": "voice/hero_a_attack.mp3",
-        "textColor": "#FFD700"
+        "textColor": "#FFDB58"
       },
       {
         "eventType": "Attack",
         "lineText": "在这里！",
         "voice": "voice/hero_a_attack.mp3",
-        "textColor": "#FFD700"
+        "textColor": "#FFDB58"
       },
       {
         "eventType": "Defense",
         "lineText": "啧...",
         "voice": "voice/hero_a_attack.mp3",
-        "textColor": "#FFD700"
+        "textColor": "#FFDB58"
       },
       {
         "eventType": "Defense",
         "lineText": "好疼！",
         "voice": "voice/hero_a_attack.mp3",
-        "textColor": "#FFD700"
+        "textColor": "#FFDB58"
       },
       {
         "eventType": "SkillActive",
         "lineText": "强力一击！",
         "voice": "voice/hero_a_attack.mp3",
-        "textColor": "#FFD700"
+        "textColor": "#FFDB58"
+      },
+      {
+        "eventType": "Death",
+        "lineText": "我支撑不住了...",
+        "voice": "voice/hero_a_attack.mp3",
+        "textColor": "#FFDB58"
       }
     ]
   }

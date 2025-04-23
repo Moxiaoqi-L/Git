@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,9 +13,17 @@ public class GameInit : MonoBehaviour
     public int currentStepNum;
     // 最大波次
     public int maxStepNum;
+    // 当前回合
+    public int currentArround = 1;
 
     // 预制体
     public GameObject enemyChessmanPrefab;
+
+    // Step 文字组件
+    public TextMeshProUGUI stepText;
+    // Round 文字组件
+    public TextMeshProUGUI roundText;
+
     // 场景加载的实例
     private SceneLoaderWithAnimation sceneLoader;
 
@@ -62,7 +71,7 @@ public class GameInit : MonoBehaviour
 
     public void LoadLevel()
     {
-        LineManager.Get.LoadAllCharacterLines();
+        UpdateStepAndRound(true);
         if (currentStepNum == 1 && currentStepNum <= maxStepNum)
         {
             foreach (var enemy in stepData.step1)
@@ -91,6 +100,7 @@ public class GameInit : MonoBehaviour
                 InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.rarity, enemy.attributes);
             }
         }
+        StartCoroutine(WaitFor());
     }
 
     // 实例化敌方预制体
@@ -136,10 +146,16 @@ public class GameInit : MonoBehaviour
         // 处理进入下一阶段的逻辑
         currentStepNum += 1;
         LoadLevel();
-        Debug.Log("进入下一阶段");
         // 可以在这里添加场景切换、数据更新等操作
     }
 
+    public void UpdateStepAndRound(bool refreshRound = false)
+    {
+        if (refreshRound) currentArround = 0;
+        currentArround += 1;
+        stepText.text = currentStepNum + " / " + maxStepNum;
+        roundText.text = currentArround.ToString();
+    }
     private IEnumerator Check()
     {
         // 等待一帧，确保 Destroy 操作完成
@@ -160,6 +176,12 @@ public class GameInit : MonoBehaviour
                 TurnManager.Instance.RefreshPlayerTurn();
             }
         }
+    }
+
+    private IEnumerator WaitFor()
+    {   
+        yield return new WaitForSeconds(0.1f);
+        LineManager.Get.LoadAllCharacterLines();
     }
 
 }

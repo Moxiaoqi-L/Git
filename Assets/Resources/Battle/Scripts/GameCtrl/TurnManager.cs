@@ -37,6 +37,7 @@ public class TurnManager : MonoBehaviour
             hero.StartOfTurn();
         }
         isPlayerTurn = true;
+        GameInit.Instance.UpdateStepAndRound();
     }
 
     // 刷新玩家回合

@@ -48,7 +48,13 @@ public class ChessmanMove : Button, IDragHandler, IBeginDragHandler, IEndDragHan
 
     public void OnDrag(PointerEventData _)
     {
-        transform.position = Input.mousePosition;
+        // 获取相机（假设UI的Canvas绑定了对应的相机，通常为MainCamera）
+        Camera canvasCamera = GetComponentInParent<Canvas>().worldCamera;
+        if (canvasCamera == null) canvasCamera = Camera.main; // 备用相机
+        
+        // 转换屏幕坐标到世界坐标（z轴设为UI的深度，避免被相机裁剪）
+        Vector3 worldPosition = canvasCamera.ScreenToWorldPoint(new Vector3(_.position.x, _.position.y, 10f)); // z设为相机前10单位
+        transform.position = worldPosition;
         if (transform.GetComponent<Image>().raycastTarget) transform.GetComponent<Image>().raycastTarget = false;
     }
 

@@ -1,0 +1,23 @@
+{
+  "characterName": "幽灵",
+  "lines": [
+    {
+      "eventType": "Attack",
+      "lineText": "嚯嚯~",
+      "voice": "voice/hero_a_attack.mp3",
+      "textColor": "#BFC2CB"
+    },
+    {
+      "eventType": "Defense",
+      "lineText": "呃啊~",
+      "voice": "voice/hero_a_attack.mp3",
+      "textColor": "#BFC2CB"
+    },
+    {
+      "eventType": "Death",
+      "lineText": "...",
+      "voice": "voice/hero_a_attack.mp3",
+      "textColor": "#BFC2CB"
+    }
+  ]
+}

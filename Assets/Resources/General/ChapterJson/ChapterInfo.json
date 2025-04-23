@@ -1,0 +1,18 @@
+{
+    "info" : [
+        {
+            "chapterName" : "Chapter 0",
+            "chapterType" : "MainStory",
+            "chapterDetail" : "这里是关于Chapter 0 序章的概述。",
+            "chapterImage" : "MainMenu 0",
+            "chapterDetailImage" : "None"
+        },
+        {
+            "chapterName" : "Chapter 1",
+            "chapterType" : "MainStory",
+            "chapterDetail" : "这里的按钮别点别点别点\n\n不听话？\n\n点了就 nm 给你卡住",
+            "chapterImage" : "Test Chapter 1",
+            "chapterDetailImage" : "None"
+        }
+    ]
+}

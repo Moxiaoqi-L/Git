@@ -31,14 +31,14 @@ public class LineManager : MonoBehaviour
         // 加载所有英雄台词
         foreach (var hero in Chessman.AllHeros())
         {
-            string characterName = hero.characterAttributes.name;
+            string characterName = hero.characterAttributes.characterName;
             LoadCharacterLines(characterName);
         }
 
         // 加载所有敌人台词
-        foreach (var enemy in Chessman.AllEnemies())
+        foreach (Enemy enemy in Chessman.AllEnemies())
         {
-            string characterName = enemy.characterAttributes.name;
+            string characterName = enemy.characterAttributes.characterName;
             LoadCharacterLines(characterName);
         }
     }

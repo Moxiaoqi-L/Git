@@ -22,7 +22,7 @@ public class BuffManager
     public BuffManager(BasicCharacter character)
     {
         this.character = character;
-        // 初始化时注册所有支持的 BUFF 类型（可通过反射自动扫描优化）
+        // 初始化时注册所有支持的 BUFF 类型（可通过反射自动扫描）
     }
 
     /// <summary>

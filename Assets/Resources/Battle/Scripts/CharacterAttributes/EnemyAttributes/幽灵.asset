@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 260e587f9b80877458106056bd31f243, type: 3}
   m_Name: "\u5E7D\u7075"
   m_EditorClassIdentifier: 
-  characterName: Default
+  characterName: "\u5E7D\u7075"
   characterImage: ghost
   avatarImage: 
   passiveSkillImage: 
@@ -35,16 +35,11 @@ MonoBehaviour:
   attackGrowth: 0
   defenseGrowth: 0
   maxHealthPointsGrowth: 0
-  skills: []
-  passiveSkill: {fileID: 11400000, guid: c024add19bdc40246a54bca889548cf4, type: 2}
+  activeSkills: []
+  passiveSkills:
+  - SoulLossPassive
+  - MoreStone
+  - Petrified
   attackRange:
   - x: 0
     y: -1
-  - x: 0
-    y: -2
-  - x: 0
-    y: -3
-  - x: 0
-    y: -4
-  - x: 0
-    y: -5

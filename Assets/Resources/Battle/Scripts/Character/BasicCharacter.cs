@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using JetBrains.Annotations;
 using TMPro;
@@ -14,18 +15,20 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
     public Chessman chessman;
     // 管理英雄 BUFF 的对象
     public BuffManager buffManager;
+    // 管理英雄 Skill 的对象
+    public SkillManager skillManager;
     // 攻击动画
     public IAttackAnimation attackAnimation;
     // 拥有的主动技能
-    public Skill activeSkill;
+    public List<Skill> activeSkill => skillManager.activeSkills;
     // 拥有的被动技能
-    public Skill passiveSkill;
+    public List<Skill> passiveSkill => skillManager.passiveSkills;
 
     // 获取头像
     public Image image;
 
     // 通过characterAttributes获取攻击范围
-    public Location[] AttackRange => characterAttributes.attackRange;
+    public List<Location> attackRange;
 
     // 每回合只能攻击一次
     public bool hasAttacked;
@@ -50,12 +53,14 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
     // 初始化英雄的技能列表
     protected virtual void InitializeSkills()
     {
-        if (characterAttributes.skills.Length > 0)
+        foreach (string activeSkill in characterAttributes.activeSkills)
         {
-            activeSkill = characterAttributes.skills[0];
+            skillManager.AddSkill(activeSkill);
         }
-        
-        passiveSkill = characterAttributes.passiveSkill;
+        foreach (string passiveSkill in characterAttributes.passiveSkills)
+        {
+            skillManager.AddSkill(passiveSkill);
+        }
     }
 
     protected void Start() {
@@ -63,10 +68,14 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
         chessman = GetComponent<Chessman>();
         // 初始化 BUFF 管理器
         buffManager = new BuffManager(this);
+        // 初始化 Skill 管理器
+        skillManager = new SkillManager(this);
         // 默认使用简单攻击动画
         attackAnimation = new DefaulAttackAnimation();
         // 图片缓存
         damageTypeImage = Resources.Load<Sprite>("General/Image/DamagetypeImage/" + characterAttributes.damageType);
+        // 初始化攻击范围
+        attackRange = new List<Location>(characterAttributes.attackRange.ToArray());
     }
 
     // 获取攻击范围
@@ -75,7 +84,7 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
         List<Location> attackLocations = new List<Location>();
         Location currentLocation = chessman.location;
         
-        foreach (var location in characterAttributes.attackRange)
+        foreach (var location in attackRange)
         {
             Location targetLocation = new Location(
                 currentLocation.x + location.x,
@@ -93,7 +102,7 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
     public List<Location> GetAttackRangeFromLocation(Location origin)
     {
         List<Location> attackLocations = new List<Location>();
-        foreach (var location in characterAttributes.attackRange)
+        foreach (var location in attackRange)
         {
             Location targetLocation = new Location(
                 origin.x + location.x,
@@ -129,7 +138,7 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
             chessman.ExitFromBoard();
         }
         // 受伤台词
-        TriggerLine(LineEventType.Defense);
+        if (!ignoreDefense) TriggerLine(LineEventType.Defense);
     }
 
     // 增加攻击力的方法
@@ -201,6 +210,10 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
         {
             triggerChance = 0.05f; // Defense台词100%概率
         }
+        else if (eventType == LineEventType.Death)
+        {
+            triggerChance = 1f; // Death台词100%概率
+        }
         // 概率判定
         if (UnityEngine.Random.value > triggerChance) return;
 
@@ -217,7 +230,7 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
             // 显示到UI列表（假设已有TextListManager）
             TextListManager.Get.AddLine(
                 characterName: characterAttributes.characterName,
-                lineText: line.lineText,
+                lineText: "「" + line.lineText + "」",
                 textColor: color
             );
         }

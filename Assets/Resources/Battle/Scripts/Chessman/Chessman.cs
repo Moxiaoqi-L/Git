@@ -226,13 +226,16 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
 
         if (SelectCore.Selection != null && SelectCore.Selection.camp == Camp.Enemy && camp == Camp.Enemy) 
         {
+            HighlightAttackRange(SelectCore.Selection.enemy, false);
+            HighlightAttackRange(enemy, true); // 显示敌人攻击范围
             SelectCore.TrySelect(this);
             return;
         }
 
         if (SelectCore.Selection != null && SelectCore.Selection != this)
         {
-            HighlightAttackRange(SelectCore.Selection.hero, false);
+            if (SelectCore.Selection.hero) HighlightAttackRange(SelectCore.Selection.hero, false);
+            if (SelectCore.Selection.enemy) HighlightAttackRange(SelectCore.Selection.enemy, false);
         }
 
         SelectCore.TrySelect(this);
@@ -240,6 +243,11 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
         if (camp == Camp.Player && hero != null)
         {
             HighlightAttackRange(hero, true); // 显示玩家攻击范围
+        }
+
+        if (camp == Camp.Enemy && enemy != null)
+        {
+            HighlightAttackRange(enemy, true); // 显示敌人攻击范围
         }
     }
 
@@ -252,19 +260,26 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
         {
             HighlightAttackRange(hero, false); // 隐藏攻击范围
         }
+        if (camp == Camp.Enemy && enemy != null)
+        {
+            HighlightAttackRange(enemy, false); // 隐藏攻击范围
+        }
     }
 
     // 高亮显示攻击范围
-    public void HighlightAttackRange(Hero hero, bool isActive)
+    public void HighlightAttackRange(BasicCharacter bs, bool isActive)
     {
-        if (hero == null || BoardCtrl.Get == null) return; 
+        if (bs == null || BoardCtrl.Get == null) return;
+
+        bool isEnemy = false;
+        if (bs is not Hero) isEnemy = true;
         
         foreach (Square square in BoardCtrl.Get.squares)
         {
-            bool shouldHighlight = hero.GetAttackRange().Contains(square.location);
+            bool shouldHighlight = bs.GetAttackRange().Contains(square.location);
             if (shouldHighlight)
             {
-                square.SetAttackRangeHighlight(isActive);
+                square.SetAttackRangeHighlight(isActive, isEnemy);
             }
         }
     }
@@ -314,8 +329,8 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
             // 让按钮出现在人物上方
             buttonObj.transform.DOMoveY(transform.position.y + 80, 0.2f);
             // 配置按钮文本和点击事件
-            buttonObj.GetComponentInChildren<TextMeshProUGUI>().text = hero.activeSkill.SkillName;
-            buttonObj.GetComponent<Button>().onClick.AddListener(() => UseSkill(hero.activeSkill, hero));
+            buttonObj.GetComponentInChildren<TextMeshProUGUI>().text = hero.activeSkill[0].SkillName;
+            buttonObj.GetComponent<Button>().onClick.AddListener(() => UseSkill(hero.activeSkill[0], hero));
             currentSkillButton = buttonObj;
         }
     }
@@ -330,9 +345,8 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
 
     private void UseSkill(Skill skill, Hero hero)
     {
-        skill.Use(hero);
         // 触发台词
-        hero.TriggerLine(LineEventType.SkillActive);
+        if (skill.Use(hero)) hero.TriggerLine(LineEventType.SkillActive);
         // 隐藏技能菜单（点击后销毁按钮）
         Destroy(currentSkillButton);
     }

@@ -12,6 +12,9 @@ public class Enemy : BasicCharacter
     public Hero targetHero;
     // 攻击完成事件（在造成伤害后触发）
     public event Action<Hero, Enemy> OnAttackCompleted;
+    // 攻击落空事件 （无目标或未命中）
+    public event Action<Hero, Enemy> OnAttackMissed;
+
 
     // 当对象启用时调用的方法，用于初始化和执行一些操作
     private new void Start() {
@@ -24,68 +27,72 @@ public class Enemy : BasicCharacter
         InitializeSkills();           
     }
 
-    protected override void InitializeSkills()
-    {
-        base.InitializeSkills();
-        if (characterAttributes.passiveSkill != null)
-        {
-
-            characterAttributes.passiveSkill.Setup(null, this);
-        }
-    }
-
     // 敌方的攻击方法，用于对敌人造成伤害，新增 selfAttack 参数用于控制是否自我攻击
     public void Attack(Enemy self)
     {
         // 眩晕不攻击
         if (isStunned) return;
-        // 获取当前攻击范围
-        List<Location> attackRange = GetAttackRange();
+        TriggerLine(LineEventType.Attack);
         // 检查攻击范围内是否有Hero
         List<Hero> heroesInRange = Chessman.AllHeros().Where(hero => 
-            attackRange.Contains(hero.chessman.location)).ToList();
+            GetAttackRange().Contains(hero.chessman.location)).ToList();
         // 要攻击的英雄
         Hero targetHero = null;
-    
-    // 若攻击范围内有 Hero，选择同列前排
-    // 若攻击范围内无 Hero，自动移动到可攻击位置
-    if (heroesInRange.Count > 0)
-    {
-        // 优先选择同列前排，否则选最近
-        int enemyColumn = chessman.location.x;
-        int maxY = 0;
-        foreach (Hero hero in heroesInRange)
+
+        // 隐藏攻击范围
+        chessman.HighlightAttackRange(this, false);
+        
+        // 若攻击范围内有 Hero，选择同列前排
+        // 若攻击范围内无 Hero，自动移动到可攻击位置
+        if (heroesInRange.Count > 0)
         {
-            if (hero.chessman.location.x == enemyColumn && hero.chessman.location.y >= maxY)
+            Location enemyLocation = chessman.location;
+            Hero nearestHero = null;
+            int minDistance = int.MaxValue;
+
+            foreach (Hero hero in heroesInRange)
             {
-                targetHero = hero;
-                maxY = hero.chessman.location.y;
+                Location heroLocation = hero.chessman.location;
+                int distance = Mathf.Abs(heroLocation.x - enemyLocation.x) + Mathf.Abs(heroLocation.y - enemyLocation.y); // 曼哈顿距离
+                
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    nearestHero = hero;
+                }
+                else if (distance == minDistance && nearestHero == null) // 距离相同则默认选第一个
+                {
+                    nearestHero = hero;
+                }
+            }
+            ExecuteAttack(nearestHero);
+        }
+        else
+        {
+            // 寻找所有可移动位置（假设Enemy可移动到任意空的相邻格子，可根据需求调整）
+            List<Location> validMoveLocations = GetValidMoveLocations();
+            // 筛选移动后攻击范围内有Hero的位置
+            List<Location> effectiveMoveLocations = validMoveLocations.Where(location => 
+                    GetAttackRangeFromLocation(location).Any(heroLoc => 
+                    Chessman.GetChessman(heroLoc)?.camp == Camp.Player)).ToList(); 
+            if (effectiveMoveLocations.Count > 0)
+            {
+                // 选择距离当前位置最近的可移动位置
+                Location nearestLocation = effectiveMoveLocations.OrderBy(loc => 
+                    Mathf.Abs(loc.x - chessman.location.x) + Mathf.Abs(loc.y - chessman.location.y)).First();
+                // 移动Enemy到目标位置（需实现移动逻辑，此处假设使用棋盘格子移动）
+                MoveToLocation(nearestLocation);
+                // 停顿
+                StartCoroutine(WaitAndAttack(nearestLocation, 0.6f)); 
             }
         }
-        ExecuteAttack(targetHero);
-    }
-    else
-    {
-        // 寻找所有可移动位置（假设Enemy可移动到任意空的相邻格子，可根据需求调整）
-        List<Location> validMoveLocations = GetValidMoveLocations();
-        // 筛选移动后攻击范围内有Hero的位置
-        List<Location> effectiveMoveLocations = validMoveLocations.Where(location => 
-                GetAttackRangeFromLocation(location).Any(heroLoc => 
-                Chessman.GetChessman(heroLoc)?.camp == Camp.Player)).ToList(); 
-        if (effectiveMoveLocations.Count > 0)
-        {
-            // 选择距离当前位置最近的可移动位置
-            Location nearestLocation = effectiveMoveLocations.OrderBy(loc => 
-                Mathf.Abs(loc.x - chessman.location.x) + Mathf.Abs(loc.y - chessman.location.y)).First();
-            // 移动Enemy到目标位置（需实现移动逻辑，此处假设使用棋盘格子移动）
-            MoveToLocation(nearestLocation);
-            // 停顿
-            StartCoroutine(WaitAndAttack(nearestLocation, 0.8f)); 
+            // 若仍无目标，结束攻击
+            if (targetHero == null) 
+            {
+                OnAttackMissed?.Invoke(null, this);
+                return;
+            }   
         }
-    }
-        // 若仍无目标，结束攻击
-        if (targetHero == null) return;
-    }
 
     // 协程：延迟后执行攻击
     private IEnumerator WaitAndAttack(Location moveLocation, float delay)
@@ -108,8 +115,9 @@ public class Enemy : BasicCharacter
     // 命令进攻
     private void ExecuteAttack(Hero targetHero)
     {
+        if (targetHero == null) return;
         // 攻击动画
-        attackAnimation.PlayAttackAnimation(this.transform, targetHero.transform, true);
+        attackAnimation.PlayAttackAnimation(transform, targetHero.transform, true);
 
         // 计算命中率
         float hitRate = characterAttributes.accuracy / (characterAttributes.accuracy + targetHero.characterAttributes.evasion);
@@ -118,7 +126,7 @@ public class Enemy : BasicCharacter
         {
             float actualattack = characterAttributes.attack + provisionalAttack;
             bool isCritical = UnityEngine.Random.value * 100 <= characterAttributes.criticalRate;
-            float damage = actualattack;
+            float damage = actualattack * (1 + GetActualDamagePower() / 100f);
             if (isCritical)
             {
                 damage *= characterAttributes.criticalDamageMultiplier / 100;
@@ -130,6 +138,7 @@ public class Enemy : BasicCharacter
         else
         {
             Debug.Log(characterAttributes.name + " 攻击落空！ ");
+            OnAttackMissed?.Invoke(targetHero, this);
         }
     }
 
@@ -138,16 +147,23 @@ public class Enemy : BasicCharacter
     {
         List<Location> validLocations = new List<Location>();
         Location current = chessman.location;
-        // 检查周围8个方向（可根据需求调整移动范围）
+        
+        // 检查周围
         for (int x = -2; x <= 2; x++)
         {
             for (int y = -2; y <= 2; y++)
             {
                 if (x == 0 && y == 0) continue; // 排除自身位置
+                
                 Location newLoc = new Location(current.x + x, current.y + y);
-                if (newLoc.IsValid() && BoardCtrl.Get[newLoc].Chessman == null) // 位置有效且无棋子
+                if (newLoc.IsValid()) // 位置有效
                 {
-                    validLocations.Add(newLoc);
+                    Square targetSquare = BoardCtrl.Get[newLoc];
+                    // 地块阵营不能是玩家，且地块上没有棋子（包括玩家和敌人）
+                    if (targetSquare.camp != Camp.Player && targetSquare.Chessman == null)
+                    {
+                        validLocations.Add(newLoc);
+                    }
                 }
             }
         }
@@ -173,6 +189,8 @@ public class Enemy : BasicCharacter
         Attack(this);
     }
 
-    protected override void OnDeath(){}
+    protected override void OnDeath(){
+        TriggerLine(LineEventType.Death);
+    }
 
 }    

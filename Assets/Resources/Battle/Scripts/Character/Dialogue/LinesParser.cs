@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
+using System;
 
 public static class LineParser
 {
@@ -13,7 +14,7 @@ public static class LineParser
     }
 }
 
-[System.Serializable]
+[Serializable]
 public class CharacterLineData
 {
     public string eventType; // 事件类型
@@ -21,7 +22,7 @@ public class CharacterLineData
     public string textColor; // 颜色（如"#FF0000"）
 }
 
-[System.Serializable]
+[Serializable]
 public class LinesData
 {
     public string characterName; // 角色名

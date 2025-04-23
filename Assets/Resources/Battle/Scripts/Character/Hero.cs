@@ -27,16 +27,6 @@ public class Hero : BasicCharacter
         InitializeSkills();      
     }
 
-    protected override void InitializeSkills()
-    {
-        base.InitializeSkills();
-        if (characterAttributes.passiveSkill != null)
-        {
-
-            characterAttributes.passiveSkill.Setup(this);
-        }
-    }
-
     // 英雄的攻击方法，用于对敌人造成伤害，新增 selfAttack 参数用于控制是否自我攻击
     public void Attack(Enemy target)
     {
@@ -54,7 +44,7 @@ public class Hero : BasicCharacter
         {
             float actualattack = GetActualAttack();
             bool isCritical = UnityEngine.Random.value * 100 <= characterAttributes.criticalRate;
-            float damage = actualattack;
+            float damage = actualattack * (1 + GetActualDamagePower() / 100f);
             if (isCritical)
             {
                 damage *= characterAttributes.criticalDamageMultiplier / 100;
@@ -126,6 +116,8 @@ public class Hero : BasicCharacter
         image.DOColor(normalColor, 0.5f);
     }
 
-    protected override void OnDeath(){}
+    protected override void OnDeath(){
+        TriggerLine(LineEventType.Death);
+    }
 
 }    

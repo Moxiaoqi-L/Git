@@ -27,6 +27,8 @@ public class CharacterDetail : MonoBehaviour
     
     public GameObject needColorPointField;
     public GameObject needColorPointPrefab;
+    public GameObject morePassiveSkillField;
+    public GameObject morePassiveSkillPrefab;
 
     // 组件相关
     private Chessman currentChessman;
@@ -43,6 +45,8 @@ public class CharacterDetail : MonoBehaviour
 
     // 对象池
     private ObjectPool colorPointPool;
+    // 对象池
+    private ObjectPool morePassiveButtonPool;
     // 监听图片变化
     public Action spriteChanged;
 
@@ -57,6 +61,7 @@ public class CharacterDetail : MonoBehaviour
     {
         // 初始化对象
         colorPointPool = new ObjectPool(needColorPointPrefab, 4, needColorPointField.transform);
+        morePassiveButtonPool = new ObjectPool(morePassiveSkillPrefab, 4, morePassiveSkillField.transform);
         noSkillSprite = Resources.Load<Sprite>("General/Image/UI/NoSkill");
     }
 
@@ -66,13 +71,43 @@ public class CharacterDetail : MonoBehaviour
         colorPointPool.ReturnAll(); // 隐藏所有闲置对象
         if (hero != null)
         {
-            foreach (Color color in hero.activeSkill.Costs)
+            foreach (Color color in hero.activeSkill[0].Costs)
             {
                 GameObject point = colorPointPool.Get();
                 point.GetComponent<Image>().color = color;
             }
         }
     }
+
+private void UpdateMorePassiveSkillDisplay()
+{
+    morePassiveButtonPool.ReturnAll(); // 回收所有按钮
+    if (enemy == null || enemy.passiveSkill.Count == 0) return;
+
+    // 创建临时列表存储按钮，按技能顺序管理
+    List<GameObject> buttons = new List<GameObject>();
+    int index = 1;
+
+    foreach (Skill currentSkill in enemy.passiveSkill)
+    {
+        GameObject button = morePassiveButtonPool.Get();
+        button.GetComponentInChildren<TextMeshProUGUI>().text = index.ToString();
+        buttons.Add(button); // 按顺序添加到列表
+
+        // 捕获当前技能和索引（闭包陷阱已修复，此处确保事件正确）
+        button.GetComponent<Button>().onClick.AddListener(() => {
+            passiveSkillName.text = currentSkill.SkillName;
+            passiveSkillDetail.text = currentSkill.SkillDetail;
+        });
+        index++;
+    }
+
+    // 确保按钮按生成顺序排列（若布局组件导致顺序混乱，可强制排序）
+    for (int i = 0; i < buttons.Count; i++)
+    {
+        buttons[i].transform.SetSiblingIndex(i); // 按索引设置层级顺序
+    }
+}
     
     private void Update()
     {
@@ -169,6 +204,7 @@ public class CharacterDetail : MonoBehaviour
             UpdateAttackDisplay(hero);
             UpdateMDefenseDisplay(hero);
             UpdateSkillCostDisplay();
+            UpdateMorePassiveSkillDisplay();
 
             GenerateBuffIcons(hero.buffManager.activeBuffs);
 
@@ -178,15 +214,15 @@ public class CharacterDetail : MonoBehaviour
             characterName.text = hero.characterAttributes.name;
             characterImage.sprite = hero.characterImage;
             spriteChanged?.Invoke();
-            if (hero.activeSkill)
+            if (hero.activeSkill.Count > 0)
             {
-                activeSkillName.text = hero.activeSkill.SkillName;
-                activeSkillDetail.text = hero.activeSkill.SkillDetail;
+                activeSkillName.text = hero.activeSkill[0].SkillName;
+                activeSkillDetail.text = hero.activeSkill[0].SkillDetail;
             }
-            if (hero.passiveSkill)
+            if (hero.passiveSkill.Count > 0)
             {
-                passiveSkillName.text = hero.passiveSkill.SkillName;
-                passiveSkillDetail.text = hero.passiveSkill.SkillDetail; 
+                passiveSkillName.text = hero.passiveSkill[0].SkillName;
+                passiveSkillDetail.text = hero.passiveSkill[0].SkillDetail; 
                 passiveSkillImage.sprite = hero.passiveSkillImage;
             }
         }
@@ -198,6 +234,7 @@ public class CharacterDetail : MonoBehaviour
             UpdateAttackDisplay(enemy);
             UpdateMDefenseDisplay(enemy);
             UpdateSkillCostDisplay();
+            UpdateMorePassiveSkillDisplay();
 
             GenerateBuffIcons(enemy.buffManager.activeBuffs);
 
@@ -206,10 +243,12 @@ public class CharacterDetail : MonoBehaviour
             characterName.text = enemy.characterAttributes.name;
             characterImage.sprite = enemy.characterImage;
             spriteChanged?.Invoke();
-            if (enemy.activeSkill)
+            Debug.Log("activeSkill:" + enemy.activeSkill.Count);
+            Debug.Log("passiveSkill:" + enemy.passiveSkill.Count);
+            if (enemy.activeSkill.Count > 0)
             {
-                activeSkillName.text = enemy.activeSkill.SkillName;
-                activeSkillDetail.text = enemy.activeSkill.SkillDetail;
+                activeSkillName.text = enemy.activeSkill[0].SkillName;
+                activeSkillDetail.text = enemy.activeSkill[0].SkillDetail;
             }
             else
             {
@@ -217,10 +256,10 @@ public class CharacterDetail : MonoBehaviour
                 activeSkillDetail.text = "";
                 activeSkillImage.sprite = noSkillSprite;
             }
-            if (enemy.passiveSkill)
+            if (enemy.passiveSkill.Count > 0)
             {
-                passiveSkillName.text = enemy.passiveSkill.SkillName;
-                passiveSkillDetail.text = enemy.passiveSkill.SkillDetail; 
+                passiveSkillName.text = enemy.passiveSkill[0].SkillName;
+                passiveSkillDetail.text = enemy.passiveSkill[0].SkillDetail; 
                 passiveSkillImage.sprite = enemy.passiveSkillImage;
             }
             else

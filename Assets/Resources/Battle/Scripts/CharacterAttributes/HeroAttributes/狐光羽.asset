@@ -15,6 +15,7 @@ MonoBehaviour:
   characterName: "\u72D0\u5149\u7FBD"
   characterImage: "\u72D0\u5149\u7FBD"
   avatarImage: "\u72D0\u5149\u7FBD"
+  passiveSkillImage: 
   level: 1
   maxLevel: 45
   rank: 0
@@ -29,13 +30,15 @@ MonoBehaviour:
   defense: 1
   magicDefense: 0
   evasion: 0
+  damageTakenMultiplier: 100
   maxHealthPoints: 60
   attackGrowth: 0
   defenseGrowth: 0
   maxHealthPointsGrowth: 0
-  skills:
-  - {fileID: 11400000, guid: 3b44a00bd736ec04fb44f8b14b31b975, type: 2}
-  passiveSkill: {fileID: 11400000, guid: 6863bb5e40d669240b43a48902f400a0, type: 2}
+  activeSkills:
+  - DelayedTreatment
+  passiveSkills:
+  - PinkAndBlack
   attackRange:
   - x: 0
     y: 1

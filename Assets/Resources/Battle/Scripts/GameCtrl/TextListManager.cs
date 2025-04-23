@@ -30,7 +30,7 @@ public class TextListManager : MonoBehaviour
         TextListEntry entry = GetOrCreateEntry();
         
         // 组合显示文本（角色名+台词）
-        string displayText = $"{characterName}: {lineText}";
+        string displayText = $"{characterName}:{lineText}";
         entry.SetLine(displayText, textColor);
         entry.Show();
     }
