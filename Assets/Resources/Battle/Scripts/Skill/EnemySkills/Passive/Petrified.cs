@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class Petrified : Skill
 {
+
+    private int petrifyLayer = 0;
+
     // 技能名字
     public override string SkillName
     {
@@ -19,15 +22,32 @@ public class Petrified : Skill
     {
         get
         {
-            return "第5回合时石化, 无法攻击";
+            return "第<color=#ff2e63> 5 </color>回合时石化\n\n<color=#ff2e63>无法攻击</color>";
         }  
     }
 
     // 初始化方法
-    public override void Init(BasicCharacter character)
+    public override void Init(SkillManager skillManager, BasicCharacter character)
     {
+        base.Init(skillManager, character);
         skillType = SkillType.Passive;
+        GameInit.Instance.OnNextRound += PetrifySelf;
+    }
 
+    private void PetrifySelf()
+    {
+        petrifyLayer++;
+        if (petrifyLayer >= 5)
+        {   
+            // 禁止攻击
+            skillManager.character.cantAttack = true;
+            // 取消监听
+            GameInit.Instance.OnNextRound -= PetrifySelf;
+            // 展示石化文字
+            skillManager.character.ShowText("石化！", Color.white);
+            // 音效
+            AudioManager.Get.PlaySound(skillAudio);
+        }
     }
 
     // 使用方法

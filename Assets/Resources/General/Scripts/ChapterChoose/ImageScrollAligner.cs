@@ -19,6 +19,8 @@ public class ImageScrollAligner : MonoBehaviour
     // 进入章节按钮
     public LoadScene loadScene;
 
+    // 音效缓存
+    public AudioClip chapterChange;
 
     // 只需要在场景加载时执行
     private void Awake() {
@@ -59,6 +61,8 @@ public class ImageScrollAligner : MonoBehaviour
         StartCoroutine(SmoothScrollTo(targetY + 115));
         // 展示详细
         ChapterDetailManager.Get.ShowStoryDetail(chapterName, chapterDetail);
+        // 音效处理
+        AudioManager.Get.PlaySound(chapterChange);
     }
 
     private System.Collections.IEnumerator SmoothScrollTo(float targetY)

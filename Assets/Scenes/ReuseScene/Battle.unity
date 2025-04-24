@@ -6075,7 +6075,7 @@ GameObject:
   - component: {fileID: 1047456771}
   - component: {fileID: 1047456772}
   m_Layer: 0
-  m_Name: MissilePrefab
+  m_Name: MissileManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6108,8 +6108,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8d5f1bc41ed38d4db0e7c010506a1ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Prefabs:
+  DefaultAttackPrefab:
+  - {fileID: 1069073989498846, guid: 7658ae01d0a0655468898c47617f4de6, type: 3}
   - {fileID: 1096352044232144, guid: 6e4b9c1925f0d3f4d8446e551a2e20d3, type: 3}
+  defaultAttackHit: {fileID: 8300000, guid: 4c1b10b7f8dc7ca4c891589a5fa1eff3, type: 3}
+  Prefabs:
+  - {fileID: 1595252117517162, guid: e7776336bc56a9b4caa1c90ea92ff765, type: 3}
+  - {fileID: 1841414879310842, guid: 6d6dffb689c5c164e9bef8f626ffd74e, type: 3}
+  - {fileID: 1658112780640456, guid: 5ae5c6fb282fd3c44bf0c2083393e142, type: 3}
+  - {fileID: 1453648102191072, guid: 6e39ca2f8efb71e48923599f48461c26, type: 3}
+  - {fileID: 1979403604311268, guid: bc0b77b5d64c11e48b0a22fadb7489ce, type: 3}
+  - {fileID: 1564468091806366, guid: 489b3a2ec3e7cf949925d1b34247d1a9, type: 3}
+  - {fileID: 1019054629656254, guid: 0dd71cf1c4378844fae81b273f0ba817, type: 3}
+  - {fileID: 1855960816831566, guid: 243070df32ba7ac45a49cb799d050a50, type: 3}
+  - {fileID: 1990380580032880, guid: 46b312e00ed9c1f459ea9f0e55bfac77, type: 3}
+  - {fileID: 1636010081862624, guid: 1eb97977c28d92945935ad5ca57aa800, type: 3}
+  - {fileID: 1985767573034186, guid: 7e5debf0606b3254faa6bca9a70b6713, type: 3}
+  - {fileID: 1747738237969746, guid: eb5112a0c4d3eac489f517fa0886c058, type: 3}
+  - {fileID: 1978937533168522, guid: 31528da7a30e88f4bbf380cf9c9042d7, type: 3}
+  - {fileID: 1658112780640456, guid: a4ecf9bba65b0b84286159aa10fc4bc2, type: 3}
 --- !u!1 &1059861665
 GameObject:
   m_ObjectHideFlags: 0
@@ -8580,6 +8597,18 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 7a0e10d71a297ab40930a8117161866e, type: 3}
+    - target: {fileID: 1144309953873186213, guid: e2204d2ee668bfd42870a98068106fe7, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1144309953873186213, guid: e2204d2ee668bfd42870a98068106fe7, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1144309953873186213, guid: e2204d2ee668bfd42870a98068106fe7, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1280340555434133650, guid: e2204d2ee668bfd42870a98068106fe7, type: 3}
       propertyPath: m_Layer
       value: 5

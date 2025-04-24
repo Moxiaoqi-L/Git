@@ -858,6 +858,7 @@ MonoBehaviour:
   contentField: {fileID: 991204710}
   chapterImagePrefab: {fileID: 3457795743915098453, guid: 53e12865c7444b84ea09fc24e17678b2, type: 3}
   loadScene: {fileID: 29962759}
+  chapterChange: {fileID: 8300000, guid: 4780b98404529324d918281846102d41, type: 3}
 --- !u!4 &971947675
 Transform:
   m_ObjectHideFlags: 0

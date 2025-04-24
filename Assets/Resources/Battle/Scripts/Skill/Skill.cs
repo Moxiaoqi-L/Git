@@ -15,7 +15,16 @@ public class Skill
     // 技能类型
     public SkillType skillType;
     // 技能等级
-    public int skillLevel; 
+    public int skillLevel;
+
+    // 技能关联的管理器
+    public SkillManager skillManager;
+
+    // 使用技能的音效
+    protected AudioClip skillAudio;
+
+    // 技能图标
+    public Sprite skillSprite;
 
     // 技能名字
     public virtual string SkillName { get{return skillName;} }
@@ -27,8 +36,19 @@ public class Skill
     public virtual List<Color> Costs{ get{return costs;} }
 
     // 初始化方法
-    public virtual void Init(BasicCharacter character){}
+    public virtual void Init(SkillManager skillManager, BasicCharacter character)
+    {
+        this.skillManager = skillManager;
+        skillAudio = Resources.Load<AudioClip>("Battle/Audio/Skill/" + GetType().ToString());
+        skillSprite = Resources.Load<Sprite>("Battle/Image/Skill/" + GetType().ToString());
+    }
 
     // 使用方法
     public virtual bool Use(Hero hero, Enemy target = null){return false;}
+
+    public virtual bool BeforeUse()
+    {
+        if (skillManager.character.cantUseSkills) return false;
+        return true;
+    }
 }

@@ -31,17 +31,22 @@ public class Enemy : BasicCharacter
     public void Attack(Enemy self)
     {
         // 眩晕不攻击
-        if (isStunned) return;
-        TriggerLine(LineEventType.Attack);
+        if (isStunned || cantAttack) return;
+        // 先尝试使用主动技能
+        if(activeSkill.Count > 0)
+        {
+            foreach (Skill skill in activeSkill)
+            {
+                skill.Use(null, null);
+            }
+        }
         // 检查攻击范围内是否有Hero
         List<Hero> heroesInRange = Chessman.AllHeros().Where(hero => 
             GetAttackRange().Contains(hero.chessman.location)).ToList();
         // 要攻击的英雄
         Hero targetHero = null;
-
         // 隐藏攻击范围
         chessman.HighlightAttackRange(this, false);
-        
         // 若攻击范围内有 Hero，选择同列前排
         // 若攻击范围内无 Hero，自动移动到可攻击位置
         if (heroesInRange.Count > 0)
@@ -65,7 +70,14 @@ public class Enemy : BasicCharacter
                     nearestHero = hero;
                 }
             }
-            ExecuteAttack(nearestHero);
+            // 攻击台词
+            TriggerLine(LineEventType.Attack);            
+            // 攻击动画
+            attackAnimation.PlayAttackAnimation(transform, 
+            nearestHero.transform, false, 
+            characterAttributes.attackAnime,
+            () => StartCoroutine(CalculateDamage(nearestHero))
+            );   
         }
         else
         {
@@ -82,8 +94,10 @@ public class Enemy : BasicCharacter
                     Mathf.Abs(loc.x - chessman.location.x) + Mathf.Abs(loc.y - chessman.location.y)).First();
                 // 移动Enemy到目标位置（需实现移动逻辑，此处假设使用棋盘格子移动）
                 MoveToLocation(nearestLocation);
+                // 攻击台词
+                TriggerLine(LineEventType.Attack);
                 // 停顿
-                StartCoroutine(WaitAndAttack(nearestLocation, 0.6f)); 
+                StartCoroutine(WaitAndAttack(nearestLocation, 0.4f)); 
             }
         }
             // 若仍无目标，结束攻击
@@ -108,16 +122,19 @@ public class Enemy : BasicCharacter
         {
             Hero targetHero = newHeroesInRange.OrderBy(hero => 
                 Vector3.Distance(transform.position, hero.transform.position)).First();
-            ExecuteAttack(targetHero);
+            // 攻击动画
+            attackAnimation.PlayAttackAnimation(transform, 
+            targetHero.transform, true, 
+            characterAttributes.attackAnime,
+            () => StartCoroutine(CalculateDamage(targetHero))
+            );
         }
     }
 
     // 命令进攻
-    private void ExecuteAttack(Hero targetHero)
+    private IEnumerator CalculateDamage(Hero targetHero)
     {
-        if (targetHero == null) return;
-        // 攻击动画
-        attackAnimation.PlayAttackAnimation(transform, targetHero.transform, true);
+        if (targetHero == null) yield break;
 
         // 计算命中率
         float hitRate = characterAttributes.accuracy / (characterAttributes.accuracy + targetHero.characterAttributes.evasion);
@@ -132,7 +149,7 @@ public class Enemy : BasicCharacter
                 damage *= characterAttributes.criticalDamageMultiplier / 100;
                 Debug.Log(characterAttributes.name + " 暴击了！ ");
             }
-            targetHero.Defend(damage);
+            targetHero.Defend(damage, characterAttributes.damageType);
             OnAttackCompleted?.Invoke(targetHero, this);
         }
         else
@@ -179,7 +196,7 @@ public class Enemy : BasicCharacter
         transform.SetParent(targetSquare.transform);
         chessman.location = targetLocation;
         // 播放移动动画（可使用DOTween实现平滑移动）
-        transform.DOMove(targetSquare.transform.position, 0.5f);
+        transform.DOMove(targetSquare.transform.position, 0.3f);
     }
 
     // 敌人回合
@@ -192,5 +209,4 @@ public class Enemy : BasicCharacter
     protected override void OnDeath(){
         TriggerLine(LineEventType.Death);
     }
-
 }    

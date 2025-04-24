@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.PlayerLoop;
+using System;
 
 public class TurnManager : MonoBehaviour
 {
@@ -80,7 +81,7 @@ public class TurnManager : MonoBehaviour
             if (enemy != null)
             {
                 enemy.TakeTurn();
-                yield return new WaitForSeconds(0.4f);
+                yield return new WaitForSeconds(0.3f);
             }
         }
         // 当所有敌方行动完毕，结束敌人回合
@@ -98,7 +99,7 @@ public class TurnManager : MonoBehaviour
         {
             hero.FinishAttack();
             hero.EndOfRound(); // 触发英雄的回合结束（包括Buff结算）
-            yield return new WaitForSeconds(0.1f); // 等待Buff协程开始
+            yield return null; // 等待Buff协程开始
         }
 
         // 等待所有英雄的BuffManager完成回合结算（根据实际协程逻辑调整）

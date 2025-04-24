@@ -14732,6 +14732,7 @@ GameObject:
   - component: {fileID: 4537009311099160}
   - component: {fileID: 198381662199079310}
   - component: {fileID: 199515453477253822}
+  - component: {fileID: 6971120854244850955}
   m_Layer: 0
   m_Name: Hit 1
   m_TagString: Untagged
@@ -15330,7 +15331,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    gravitySource: 0
+    gravitySource: 1
     maxNumParticles: 1000
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
@@ -19626,7 +19627,7 @@ ParticleSystemRenderer:
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
-  m_MinParticleSize: 0
+  m_MinParticleSize: 1
   m_MaxParticleSize: 8
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
@@ -19655,6 +19656,18 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &6971120854244850955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1096352044232144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 199e3c49ebcb3fe46997b10cf6a8eb52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1115158167816476
 GameObject:
   m_ObjectHideFlags: 0

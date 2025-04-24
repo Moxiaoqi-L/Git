@@ -23,8 +23,9 @@ public class YourSkillName : Skill
     }
 
     // 初始化方法
-    public override void Init(BasicCharacter character)
+    public override void Init(SkillManager skillManager, BasicCharacter character)
     {
+        base.Init(skillManager, character);
 
     }
 

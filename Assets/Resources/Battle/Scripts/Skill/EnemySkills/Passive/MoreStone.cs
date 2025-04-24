@@ -19,8 +19,9 @@ public class MoreStone : Skill
                                           "获得 <color=#ff2e63>额外攻击范围</color>\n" +
                                           "获得 <color=#ff2e63>20% 伤害增幅</color>";
 
-    public override void Init(BasicCharacter character)
+    public override void Init(SkillManager skillManager, BasicCharacter character)
     {
+        base.Init(skillManager, character);
         skillType = SkillType.Passive;
         var enemy =  character as Enemy;
         if (enemy == null) return;
@@ -40,7 +41,6 @@ public class MoreStone : Skill
         if (consecutiveMissedAttacks == -1) return;
         // 落空次数 + 1
         consecutiveMissedAttacks++;
-        Debug.Log("OnAttackMissed:" + consecutiveMissedAttacks);
 
         if (consecutiveMissedAttacks >= 2)
         {
@@ -57,7 +57,6 @@ public class MoreStone : Skill
 
     private void ApplyEffects()
     {
-        Debug.Log("ApplyEffects:" + consecutiveMissedAttacks);
         
         // 增加伤害增幅（通过临时属性）
         targetEnemy.IncreaseDamagePower(20);

@@ -10,7 +10,11 @@ public abstract class Buff
     public int stackLayers;         // 叠加层数
 
     // 应用 BUFF 效果（子类实现具体逻辑）
-    public abstract void Apply(BasicCharacter character);
+    public virtual void Apply(BasicCharacter character)
+    {
+        buffSprite = Resources.Load<Sprite>("Battle/Image/Buff/" + GetType().ToString());
+        Debug.Log(GetType());
+    }
 
     // 移除 BUFF 效果（子类实现具体逻辑）
     public abstract void Remove(BasicCharacter character);

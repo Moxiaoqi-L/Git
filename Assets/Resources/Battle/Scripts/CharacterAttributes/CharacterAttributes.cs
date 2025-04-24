@@ -22,6 +22,9 @@ public abstract class CharacterAttributes : ScriptableObject
     // 最大等阶
     public int maxRank = 2;
 
+    // 攻击动画
+    public string attackAnime = null;
+
     // 攻击力
     public int attack;
     // 伤害类型
@@ -78,5 +81,7 @@ public enum DamageType
     // 物理伤害
     Physical,
     // 精神伤害
-    Mental
+    Mental,
+    // Buff伤害
+    Buff
 }

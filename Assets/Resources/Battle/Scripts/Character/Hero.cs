@@ -1,6 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 using System;
+using System.Collections;
 
 // 英雄类，代表游戏中的英雄角色，包含英雄的各种属性和行为
 public class Hero : BasicCharacter
@@ -27,43 +28,27 @@ public class Hero : BasicCharacter
         InitializeSkills();      
     }
 
-    // 英雄的攻击方法，用于对敌人造成伤害，新增 selfAttack 参数用于控制是否自我攻击
-    public void Attack(Enemy target)
+    // 英雄的攻击方法，用于对敌人造成伤害
+    public IEnumerator Attack(Enemy target)
     {
-        if (hasAttacked || isStunned)
-        {
-            return;
-        }
-        TriggerLine(LineEventType.Attack);
-        // 播放攻击动画
-        attackAnimation.PlayAttackAnimation(this.transform, target.transform);
-        // 计算命中率
-        float hitRate = characterAttributes.accuracy / (characterAttributes.accuracy + target.characterAttributes.evasion);
-        float randomValue = UnityEngine.Random.value;
-        if (randomValue <= hitRate)
-        {
-            float actualattack = GetActualAttack();
-            bool isCritical = UnityEngine.Random.value * 100 <= characterAttributes.criticalRate;
-            float damage = actualattack * (1 + GetActualDamagePower() / 100f);
-            if (isCritical)
-            {
-                damage *= characterAttributes.criticalDamageMultiplier / 100;
-                Debug.Log(characterAttributes.name + " 暴击了！ ");
-            }
-            target.Defend(damage);
-        }
-        else
-        {
-            Debug.Log(characterAttributes.name + " 攻击落空！ ");
-        }
+        if (hasAttacked || isStunned || cantAttack) yield break;
         // 获取攻击点数
         ColorPointCtrl.Get.GetColorPoint(this.transform, this.chessman.location.y);
         // 隐藏攻击范围
         chessman.HighlightAttackRange(this, false);
         // 取消选中
         SelectCore.DropSelect();
-        // 完成攻击
-        FinishAttack(target);
+        // 攻击台词
+        TriggerLine(LineEventType.Attack);
+        // 播放攻击动画并等待完成
+        attackAnimation.PlayAttackAnimation(
+            transform,
+            target.transform,
+            false,
+            characterAttributes.attackAnime,
+            () => StartCoroutine(CalculateDamage(target)) // 动画完成后触发伤害计算
+        );
+        yield return null; // 等待动画回调触发
     }
 
     public void StartOfTurn()
@@ -120,4 +105,31 @@ public class Hero : BasicCharacter
         TriggerLine(LineEventType.Death);
     }
 
+    // 攻击方法协程
+    private IEnumerator CalculateDamage(Enemy target)
+    {
+        Debug.Log("进入攻击方法协程");
+        // 计算命中率
+        float hitRate = characterAttributes.accuracy / (characterAttributes.accuracy + target.characterAttributes.evasion);
+        float randomValue = UnityEngine.Random.value;
+        if (randomValue <= hitRate)
+        {
+            float actualattack = GetActualAttack();
+            bool isCritical = UnityEngine.Random.value * 100 <= characterAttributes.criticalRate;
+            float damage = actualattack * (1 + GetActualDamagePower() / 100f);
+            if (isCritical)
+            {
+                damage *= characterAttributes.criticalDamageMultiplier / 100;
+                Debug.Log(characterAttributes.name + " 暴击了！ ");
+            }
+            target.Defend(damage, characterAttributes.damageType, from : this);
+        }
+        else
+        {
+            Debug.Log(characterAttributes.name + " 攻击落空！ ");
+        }
+        // 完成攻击
+        FinishAttack(target);
+        yield return null;
+    }
 }    

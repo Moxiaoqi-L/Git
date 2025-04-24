@@ -4,7 +4,7 @@
     "steps" : {
         "step1" : [
             {
-                "attributes" : "幽灵",
+                "attributes" : "黏液果冻",
                 "avatarImage" : "ghost",
                 "rarityImage" : "Rarity Enemy 0",
                 "locationX" : 1,
@@ -24,7 +24,7 @@
         ],
         "step2" : [
             {
-                "attributes" : "幽灵",
+                "attributes" : "逃亡地精",
                 "avatarImage" : "ghost",
                 "rarityImage" : "Rarity Enemy 0",
                 "locationX" : 1,
@@ -33,14 +33,61 @@
                 "level" : 1
             },
             {
-                "attributes" : "幽灵",
+                "attributes" : "逃亡地精",
                 "avatarImage" : "ghost",
                 "rarityImage" : "Rarity Enemy 0",
                 "locationX" : 2,
                 "locationY" : 4, 
                 "rank" : 0,
                 "level" : 1
+            },
+            {
+                "attributes" : "幽灵",
+                "avatarImage" : "ghost",
+                "rarityImage" : "Rarity Enemy 0",
+                "locationX" : 3,
+                "locationY" : 3, 
+                "rank" : 0,
+                "level" : 1
             }
-        ]      
+        ],
+        "step3" : [
+            {
+                "attributes" : "枉死鬼",
+                "avatarImage" : "ghost",
+                "rarityImage" : "Rarity Enemy 0",
+                "locationX" : 1,
+                "locationY" : 4, 
+                "rank" : 0,
+                "level" : 1
+            },
+            {
+                "attributes" : "枉死鬼",
+                "avatarImage" : "ghost",
+                "rarityImage" : "Rarity Enemy 0",
+                "locationX" : 2,
+                "locationY" : 4, 
+                "rank" : 0,
+                "level" : 1
+            },
+            {
+                "attributes" : "幽灵",
+                "avatarImage" : "ghost",
+                "rarityImage" : "Rarity Enemy 0",
+                "locationX" : 3,
+                "locationY" : 3, 
+                "rank" : 0,
+                "level" : 1
+            },
+            {
+                "attributes" : "幽灵",
+                "avatarImage" : "ghost",
+                "rarityImage" : "Rarity Enemy 0",
+                "locationX" : 4,
+                "locationY" : 3, 
+                "rank" : 0,
+                "level" : 1
+            }
+        ]       
     }
 }

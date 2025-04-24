@@ -207,7 +207,7 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
             Hero selectedHero = SelectCore.Selection.hero;
             if (selectedHero.GetAttackRange().Contains(location))
             {
-                selectedHero.Attack(enemy); // 执行攻击
+                StartCoroutine(selectedHero.Attack(enemy)); // 执行攻击
                 return true;
             }
             else

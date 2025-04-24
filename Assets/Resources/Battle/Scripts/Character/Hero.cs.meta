@@ -3,7 +3,17 @@ guid: 8a02317734854b74c92b93c6e96e1ac0
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - characterAttributes: {instanceID: 0}
+  - chessman: {instanceID: 0}
+  - image: {instanceID: 0}
+  - damageNumberPrefab: {fileID: 3645883595803365000, guid: 6b3256218880d07439d67f8438cd3044, type: 3}
+  - damageTypeImage: {instanceID: 0}
+  - characterImage: {instanceID: 0}
+  - avatarImage: {instanceID: 0}
+  - activeSkillImage: {instanceID: 0}
+  - passiveSkillImage: {instanceID: 0}
+  - chessmanMove: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

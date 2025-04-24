@@ -571,8 +571,8 @@ MonoBehaviour:
   camp: 1
   hero: {fileID: 0}
   enemy: {fileID: 0}
+  topUI: {fileID: 0}
   skillButtonPrefab: {fileID: 5855110912970571299, guid: 415591ef923cbde47a87cfde37988a99, type: 3}
-  canvas: {fileID: 0}
 --- !u!114 &567262331771243183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -585,15 +585,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a02317734854b74c92b93c6e96e1ac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chessman: {fileID: 0}
   characterAttributes: {fileID: 0}
-  skills: []
-  image: {fileID: 2843685814730232763}
-  currentHealthPoints: 100
   provisionalAttack: 0
+  provisionalDamageType: 0
+  provisionalCriticalRate: 0
+  provisionalCriticalDamageMultiplier: 0
+  provisionalAccuracy: 0
+  provisionalSkillPower: 0
+  provisionalDamagePower: 0
   provisionalDefense: 0
+  provisionalMagicDefense: 0
+  provisionalEvasion: 0
+  provisionalDamageTakenMultiplier: 0
+  currentHealthPoints: 100
+  provisionalMaxHealthPoints: 0
+  chessman: {fileID: 0}
+  image: {fileID: 2843685814730232763}
+  damageNumberPrefab: {fileID: 3645883595803365000, guid: 6b3256218880d07439d67f8438cd3044, type: 3}
+  attackRange: []
+  cantAttack: 0
   hasAttacked: 0
   isStunned: 0
+  damageTypeImage: {fileID: 0}
+  characterImage: {fileID: 0}
+  avatarImage: {fileID: 0}
+  activeSkillImage: {fileID: 0}
+  passiveSkillImage: {fileID: 0}
   chessmanMove: {fileID: 0}
 --- !u!114 &356240706307179592
 MonoBehaviour:

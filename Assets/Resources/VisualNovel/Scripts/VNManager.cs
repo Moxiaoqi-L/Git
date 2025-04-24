@@ -38,6 +38,8 @@ public class VNManager : MonoBehaviour
     public Button skipButton;
     public Button historyButton;
 
+    public SceneLoaderWithAnimation sceneLoaderWithAnimation;
+
     private readonly string storyPath = Constants.STORY_PATH;
     private readonly string defaultStoryFileName = Constants.DEFAULT_STORY_FILE_NAME;
     private readonly string excelFileExtension = Constants.EXCEL_FILE_EXTENSION;
@@ -59,6 +61,8 @@ public class VNManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        sceneLoaderWithAnimation = FindObjectOfType<SceneLoaderWithAnimation>();
     }
 
     // Start is called before the first frame update
@@ -143,7 +147,12 @@ public class VNManager : MonoBehaviour
             }
             if (storyData[currentLine].speakerName == Constants.END_OF_STORY)
             {
-                Debug.Log(Constants.END_OF_STORY);
+                backgroundMusic.Stop();
+                vocalAudio.Stop();
+                soundAudio.Stop();
+                backgroundMusic.volume = 0.6f;
+                sceneLoaderWithAnimation.LoadScene("MainMenu");
+
             }
             if (storyData[currentLine].speakerName == Constants.CHOICE)
             {
@@ -362,7 +371,6 @@ public class VNManager : MonoBehaviour
     void OnSkipButtonClick()
     {
         // 弹出确认退出？
-        SceneLoaderWithAnimation sceneLoaderWithAnimation = FindObjectOfType<SceneLoaderWithAnimation>();
         sceneLoaderWithAnimation.LoadScene("Chapter 0");
         StopAllAudio();
     }

@@ -33,8 +33,9 @@ public class RedGroundDefense : Skill
     }
 
     // 初始化技能（在Hero加载技能时调用）
-    public override void Init(BasicCharacter character)
+    public override void Init(SkillManager skillManager, BasicCharacter character)
     {
+        base.Init(skillManager, character);
         var hero =  character as Hero;
 
         skillType = SkillType.Passive;

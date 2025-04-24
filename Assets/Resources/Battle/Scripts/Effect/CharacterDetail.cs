@@ -94,10 +94,11 @@ private void UpdateMorePassiveSkillDisplay()
         button.GetComponentInChildren<TextMeshProUGUI>().text = index.ToString();
         buttons.Add(button); // 按顺序添加到列表
 
-        // 捕获当前技能和索引（闭包陷阱已修复，此处确保事件正确）
+        // 捕获当前技能和索引
         button.GetComponent<Button>().onClick.AddListener(() => {
             passiveSkillName.text = currentSkill.SkillName;
             passiveSkillDetail.text = currentSkill.SkillDetail;
+            passiveSkillImage.sprite = currentSkill.skillSprite;
         });
         index++;
     }
@@ -218,12 +219,13 @@ private void UpdateMorePassiveSkillDisplay()
             {
                 activeSkillName.text = hero.activeSkill[0].SkillName;
                 activeSkillDetail.text = hero.activeSkill[0].SkillDetail;
+                activeSkillImage.sprite = hero.activeSkill[0].skillSprite;
             }
             if (hero.passiveSkill.Count > 0)
             {
                 passiveSkillName.text = hero.passiveSkill[0].SkillName;
                 passiveSkillDetail.text = hero.passiveSkill[0].SkillDetail; 
-                passiveSkillImage.sprite = hero.passiveSkillImage;
+                passiveSkillImage.sprite = hero.passiveSkill[0].skillSprite;
             }
         }
         if (enemy != null)
@@ -243,8 +245,6 @@ private void UpdateMorePassiveSkillDisplay()
             characterName.text = enemy.characterAttributes.name;
             characterImage.sprite = enemy.characterImage;
             spriteChanged?.Invoke();
-            Debug.Log("activeSkill:" + enemy.activeSkill.Count);
-            Debug.Log("passiveSkill:" + enemy.passiveSkill.Count);
             if (enemy.activeSkill.Count > 0)
             {
                 activeSkillName.text = enemy.activeSkill[0].SkillName;

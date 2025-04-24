@@ -390,15 +390,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b33cdcb83d0cd6d47b7d9ae182b1ed19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chessman: {fileID: 0}
   characterAttributes: {fileID: 0}
-  skill: {fileID: 0}
-  image: {fileID: 3987374663784930148}
-  currentHealthPoints: 0
   provisionalAttack: 0
+  provisionalDamageType: 0
+  provisionalCriticalRate: 0
+  provisionalCriticalDamageMultiplier: 0
+  provisionalAccuracy: 0
+  provisionalSkillPower: 0
+  provisionalDamagePower: 0
   provisionalDefense: 0
+  provisionalMagicDefense: 0
+  provisionalEvasion: 0
+  provisionalDamageTakenMultiplier: 0
+  currentHealthPoints: 0
+  provisionalMaxHealthPoints: 0
+  chessman: {fileID: 0}
+  image: {fileID: 3987374663784930148}
+  damageNumberPrefab: {fileID: 3645883595803365000, guid: 6b3256218880d07439d67f8438cd3044, type: 3}
+  attackRange: []
+  cantAttack: 0
   hasAttacked: 0
   isStunned: 0
+  damageTypeImage: {fileID: 0}
   characterImage: {fileID: 0}
   avatarImage: {fileID: 0}
   activeSkillImage: {fileID: 0}

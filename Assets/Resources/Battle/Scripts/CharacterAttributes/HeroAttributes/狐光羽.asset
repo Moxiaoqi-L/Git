@@ -20,18 +20,19 @@ MonoBehaviour:
   maxLevel: 45
   rank: 0
   maxRank: 2
-  attack: 16
+  attackAnime: "\u6781\u5BA2"
+  attack: 12
   damageType: 0
   criticalRate: 0
   criticalDamageMultiplier: 0
   accuracy: 100
   skillPower: 0
   damagePower: 0
-  defense: 1
+  defense: 0
   magicDefense: 0
   evasion: 0
   damageTakenMultiplier: 100
-  maxHealthPoints: 60
+  maxHealthPoints: 40
   attackGrowth: 0
   defenseGrowth: 0
   maxHealthPointsGrowth: 0

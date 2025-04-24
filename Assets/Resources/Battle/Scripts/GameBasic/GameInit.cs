@@ -30,6 +30,10 @@ public class GameInit : MonoBehaviour
     private static TextAsset jsonFile;
     private static LevelData levelData;
     private static StepData stepData;
+
+    // 回合增加事件
+    public event Action OnNextRound;
+    
     // 确保唯一
     private void Awake()
     {
@@ -108,6 +112,7 @@ public class GameInit : MonoBehaviour
     {
         // 加载预制体 , 配置文件, 图片
         EnemyAttributes enemyAttributes = Resources.Load<EnemyAttributes>("Battle/Scripts/CharacterAttributes/EnemyAttributes/" + attributeFileName);
+        Debug.Log(enemyAttributes);
         Sprite avatarSprite = Resources.Load<Sprite>("Battle/Image/Avatar/" + avatarImageFileName);
         Sprite raritySprite = Resources.Load<Sprite>("Battle/Image/Rarity/Rarity Enemy " + rarityIndex);
 
@@ -153,6 +158,7 @@ public class GameInit : MonoBehaviour
     {
         if (refreshRound) currentArround = 0;
         currentArround += 1;
+        OnNextRound?.Invoke();
         stepText.text = currentStepNum + " / " + maxStepNum;
         roundText.text = currentArround.ToString();
     }

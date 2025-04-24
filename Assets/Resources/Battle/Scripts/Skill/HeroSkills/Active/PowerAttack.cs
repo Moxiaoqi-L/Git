@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PowerAttack : Skill
 {
+
+    public float attackDamageMultiplier = 200;
+
     public override string SkillName
     {
         get
@@ -26,12 +29,10 @@ public class PowerAttack : Skill
             return new List<Color> { Constants.REDPOINT, Constants.REDPOINT};
         }
     }
-    
-    public float attackDamageMultiplier;
 
-
-    public override void Init(BasicCharacter character)
+    public override void Init(SkillManager skillManager, BasicCharacter character)
     {
+        base.Init(skillManager, character);
         skillType = SkillType.Active;
 
         // 无需Setup
@@ -39,6 +40,7 @@ public class PowerAttack : Skill
 
     public override bool Use(Hero hero, Enemy target = null)
     {
+        if (!BeforeUse()) return false;
         if (hero.isStunned) return false;
         if (hero.hasAttacked || !ColorPointCtrl.Get.RemoveColorPointsByColors(Costs)) return false;
         // 技能使用逻辑
@@ -52,7 +54,7 @@ public class PowerAttack : Skill
                 foreach (Enemy enemy in enemiesInSameColumn)
                 {
                     int currentY = enemy.chessman.location.y;
-                    if (currentY < minY)
+                    if (currentY <= minY)
                     {
                         minY = currentY;
                         target = enemy;
@@ -69,8 +71,9 @@ public class PowerAttack : Skill
 
         float actualAttack = hero.GetActualAttack();
         float damage = actualAttack * (attackDamageMultiplier / 100) * (1 + hero.characterAttributes.skillPower) * (1 + hero.characterAttributes.damagePower);
-        target.Defend((int)damage);
+        target.Defend(damage, DamageType.Physical);
         target.AddBuff("眩晕", 1);
+        AudioManager.Get.PlaySound(skillAudio);
         hero.FinishAttack(target);
         return true;
     }

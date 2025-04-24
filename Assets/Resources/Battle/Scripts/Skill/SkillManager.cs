@@ -6,7 +6,7 @@ using UnityEngine;
 // 管理角色 技能 的类
 public class SkillManager
 {
-    private BasicCharacter character; // 关联的角色实例
+    public BasicCharacter character; // 关联的角色实例
     public List<Skill> activeSkills = new(); // 主动技能字典
     public List<Skill> passiveSkills = new(); // 被动技能字典
 
@@ -25,7 +25,7 @@ public class SkillManager
         Type skillType = skillTypeRegistry[skillName];
         Skill newSkill = CreateSkillInstance(skillType);
 
-        newSkill.Init(character);
+        newSkill.Init(this, character);
 
         
 

@@ -7,9 +7,9 @@ public class PinkAndBlack : Skill
     // 目标地块Y值
     public int targetY = 0;
     // 每层中毒BUFF数值
-    public int damagePerLayer;
+    public int damagePerLayer = 1;
     // BUFF层数
-    public int layers;
+    public int layers = 2;
 
     public override string SkillName
     {
@@ -29,8 +29,9 @@ public class PinkAndBlack : Skill
     }
 
     // 被动技能初始化（在Hero加载时调用）
-    public override void Init(BasicCharacter character)
+    public override void Init(SkillManager skillManager, BasicCharacter character)
     {
+        base.Init(skillManager, character);
         var hero =  character as Hero;
         skillType = SkillType.Passive;
         // 监听英雄的攻击事件（需要在Hero中添加事件回调）

@@ -11,7 +11,6 @@ public class StunBuff : Buff
     public StunBuff(int initialLayers)
     {
         buffName = "<color=#FF0000>眩晕</color>";
-        // buffSprite = Resources.Load<Sprite>($"Battle/Image/Buff/失魂");
         buffDetail = "禁止攻击一回合";
         stackLayers = initialLayers; // 持续1回合（层数1）
         duration = 0; // 无固定持续时间，依赖回合结束移除
@@ -19,6 +18,7 @@ public class StunBuff : Buff
 
     public override void Apply(BasicCharacter character)
     {
+        base.Apply(character);
         originalColor = character.image.color; // 初始化时保存原始颜色
         PlayStunAnimation(character.image);
         character.isStunned = true;

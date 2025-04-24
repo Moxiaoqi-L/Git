@@ -11,7 +11,6 @@ public class SoulLossBuff : Buff
         stackLayers = initialLayers; // 持续回合数
         duration = 0; // 依赖回合结束移除
         buffName = "<color=#608BBB>失魂</color>";
-        buffSprite = Resources.Load<Sprite>($"Battle/Image/Buff/失魂");
         UpdateBuffDetail();
     }
 
@@ -23,6 +22,7 @@ public class SoulLossBuff : Buff
 
     public override void Apply(BasicCharacter character)
     {
+        base.Apply(character);
         // 应用伤害加成
         character.IncreaseDamageTakenMultiplier(damageMultiplier);
     }

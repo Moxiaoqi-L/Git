@@ -18,7 +18,7 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
     // 管理英雄 Skill 的对象
     public SkillManager skillManager;
     // 攻击动画
-    public IAttackAnimation attackAnimation;
+    public DefaulAttackAnimation attackAnimation;
     // 拥有的主动技能
     public List<Skill> activeSkill => skillManager.activeSkills;
     // 拥有的被动技能
@@ -26,14 +26,20 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
 
     // 获取头像
     public Image image;
+    // 攻击文字预制体
+    public GameObject damageNumberPrefab;
 
     // 通过characterAttributes获取攻击范围
     public List<Location> attackRange;
 
+    // 禁止攻击
+    public bool cantAttack = false;
     // 每回合只能攻击一次
     public bool hasAttacked;
     // 眩晕状态
     public bool isStunned = false;
+    // 禁止使用技能
+    public bool cantUseSkills = false;
 
     // 缓存立绘, 头像, 技能图片等
     public Sprite damageTypeImage;
@@ -48,6 +54,11 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
     public event Action<BasicCharacter> OnDefenseChanged;
     // 监听攻击变化事件
     public event Action<BasicCharacter> OnAttackChanged;
+    // 监听被攻击事件
+    public event Action<BasicCharacter> OnAttackedBy;
+    // 监听受伤前事件
+    public event Func<float, DamageType, float> BeforeLoseHp;
+
 
     
     // 初始化英雄的技能列表
@@ -76,6 +87,8 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
         damageTypeImage = Resources.Load<Sprite>("General/Image/DamagetypeImage/" + characterAttributes.damageType);
         // 初始化攻击范围
         attackRange = new List<Location>(characterAttributes.attackRange.ToArray());
+        // cantUseSkills
+        cantUseSkills = false;
     }
 
     // 获取攻击范围
@@ -117,23 +130,38 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
     }
 
     // 通用防御方法，用于处理受到的伤害
-    public virtual void Defend(float incomingDamage, bool ignoreDefense = false, Color color = new())
+    public virtual void Defend(float incomingDamage,DamageType damageType, bool ignoreDefense = false, Color color = new(), BasicCharacter from = null)
     {
         float actualDamage;
         if (ignoreDefense) actualDamage = incomingDamage;
         else actualDamage = Mathf.Max(incomingDamage * 0.1f, 
         incomingDamage * (GetActualDamageTakenMultiplier() / 100f) - (characterAttributes.defense + provisionalDefense));
-        // 展示伤害动画
-        ShowDamageNumber((int)actualDamage, color);
         // 受伤震动
         GetDamageShake();
+        // 触发事件前，先复制当前订阅列表（避免触发过程中订阅被修改）
+        var currentEvent = BeforeLoseHp;
+        // 遍历所有订阅的处理函数，每个处理函数都可以修改伤害数值
+        // 这里示例按顺序应用每个处理函数的返回值，最终得到最终伤害
+        if (currentEvent != null)
+        {
+            foreach (var handler in currentEvent.GetInvocationList())
+            {
+                actualDamage = handler.DynamicInvoke(actualDamage, damageType) as float? ?? actualDamage;
+            }
+        }
+        // 展示伤害动画
+        ShowDamageNumber((int)actualDamage, color);
+        // 被击中事件
+        if (from != null) OnAttackedBy?.Invoke(from);
+        // 血量减少
         currentHealthPoints -= (int)actualDamage;
+        // 防止血量削减为 0 
         if (currentHealthPoints <= 0) currentHealthPoints = 0;
         // 受伤事件
         OnHealthPointsChanged?.Invoke(this);
         if (currentHealthPoints <= 0)
         {
-            // 死亡回调  TODO 死亡事件
+            // 死亡回调
             OnDeath();
             chessman.ExitFromBoard();
         }
@@ -158,7 +186,7 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
     // 增加生命值的方法
     public void IncreaseHealthPoints(int amount, Color color = new())
     {
-        ShowDamageNumber(amount, Constants.HEAL_COLOR);
+        ShowDamageNumber(amount, color);
         // 增加英雄的生命值
         currentHealthPoints += amount;
         currentHealthPoints = currentHealthPoints > characterAttributes.maxHealthPoints ? characterAttributes.maxHealthPoints : currentHealthPoints;
@@ -256,7 +284,6 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
     protected void ShowDamageNumber(int damage, Color color = new())
     {
         // 加载伤害数字预制体
-        GameObject damageNumberPrefab = Resources.Load<GameObject>("Battle/Prefab/DamageNumber");
         if (damageNumberPrefab != null)
         {
             // 获取 Canvas
@@ -274,7 +301,30 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
                 }
                 if (color != new Color()) damageText.color = color;
                 // 让数字向上移动并逐渐消失,使用一个协程来实现
-                StartCoroutine(MoveAndFade(damageNumber));
+                StartCoroutine(MoveAndFade(damageNumber, new Vector3(0, 60, 0), 60));
+            }
+        }
+    }
+
+    public void ShowText(string text, Color color = new())
+    {
+        if (damageNumberPrefab != null)
+        {
+            // 获取 Canvas
+            Canvas canvas = FindObjectOfType<Canvas>();
+            if (canvas != null)
+            {
+                // 实例化伤害数字对象
+                GameObject textObj = Instantiate(damageNumberPrefab, this.transform);
+                // 获取 Text 组件并设置伤害值
+                TextMeshProUGUI damageText = textObj.GetComponent<TextMeshProUGUI>();
+                if (damageText != null)
+                {
+                    damageText.text = text;
+                }
+                if (color != new Color()) damageText.color = color;
+                // 让数字向上移动并逐渐消失,使用一个协程来实现
+                StartCoroutine(MoveAndFade(textObj, new Vector3(0, 20, 0), 15));
             }
         }
     }
@@ -293,23 +343,23 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
     }
 
     // 数字向上移动并逐渐消失的协程
-    protected IEnumerator MoveAndFade(GameObject damageNumber)
+    protected IEnumerator MoveAndFade(GameObject text, Vector3 vector3, int moveUp)
     {
         float duration = 0.6f; // 动画持续时间
         float elapsedTime = 0f;
-        Vector3 startPosition = this.transform.position + new Vector3(0 ,50 ,0);
-        Vector3 endPosition = startPosition + Vector3.up * 60f; // 向上移动 1 个单位
+        Vector3 startPosition = this.transform.position + vector3;
+        Vector3 endPosition = startPosition + Vector3.up * moveUp; // 向上移动 1 个单位
 
-        CanvasGroup canvasGroup = damageNumber.GetComponent<CanvasGroup>();
+        CanvasGroup canvasGroup = text.GetComponent<CanvasGroup>();
         if (canvasGroup == null)
         {
-            canvasGroup = damageNumber.AddComponent<CanvasGroup>();
+            canvasGroup = text.AddComponent<CanvasGroup>();
         }
         canvasGroup.alpha = 1f;
         while (elapsedTime < duration)
         {
-            // 移动数字
-            damageNumber.transform.position = Vector3.Lerp(startPosition, endPosition, elapsedTime / duration);
+            // 移动文字
+            text.transform.position = Vector3.Lerp(startPosition, endPosition, elapsedTime / duration);
             // 逐渐消失
             canvasGroup.alpha = 1.2f - (elapsedTime / duration);
 
@@ -317,6 +367,11 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
             yield return null;
         }
         // 销毁数字对象
-        Destroy(damageNumber);
+        Destroy(text);
     }
+
+    private void OnDestroy() {
+        StopAllCoroutines();
+    }
+    
 }    

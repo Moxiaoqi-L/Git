@@ -16,7 +16,10 @@ public class BuffManager
         { "自愈", typeof(HealBuff) },
         { "中毒", typeof(PoisonBuff) },
         { "眩晕", typeof(StunBuff) },
-        { "失魂", typeof(SoulLossBuff) }
+        { "失魂", typeof(SoulLossBuff) },
+        { "技能封印", typeof(SealBuff) },
+        { "攻击力下降", typeof(AttackReductionBuff) },
+        { "防御力下降", typeof(DefenseReductionBuff) }
     };
 
     public BuffManager(BasicCharacter character)
@@ -144,7 +147,7 @@ public class BuffManager
             {
                 RemoveBuff(buffName); // 层数为0时移除
             }
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
         }
         IsProcessingRoundEnd = false;
     }
