@@ -5,6 +5,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "新英雄属性", menuName = "创建英雄属性")]
 public class HeroAttributes : CharacterAttributes
 {
+
+    // 英雄ID
+    public int heroID;
+
     // 经验
     public int xp = 0;
     // 最大经验

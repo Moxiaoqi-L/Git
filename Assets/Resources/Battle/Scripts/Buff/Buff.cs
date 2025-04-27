@@ -13,7 +13,6 @@ public abstract class Buff
     public virtual void Apply(BasicCharacter character)
     {
         buffSprite = Resources.Load<Sprite>("Battle/Image/Buff/" + GetType().ToString());
-        Debug.Log(GetType());
     }
 
     // 移除 BUFF 效果（子类实现具体逻辑）

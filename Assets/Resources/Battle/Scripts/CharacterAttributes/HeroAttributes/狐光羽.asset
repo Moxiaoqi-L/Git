@@ -51,5 +51,6 @@ MonoBehaviour:
     y: 4
   - x: 0
     y: 5
+  heroID: 2
   xp: 0
   maxXp: 60

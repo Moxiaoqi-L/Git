@@ -16,8 +16,7 @@ public class AttackReductionBuff : Buff
 
     private void UpdateBuffDetail()
     {
-        buffDetail = "攻击力降低 <color=#FF4500>" + attackReduction + "</color> \n"
-                    + "持续<color=#FF4500>" + stackLayers + "</color>回合";
+        buffDetail = "攻击力降低 <color=#FF4500>" + attackReduction + "</color> \n";
     }
 
     public override void Apply(BasicCharacter character)

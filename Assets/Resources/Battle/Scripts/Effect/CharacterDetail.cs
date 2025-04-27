@@ -260,7 +260,7 @@ private void UpdateMorePassiveSkillDisplay()
             {
                 passiveSkillName.text = enemy.passiveSkill[0].SkillName;
                 passiveSkillDetail.text = enemy.passiveSkill[0].SkillDetail; 
-                passiveSkillImage.sprite = enemy.passiveSkillImage;
+                passiveSkillImage.sprite = enemy.passiveSkill[0].skillSprite;
             }
             else
             {
@@ -280,11 +280,11 @@ private void UpdateMorePassiveSkillDisplay()
             GameObject iconInstance = Instantiate(buffIconPrefab, buffIconContainer);
             
             // 设置图标（假设每个 BUFF 有对应的图标资源，路径为 "BuffIcons/{buffName}"）
+            // 传入详细信息给detail
             Sprite buffSprite = buff.buffSprite;
-            if (buffSprite != null)
-            {
-                iconInstance.GetComponent<Image>().sprite = buffSprite;
-            }
+            iconInstance.GetComponent<Image>().sprite = buffSprite;
+            iconInstance.GetComponent<BuffDetail>().title = buff.buffName;
+            iconInstance.GetComponent<BuffDetail>().content = buff.buffDetail;
             
             // 显示层数（如果有）
             TextMeshProUGUI layerText = iconInstance.GetComponentInChildren<TextMeshProUGUI>();
