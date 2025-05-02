@@ -307,6 +307,7 @@ MonoBehaviour:
   camp: 1
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 21300000, guid: 9d19bb96049452546bcf86bb8a6542f6, type: 3}
 --- !u!1 &55306219
 GameObject:
   m_ObjectHideFlags: 0
@@ -522,6 +523,7 @@ MonoBehaviour:
   camp: 2
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 0}
 --- !u!1 &83092701
 GameObject:
   m_ObjectHideFlags: 0
@@ -712,6 +714,7 @@ MonoBehaviour:
   camp: 1
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 21300000, guid: 9d19bb96049452546bcf86bb8a6542f6, type: 3}
 --- !u!1 &89016009
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,6 +855,7 @@ MonoBehaviour:
   camp: 2
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 0}
 --- !u!1 &105075798
 GameObject:
   m_ObjectHideFlags: 0
@@ -992,6 +996,7 @@ MonoBehaviour:
   camp: 2
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 0}
 --- !u!1 &106229303
 GameObject:
   m_ObjectHideFlags: 0
@@ -1376,6 +1381,7 @@ MonoBehaviour:
   camp: 2
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 0}
 --- !u!1 &213001947
 GameObject:
   m_ObjectHideFlags: 0
@@ -1768,6 +1774,7 @@ MonoBehaviour:
   camp: 2
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 0}
 --- !u!1 &271297876
 GameObject:
   m_ObjectHideFlags: 0
@@ -1908,6 +1915,7 @@ MonoBehaviour:
   camp: 1
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 21300000, guid: 9d19bb96049452546bcf86bb8a6542f6, type: 3}
 --- !u!1 &290539764
 GameObject:
   m_ObjectHideFlags: 0
@@ -2767,6 +2775,7 @@ MonoBehaviour:
   camp: 2
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 0}
 --- !u!1 &542332036
 GameObject:
   m_ObjectHideFlags: 0
@@ -3018,6 +3027,7 @@ MonoBehaviour:
   camp: 2
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 0}
 --- !u!1 &549611838
 GameObject:
   m_ObjectHideFlags: 0
@@ -3410,6 +3420,7 @@ MonoBehaviour:
   camp: 1
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 21300000, guid: 9d19bb96049452546bcf86bb8a6542f6, type: 3}
 --- !u!1 &622887351
 GameObject:
   m_ObjectHideFlags: 0
@@ -4078,6 +4089,7 @@ MonoBehaviour:
   camp: 1
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 21300000, guid: 9d19bb96049452546bcf86bb8a6542f6, type: 3}
 --- !u!1 &757707313
 GameObject:
   m_ObjectHideFlags: 0
@@ -4352,6 +4364,7 @@ MonoBehaviour:
   camp: 1
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 21300000, guid: 9d19bb96049452546bcf86bb8a6542f6, type: 3}
 --- !u!1 &801624045
 GameObject:
   m_ObjectHideFlags: 0
@@ -4492,6 +4505,7 @@ MonoBehaviour:
   camp: 1
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 21300000, guid: 9d19bb96049452546bcf86bb8a6542f6, type: 3}
 --- !u!1 &841712475
 GameObject:
   m_ObjectHideFlags: 0
@@ -5325,6 +5339,7 @@ MonoBehaviour:
   camp: 2
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 0}
 --- !u!1 &917528444
 GameObject:
   m_ObjectHideFlags: 0
@@ -5540,6 +5555,7 @@ MonoBehaviour:
   camp: 2
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 0}
 --- !u!1 &933369616
 GameObject:
   m_ObjectHideFlags: 0
@@ -5681,6 +5697,7 @@ MonoBehaviour:
   camp: 1
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 21300000, guid: 9d19bb96049452546bcf86bb8a6542f6, type: 3}
 --- !u!1 &1001719166
 GameObject:
   m_ObjectHideFlags: 0
@@ -6018,6 +6035,7 @@ MonoBehaviour:
   camp: 2
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 0}
 --- !u!1 &1018398605
 GameObject:
   m_ObjectHideFlags: 0
@@ -6258,6 +6276,53 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1067120389
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1067120390}
+  - component: {fileID: 1067120391}
+  m_Layer: 0
+  m_Name: APMPManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1067120390
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067120389}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1237626407}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1067120391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067120389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b283915110b47246b9e8aa5c14059a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHeroCount: 2
+  currentAP: 0
+  currentMP: 0
 --- !u!1 &1092282553
 GameObject:
   m_ObjectHideFlags: 0
@@ -6529,6 +6594,7 @@ MonoBehaviour:
   camp: 2
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 0}
 --- !u!1 &1131343134
 GameObject:
   m_ObjectHideFlags: 0
@@ -6669,6 +6735,7 @@ MonoBehaviour:
   camp: 2
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 0}
 --- !u!1 &1133241472
 GameObject:
   m_ObjectHideFlags: 0
@@ -7019,6 +7086,7 @@ MonoBehaviour:
   camp: 1
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 21300000, guid: 9d19bb96049452546bcf86bb8a6542f6, type: 3}
 --- !u!1 &1158512721
 GameObject:
   m_ObjectHideFlags: 0
@@ -7159,6 +7227,7 @@ MonoBehaviour:
   camp: 1
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 21300000, guid: 9d19bb96049452546bcf86bb8a6542f6, type: 3}
 --- !u!1 &1160954635
 GameObject:
   m_ObjectHideFlags: 0
@@ -7433,6 +7502,7 @@ MonoBehaviour:
   camp: 1
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 21300000, guid: 9d19bb96049452546bcf86bb8a6542f6, type: 3}
 --- !u!224 &1203928225 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3509395576951099603, guid: e2204d2ee668bfd42870a98068106fe7, type: 3}
@@ -7578,6 +7648,7 @@ MonoBehaviour:
   camp: 2
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 0}
 --- !u!224 &1237141119 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3509395576951099603, guid: e2204d2ee668bfd42870a98068106fe7, type: 3}
@@ -7621,6 +7692,7 @@ Transform:
   - {fileID: 349346005}
   - {fileID: 1407256046}
   - {fileID: 1047456771}
+  - {fileID: 1067120390}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1287776662
@@ -7763,6 +7835,7 @@ MonoBehaviour:
   camp: 1
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 21300000, guid: 9d19bb96049452546bcf86bb8a6542f6, type: 3}
 --- !u!1 &1290596101
 GameObject:
   m_ObjectHideFlags: 0
@@ -7903,6 +7976,7 @@ MonoBehaviour:
   camp: 2
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 0}
 --- !u!1 &1334942215
 GameObject:
   m_ObjectHideFlags: 0
@@ -8215,6 +8289,7 @@ MonoBehaviour:
   camp: 1
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 21300000, guid: 9d19bb96049452546bcf86bb8a6542f6, type: 3}
 --- !u!1 &1407256045
 GameObject:
   m_ObjectHideFlags: 0
@@ -8533,6 +8608,7 @@ MonoBehaviour:
   camp: 1
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 21300000, guid: 9d19bb96049452546bcf86bb8a6542f6, type: 3}
 --- !u!1001 &1464257687
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9085,6 +9161,7 @@ MonoBehaviour:
   camp: 1
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 21300000, guid: 9d19bb96049452546bcf86bb8a6542f6, type: 3}
 --- !u!1 &1621005307
 GameObject:
   m_ObjectHideFlags: 0
@@ -9374,6 +9451,7 @@ MonoBehaviour:
   camp: 2
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 0}
 --- !u!1 &1722415239
 GameObject:
   m_ObjectHideFlags: 0
@@ -9723,6 +9801,7 @@ MonoBehaviour:
   camp: 2
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 0}
 --- !u!1 &1741746967
 GameObject:
   m_ObjectHideFlags: 0
@@ -9863,6 +9942,7 @@ MonoBehaviour:
   camp: 1
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 21300000, guid: 9d19bb96049452546bcf86bb8a6542f6, type: 3}
 --- !u!1 &1789459497
 GameObject:
   m_ObjectHideFlags: 0
@@ -10056,6 +10136,7 @@ MonoBehaviour:
   camp: 1
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 21300000, guid: 9d19bb96049452546bcf86bb8a6542f6, type: 3}
 --- !u!1 &1818004671
 GameObject:
   m_ObjectHideFlags: 0
@@ -10841,6 +10922,7 @@ MonoBehaviour:
   camp: 2
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 0}
 --- !u!1 &1970919028
 GameObject:
   m_ObjectHideFlags: 0
@@ -11115,6 +11197,7 @@ MonoBehaviour:
   camp: 2
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 0}
 --- !u!1 &1985561257
 GameObject:
   m_ObjectHideFlags: 0
@@ -11389,6 +11472,7 @@ MonoBehaviour:
   camp: 1
   heroAttackImage: {fileID: 21300000, guid: c1be041b0f119ae4a9f1e0ba1d867c3e, type: 3}
   enemyAttackImage: {fileID: 21300000, guid: f8c0bb9566ec64f499719354df1dbd4a, type: 3}
+  heroMoveImage: {fileID: 21300000, guid: 9d19bb96049452546bcf86bb8a6542f6, type: 3}
 --- !u!1 &2034403968
 GameObject:
   m_ObjectHideFlags: 0

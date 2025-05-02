@@ -27,8 +27,8 @@ public class Enemy : BasicCharacter
         InitializeSkills();           
     }
 
-    // 敌方的攻击方法，用于对敌人造成伤害，新增 selfAttack 参数用于控制是否自我攻击
-    public void Attack(Enemy self)
+    // 敌方的攻击方法
+    public void Attack(Enemy self = null)
     {
         // 眩晕不攻击
         if (isStunned || cantAttack) return;
@@ -59,7 +59,6 @@ public class Enemy : BasicCharacter
             {
                 Location heroLocation = hero.chessman.location;
                 int distance = Mathf.Abs(heroLocation.x - enemyLocation.x) + Mathf.Abs(heroLocation.y - enemyLocation.y); // 曼哈顿距离
-                
                 if (distance < minDistance)
                 {
                     minDistance = distance;
@@ -71,8 +70,9 @@ public class Enemy : BasicCharacter
                 }
             }
             // 攻击台词
-            TriggerLine(LineEventType.Attack);            
-            // 攻击动画
+            TriggerLine(LineEventType.Attack);
+            nearestHero.AddBuff("污染", 2);         
+            // 攻击动画：完成后造成伤害
             attackAnimation.PlayAttackAnimation(transform, 
             nearestHero.transform, false, 
             characterAttributes.attackAnime,
@@ -159,7 +159,7 @@ public class Enemy : BasicCharacter
         }
     }
 
-    // 获取Enemy的有效移动位置（示例：相邻8格且为空）
+    // 获取Enemy的有效移动位置
     private List<Location> GetValidMoveLocations()
     {
         List<Location> validLocations = new List<Location>();
@@ -172,7 +172,7 @@ public class Enemy : BasicCharacter
             {
                 if (x == 0 && y == 0) continue; // 排除自身位置
                 
-                Location newLoc = new Location(current.x + x, current.y + y);
+                Location newLoc = new(current.x + x, current.y + y);
                 if (newLoc.IsValid()) // 位置有效
                 {
                     Square targetSquare = BoardCtrl.Get[newLoc];

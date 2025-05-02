@@ -79,7 +79,13 @@ public class CharacterProvisionalAttributes : MonoBehaviour
         return characterAttributes.damagePower + provisionalDamagePower;
     }
 
-
+    // 护甲
+    public int provisionalArmor;
+    public virtual void IncreaseArmor(int amount)
+    {
+        provisionalArmor += amount;
+    }
+    
     // 防御力
     public int provisionalDefense;
     public virtual void IncreaseDefense(int amount)

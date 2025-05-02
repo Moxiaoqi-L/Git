@@ -8,7 +8,7 @@ public class BuffManager
 {
     public bool IsProcessingRoundEnd { get; private set; } // 当前是否在处理回合结束结算
     private BasicCharacter character; // 关联的角色实例
-    public Dictionary<string, Buff> activeBuffs = new Dictionary<string, Buff>(); // 当前生效的 BUFF
+    public Dictionary<string, Buff> activeBuffs = new(); // 当前生效的 BUFF
 
     // BUFF 类型注册表（名称到类型的映射）
     private static Dictionary<string, Type> buffTypeRegistry = new Dictionary<string, Type>
@@ -19,7 +19,9 @@ public class BuffManager
         { "失魂", typeof(SoulLossBuff) },
         { "技能封印", typeof(SealBuff) },
         { "攻击力下降", typeof(AttackReductionBuff) },
-        { "防御力下降", typeof(DefenseReductionBuff) }
+        { "攻击力提升", typeof(AttackIncreaseBuff) },
+        { "防御力下降", typeof(DefenseReductionBuff) },
+        { "污染", typeof(PollutionBuff) }
     };
 
     public BuffManager(BasicCharacter character)

@@ -11,16 +11,15 @@ public abstract class CharacterAttributes : ScriptableObject
     public string characterImage;
     // 头像
     public string avatarImage;
-    // 被动技能图片
-    public string passiveSkillImage;
     // 等级
     public int level = 1;
     // 最大等级             45/65/90
     public int maxLevel = 45;
     // 等阶
     public int rank = 0;
-    // 最大等阶
-    public int maxRank = 2;
+
+    // 职业类型
+    public Job job;
 
     // 攻击动画
     public string attackAnime = null;
@@ -40,6 +39,8 @@ public abstract class CharacterAttributes : ScriptableObject
     // 伤害增幅
     public int damagePower = 0;
 
+
+    public int armor = 0;
     // 防御力
     public int defense;
     // 魔法防御力
@@ -66,14 +67,20 @@ public abstract class CharacterAttributes : ScriptableObject
     public List<string> passiveSkills = new List<string>{};
     // 大招
     // TODO
+    // 移动范围
+    public MoveRangeType moveRangeType;
 
-    // public int test;
-
-    // 攻击范围的相对偏移量（x,y相对于当前位置）
+    // 攻击范围
     public List<Location> attackRange;
 
     // 初始化属性（子类实现具体逻辑）
     public abstract void InitAttributes();
+    public static Dictionary<MoveRangeType, List<Location>> MoveRange = new()
+    {
+        { MoveRangeType.SquareA , new List<Location>(){new(0,1), new(0,-1), new(-1,0), new(1,0), new(-1,1), new(-1,-1), new(1,1), new(1,-1)} },
+        { MoveRangeType.XA , new List<Location>(){new(-1,1), new(-1,-1), new(1,1), new(1,-1)} },
+        { MoveRangeType.AddA , new List<Location>(){new(0,1), new(0,-1), new(-1,0), new(1,0)} }
+    };
 }
 
 public enum DamageType
@@ -85,3 +92,29 @@ public enum DamageType
     // Buff伤害
     Buff
 }
+
+public enum Job
+{
+    // 无职业
+    None,
+    // 战士
+    Warior,
+    // 刺客
+    Assassin,
+    // 狙击
+    Sniper,
+    // 辅助
+    Supporter
+}
+
+public enum MoveRangeType
+{
+    SquareA,
+    XA,
+    AddA,
+    SquareB,
+    XB,
+    AddB
+}
+
+

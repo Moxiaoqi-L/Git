@@ -15,11 +15,10 @@ MonoBehaviour:
   characterName: "\u72D0\u5149\u7FBD"
   characterImage: "\u72D0\u5149\u7FBD"
   avatarImage: "\u72D0\u5149\u7FBD"
-  passiveSkillImage: 
   level: 1
   maxLevel: 45
   rank: 0
-  maxRank: 2
+  job: 3
   attackAnime: "\u6781\u5BA2"
   attack: 12
   damageType: 0
@@ -40,6 +39,7 @@ MonoBehaviour:
   - DelayedTreatment
   passiveSkills:
   - PinkAndBlack
+  moveRangeType: 2
   attackRange:
   - x: 0
     y: 1
@@ -53,4 +53,4 @@ MonoBehaviour:
     y: 5
   heroID: 2
   xp: 0
-  maxXp: 60
+  maxXp: 100

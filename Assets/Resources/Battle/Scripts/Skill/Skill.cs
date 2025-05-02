@@ -48,7 +48,14 @@ public class Skill
 
     public virtual bool BeforeUse()
     {
+        // 技能禁用
         if (skillManager.character.cantUseSkills) return false;
+        // 眩晕的异常状态
+        if (skillManager.character.isStunned) return false;
+        // 技能点不够
+        if (!ColorPointCtrl.Get.RemoveColorPointsByColors(Costs)) return false;
+        // 行动点不够
+        if (!APMPManager.Get.ConsumeAP()) return false;
         return true;
     }
 }

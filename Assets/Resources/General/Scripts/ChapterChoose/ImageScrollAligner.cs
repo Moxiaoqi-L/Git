@@ -24,7 +24,7 @@ public class ImageScrollAligner : MonoBehaviour
 
     // 只需要在场景加载时执行
     private void Awake() {
-        TextAsset jsonFile = Resources.Load<TextAsset>($"General/ChapterJson/ChapterInfo");
+        TextAsset jsonFile = Resources.Load<TextAsset>($"General/Json/ChapterInfo");
         if (jsonFile == null) Debug.LogWarning("卧槽！章节文件出错了！你在干什么");
         ChapterData chapterData = JsonUtility.FromJson<ChapterData>(jsonFile.text);
         foreach (Chapter chapter in chapterData.info)

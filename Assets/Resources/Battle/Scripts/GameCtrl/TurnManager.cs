@@ -39,6 +39,7 @@ public class TurnManager : MonoBehaviour
         }
         isPlayerTurn = true;
         GameInit.Instance.UpdateStepAndRound();
+        APMPManager.Get.ResetPointsAtTurnStart();
     }
 
     // 刷新玩家回合
@@ -49,6 +50,7 @@ public class TurnManager : MonoBehaviour
         {
             hero.RefreshSelf();
         }
+        APMPManager.Get.ResetPointsAtTurnStart();
     }
 
     // 结束玩家回合

@@ -1,0 +1,28 @@
+{
+    "items" : [
+        {
+            "itemID" : 10001,
+            "itemName" : "霍皮晶币",
+            "itemDetail" : "在社会上的通用货币",
+            "itemSprite" : "",
+            "xp" : 0,
+            "stamina" : 0
+        },        
+        {
+            "itemID" : 10002,
+            "itemName" : "鬼晶",
+            "itemDetail" : "厉鬼被击败的产物，主要用于升级与进阶",
+            "itemSprite" : "",
+            "xp" : 0,
+            "stamina" : 0
+        },
+        {
+            "itemID" : 10003,
+            "itemName" : "地核铸币",
+            "itemDetail" : "十分稀有的货币，只在上流阶层中流通",
+            "itemSprite" : "",
+            "xp" : 0,
+            "stamina" : 0
+        }
+    ]
+}

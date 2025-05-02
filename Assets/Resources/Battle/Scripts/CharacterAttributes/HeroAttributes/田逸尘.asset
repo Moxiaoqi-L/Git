@@ -15,11 +15,10 @@ MonoBehaviour:
   characterName: "\u7530\u9038\u5C18"
   characterImage: "\u7530\u9038\u5C18"
   avatarImage: "\u7530\u9038\u5C18"
-  passiveSkillImage: durable
   level: 1
   maxLevel: 45
   rank: 0
-  maxRank: 2
+  job: 0
   attackAnime: "\u666E\u901A\u653B\u51FB"
   attack: 10
   damageType: 0
@@ -28,6 +27,7 @@ MonoBehaviour:
   accuracy: 100
   skillPower: 0
   damagePower: 0
+  armor: 0
   defense: 0
   magicDefense: 0
   evasion: 0
@@ -37,9 +37,10 @@ MonoBehaviour:
   defenseGrowth: 0
   maxHealthPointsGrowth: 0
   activeSkills:
-  - PowerAttack
+  - AttackBoost
   passiveSkills:
   - RedGroundDefense
+  moveRangeType: 0
   attackRange:
   - x: 0
     y: 1

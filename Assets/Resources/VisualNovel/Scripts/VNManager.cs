@@ -40,7 +40,6 @@ public class VNManager : MonoBehaviour
 
     public SceneLoaderWithAnimation sceneLoaderWithAnimation;
 
-    private readonly string storyPath = Constants.STORY_PATH;
     private readonly string defaultStoryFileName = Constants.DEFAULT_STORY_FILE_NAME;
     private readonly string excelFileExtension = Constants.EXCEL_FILE_EXTENSION;
     private List<ExcelReader.ExcelData> storyData;
@@ -50,7 +49,7 @@ public class VNManager : MonoBehaviour
     private string currentStoryFileName;
 
     private bool isAutoPlay = false;
-    private bool isSkip = false;
+    // private bool isSkip = false;
 
     private void Awake() {
         if (Get == null)

@@ -16,14 +16,10 @@ public class Hero : BasicCharacter
         base.Start();
         // 缓存图片
         characterImage = Resources.Load<Sprite>("General/Image/CharacterImage/" + characterAttributes.characterImage);
-        passiveSkillImage = Resources.Load<Sprite>("General/Image/PassiveSkillImage/" + characterAttributes.passiveSkillImage);
-
         // 初始化生命值
         currentHealthPoints = characterAttributes.maxHealthPoints;
         // 获取移动方式
-        chessmanMove = GetComponent<ChessmanMove>();
-        // 初始允许攻击
-        hasAttacked = false;    
+        chessmanMove = GetComponent<ChessmanMove>(); 
         // 初始化技能列表
         InitializeSkills();      
     }
@@ -31,7 +27,14 @@ public class Hero : BasicCharacter
     // 英雄的攻击方法，用于对敌人造成伤害
     public IEnumerator Attack(Enemy target)
     {
-        if (hasAttacked || isStunned || cantAttack) yield break;
+        // 异常状态
+        if (isStunned || cantAttack) yield break;
+        // 检查行动点是否足够
+        if (!APMPManager.Get.ConsumeAP())
+        {
+            ShowText("行动点不足！", Constants.REDPOINT);
+            yield break;
+        }
         // 获取攻击点数
         ColorPointCtrl.Get.GetColorPoint(this.transform, this.chessman.location.y);
         // 隐藏攻击范围
@@ -53,10 +56,7 @@ public class Hero : BasicCharacter
 
     public void StartOfTurn()
     {
-        // 设置允许攻击
-        hasAttacked = false;
-        // 恢复位移
-        if (!isStunned) chessmanMove.enabled = true;    
+        // TODO
     }
 
     // 每回合结束时调用，
@@ -68,12 +68,6 @@ public class Hero : BasicCharacter
     }
 
     public void FinishAttack(Enemy targetEnemy = null){
-        // 设置已经攻击
-        hasAttacked = true;
-        // 头像变灰
-        MakeImageGray();
-        // 禁止位移
-        chessmanMove.enabled = false;
         // 攻击完成事件
         OnAttackCompleted?.Invoke(this, targetEnemy);
     }
@@ -88,11 +82,11 @@ public class Hero : BasicCharacter
     }
 
     // 图片变灰的方法
-    private void MakeImageGray()
-    {
-        Color grayColor = new Color(0.5f, 0.5f, 0.5f, 1f);
-        image.DOColor(grayColor, 0.5f);
-    }
+    // private void MakeImageGray()
+    // {
+    //     Color grayColor = new Color(0.5f, 0.5f, 0.5f, 1f);
+    //     image.DOColor(grayColor, 0.5f);
+    // }
 
     // 图片恢复正常的方法
     public void RestoreImageColor()

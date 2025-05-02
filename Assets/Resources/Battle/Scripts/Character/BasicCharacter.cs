@@ -31,11 +31,11 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
 
     // 通过characterAttributes获取攻击范围
     public List<Location> attackRange;
+    // 通过characterAttributes获取移动范围
+    public List<Location> moveRange;
 
     // 禁止攻击
     public bool cantAttack = false;
-    // 每回合只能攻击一次
-    public bool hasAttacked;
     // 眩晕状态
     public bool isStunned = false;
     // 禁止使用技能
@@ -48,8 +48,13 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
     public Sprite activeSkillImage;
     public Sprite passiveSkillImage;
 
+    // 自定义委托类型，支持ref参数修改治疗量
+    public delegate void HealingReceivedHandler(ref int healingAmount);
+
     // 监听血量变化事件
     public event Action<BasicCharacter> OnHealthPointsChanged;
+    // 监听受到治疗事件
+    public event HealingReceivedHandler OnHealingReceived;
     // 监听防御变化事件
     public event Action<BasicCharacter> OnDefenseChanged;
     // 监听攻击变化事件
@@ -60,7 +65,27 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
     public event Func<float, DamageType, float> BeforeLoseHp;
 
 
-    
+    protected void Start() {
+        // 获取棋子自身
+        chessman = GetComponent<Chessman>();
+        // 初始化 BUFF 管理器
+        buffManager = new BuffManager(this);
+        // 初始化 Skill 管理器
+        skillManager = new SkillManager(this);
+        // 初始化属性
+        characterAttributes.InitAttributes();
+        // 默认使用简单攻击动画
+        attackAnimation = new DefaulAttackAnimation();
+        // 图片缓存
+        damageTypeImage = Resources.Load<Sprite>("General/Image/DamagetypeImage/" + characterAttributes.damageType);
+        // 初始化攻击范围
+        attackRange = new List<Location>(characterAttributes.attackRange);
+        // 初始化移动范围
+        moveRange = new List<Location>(CharacterAttributes.MoveRange[characterAttributes.moveRangeType]);
+        // cantUseSkills
+        cantUseSkills = false;
+    }
+
     // 初始化英雄的技能列表
     protected virtual void InitializeSkills()
     {
@@ -72,23 +97,6 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
         {
             skillManager.AddSkill(passiveSkill);
         }
-    }
-
-    protected void Start() {
-        // 获取棋子自身
-        chessman = GetComponent<Chessman>();
-        // 初始化 BUFF 管理器
-        buffManager = new BuffManager(this);
-        // 初始化 Skill 管理器
-        skillManager = new SkillManager(this);
-        // 默认使用简单攻击动画
-        attackAnimation = new DefaulAttackAnimation();
-        // 图片缓存
-        damageTypeImage = Resources.Load<Sprite>("General/Image/DamagetypeImage/" + characterAttributes.damageType);
-        // 初始化攻击范围
-        attackRange = new List<Location>(characterAttributes.attackRange.ToArray());
-        // cantUseSkills
-        cantUseSkills = false;
     }
 
     // 获取攻击范围
@@ -109,6 +117,31 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
             }
         }
         return attackLocations;
+    }
+
+    // 获取移动范围
+    public List<Location> GetMoveRange()
+    {
+        List<Location> moveLocations = new List<Location>();
+        Location currentLocation = chessman.location;
+        
+        foreach (var location in moveRange)
+        {
+            Location targetLocation = new(
+                currentLocation.x + location.x,
+                currentLocation.y + location.y
+            );
+            if (targetLocation.IsValid())
+            {
+                moveLocations.Add(targetLocation);
+            }
+        }
+        return moveLocations;
+    }
+    // 初始化人物属性
+    public void CharacterAttributesInit()
+    {
+
     }
 
     // 从坐标获取攻击范围
@@ -186,6 +219,7 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
     // 增加生命值的方法
     public void IncreaseHealthPoints(int amount, Color color = new())
     {
+        if (amount > 0) OnHealingReceived?.Invoke(ref amount);
         ShowDamageNumber(amount, color);
         // 增加英雄的生命值
         currentHealthPoints += amount;
@@ -216,7 +250,6 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
     public virtual void RefreshSelf()
     {
         ClearAllBuffs();
-        hasAttacked = false; // 重置攻击状态
     }
 
 

@@ -12,6 +12,9 @@ public class ChessmanMove : Button, IDragHandler, IBeginDragHandler, IEndDragHan
 {
     private Transform beginParentTransform; //记录开始拖动时的父级对象
     private Transform topOfUiT;
+
+    private GameObject currentObject;
+
     public Chessman chessman;
     // 新增：移动完成事件（供Hero监听）
     public event Action<Hero> OnMoveCompleted;
@@ -28,6 +31,7 @@ public class ChessmanMove : Button, IDragHandler, IBeginDragHandler, IEndDragHan
 
     public void OnBeginDrag(PointerEventData _)
     {
+        currentObject = _.pointerCurrentRaycast.gameObject;
         if (transform.parent == topOfUiT) return;
         beginParentTransform = transform.parent;
         transform.SetParent(topOfUiT);
@@ -40,8 +44,6 @@ public class ChessmanMove : Button, IDragHandler, IBeginDragHandler, IEndDragHan
             // 调用Chessman的取消方法
             if (SelectCore.Selection == chessman) targetChessman.HighlightAttackRange(targetChessman.hero, false);
             else if (SelectCore.Selection && SelectCore.Selection != chessman) SelectCore.Selection.HighlightAttackRange(SelectCore.Selection.hero, false);
-            
-            
         }
     }
 
@@ -67,7 +69,7 @@ public class ChessmanMove : Button, IDragHandler, IBeginDragHandler, IEndDragHan
             transform.GetComponent<Image>().raycastTarget = true;
             return;            
         }
-        if (go.tag == "Square") //如果当前拖动物体下是：格子 时
+        if (go.tag == "Square" && currentObject.GetComponent<Hero>().GetMoveRange().Contains(go.GetComponent<Square>().location) && APMPManager.Get.ConsumeMP()) //如果当前拖动物体下是：格子 时     
         {
             SetPosAndParent(transform, go.transform);
             transform.GetComponent<Image>().raycastTarget = true;
@@ -83,8 +85,6 @@ public class ChessmanMove : Button, IDragHandler, IBeginDragHandler, IEndDragHan
         }
         else //其他任何情况，物体回归原始位置
         {
-            Debug.Log("其他情况");
-            Debug.Log(go.tag);
             SetPosAndParent(transform, beginParentTransform);
             transform.GetComponent<Image>().raycastTarget = true;
             // 重新显示新位置的攻击范围（仅当是玩家阵营时）

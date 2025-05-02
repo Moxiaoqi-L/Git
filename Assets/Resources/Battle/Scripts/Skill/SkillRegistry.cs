@@ -50,7 +50,6 @@ public class SkillRegistry : MonoBehaviour
                         if (!SkillTypeRegistry.ContainsKey(skillName))
                         {
                             SkillTypeRegistry.Add(skillName, type);
-                            Debug.Log($"成功注册技能：{skillName}");
                         }
                     }
                 }

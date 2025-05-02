@@ -276,11 +276,10 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
         
         foreach (Square square in BoardCtrl.Get.squares)
         {
-            bool shouldHighlight = bs.GetAttackRange().Contains(square.location);
-            if (shouldHighlight)
-            {
-                square.SetAttackRangeHighlight(isActive, isEnemy);
-            }
+            bool shouldHighlightAttackRange = bs.GetAttackRange().Contains(square.location);
+            bool shouldHighlightMoveRange = bs.GetMoveRange().Contains(square.location);
+            if (shouldHighlightAttackRange) square.SetAttackRangeHighlight(isActive, isEnemy);
+            if (shouldHighlightMoveRange && square.camp == Camp.Player) square.SetMoveRangeHighlight(isActive);
         }
     }
 

@@ -13,6 +13,8 @@ public class EnhancedRandomBackground : MonoBehaviour {
     private Vector2 centerPosition; // 屏幕中心位置
     private float originalAlpha; // 初始透明度（默认为1）
 
+    private Tween _bounceTween;  
+
     void Start() {
         if (backgroundImage == null) {
             Debug.LogError("请为背景图片赋值！");
@@ -35,7 +37,7 @@ public class EnhancedRandomBackground : MonoBehaviour {
         float duration = Random.Range(minDuration, maxDuration);
 
         // 复合动画序列：移动+旋转+透明度
-        DOTween.Sequence()
+        _bounceTween = DOTween.Sequence()
             .Append(backgroundRect.DOAnchorPos(targetPos, duration)
                 .SetEase(GetRandomEase())) // 随机缓动
             .Join(backgroundImage.DOFade(
@@ -68,5 +70,10 @@ public class EnhancedRandomBackground : MonoBehaviour {
     // 适配屏幕尺寸（确保全屏）
     void AdaptToScreen() {
         backgroundRect.sizeDelta += new Vector2(144, 81);
+    }
+
+    private void OnDestroy() {
+        _bounceTween.Kill();
+        _bounceTween = null;
     }
 }

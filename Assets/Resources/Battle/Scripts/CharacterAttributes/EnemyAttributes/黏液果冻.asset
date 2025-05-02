@@ -15,13 +15,12 @@ MonoBehaviour:
   characterName: "\u9ECF\u6DB2\u679C\u51BB"
   characterImage: ghost
   avatarImage: 
-  passiveSkillImage: 
-  level: 1
+  level: 10
   maxLevel: 45
   rank: 0
-  maxRank: 2
+  job: 0
   attackAnime: 
-  attack: 4
+  attack: 14
   damageType: 0
   criticalRate: 0
   criticalDamageMultiplier: 150
@@ -33,12 +32,13 @@ MonoBehaviour:
   evasion: 0
   damageTakenMultiplier: 100
   maxHealthPoints: 15
-  attackGrowth: 0
+  attackGrowth: 1
   defenseGrowth: 0
   maxHealthPointsGrowth: 0
   activeSkills: []
   passiveSkills:
   - RetaliationAttackReduction
+  moveRangeType: 0
   attackRange:
   - x: 0
     y: -1

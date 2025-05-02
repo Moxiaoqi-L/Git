@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +31,7 @@ public class GameInit : MonoBehaviour
     private static TextAsset jsonFile;
     private static LevelData levelData;
     private static StepData stepData;
+    private static AudioClip battleMusic;
 
     // 回合增加事件
     public event Action OnNextRound;
@@ -62,9 +64,12 @@ public class GameInit : MonoBehaviour
         // 初始波次为 1
         currentStepNum = 1;
         // 读取JSON文件
-        jsonFile = Resources.Load<TextAsset>("Battle/BattleLevel/Course-1");
+        jsonFile = Resources.Load<TextAsset>("General/BattleLevel/Course-1");
         // 解析JSON数据
         levelData = JsonUtility.FromJson<LevelData>(jsonFile.text);
+        // 播放背景音乐
+        battleMusic = Resources.Load<AudioClip>(Constants.MUSIC_PATH + levelData.music);
+        AudioManager.Get.PlayBGM(battleMusic);
         stepData = levelData.steps;
         // 判断最大波次
         if (stepData.step4 == null) maxStepNum = 3;
@@ -80,65 +85,53 @@ public class GameInit : MonoBehaviour
         {
             foreach (var enemy in stepData.step1)
             {
-                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.rarity, enemy.attributes);
+                InstantiateEnemyChessman(enemy);
             }
         }
         if (currentStepNum == 2 && currentStepNum <= maxStepNum)
         {
             foreach (var enemy in stepData.step2)
             {
-                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.rarity, enemy.attributes);
+                InstantiateEnemyChessman(enemy);
             }
         }
         if (currentStepNum == 3 && currentStepNum <= maxStepNum)
         {
             foreach (var enemy in stepData.step3)
             {
-                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.rarity, enemy.attributes);
+                InstantiateEnemyChessman(enemy);
             }
         }
         if (currentStepNum == 4 && currentStepNum <= maxStepNum)
         {
             foreach (var enemy in stepData.step4)
             {
-                InstantiateEnemyChessman(new Location(enemy.locationX, enemy.locationY), enemy.avatarImage, enemy.rarity, enemy.attributes);
+                InstantiateEnemyChessman(enemy);
             }
         }
         StartCoroutine(WaitFor());
     }
 
     // 实例化敌方预制体
-    public void InstantiateEnemyChessman(Location location,string avatarImageFileName, int rarityIndex, string attributeFileName)
+    public void InstantiateEnemyChessman(EnemyData enemy)
     {
         // 加载预制体 , 配置文件, 图片
-        EnemyAttributes enemyAttributes = Resources.Load<EnemyAttributes>("Battle/Scripts/CharacterAttributes/EnemyAttributes/" + attributeFileName);
-        Debug.Log(enemyAttributes);
-        Sprite avatarSprite = Resources.Load<Sprite>("Battle/Image/Avatar/" + avatarImageFileName);
-        Sprite raritySprite = Resources.Load<Sprite>("Battle/Image/Rarity/Rarity Enemy " + rarityIndex);
-
-        if (enemyChessmanPrefab == null)
-        {
-            Debug.LogError("无法加载 EnemyChessmanPrefab 预制体。");
-            return;
-        }
-
-        // 2. 查找目标方格，假设存在一个 BoardCtrl 类来管理棋盘
-        Square targetSquare = BoardCtrl.Get[location];
-
-        if (targetSquare == null)
-        {
-            Debug.LogError($"未找到坐标为 {location} 的方格。");
-            return;
-        }
-
+        EnemyAttributes enemyAttributes = Resources.Load<EnemyAttributes>("Battle/Scripts/CharacterAttributes/EnemyAttributes/" + enemy.attributes);
+        Sprite avatarSprite = Resources.Load<Sprite>("General/Image/Avatar/" + enemy.avatarImage);
+        Sprite raritySprite = Resources.Load<Sprite>("General/Image/Rarity/Rarity Enemy " + enemy.rarity);
+        // 查找目标方格
+        Square targetSquare = BoardCtrl.Get[new Location(enemy.locationX, enemy.locationY)];
         // 实例化预制体
         GameObject enemyChessmanInstance = Instantiate(enemyChessmanPrefab);
         // 设置父物体
         enemyChessmanInstance.transform.SetParent(targetSquare.transform, false);
         // 设置 Chessman Location
-        enemyChessmanInstance.GetComponent<Chessman>().location = location;
+        enemyChessmanInstance.GetComponent<Chessman>().location = targetSquare.location;
         // 设置 Enemy Attributes
         enemyChessmanInstance.GetComponent<Enemy>().characterAttributes = enemyAttributes;
+        // 设置Enemy等级与阶级
+        enemyChessmanInstance.GetComponent<Enemy>().characterAttributes.level = enemy.level;
+        enemyChessmanInstance.GetComponent<Enemy>().characterAttributes.rank = enemy.rank;
         // 设置头像图片
         enemyChessmanInstance.transform.Find("Avatar").GetComponent<Image>().sprite = avatarSprite;
         // 设置稀有度图片
@@ -198,6 +191,7 @@ public class LevelData
 {
     public string levelName;
     public string level;
+    public string music;
     public StepData steps;
 }
 

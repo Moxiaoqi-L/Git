@@ -49,8 +49,6 @@ public class DelayedTreatment : Skill
     public override bool Use(Hero hero, Enemy target = null)
     {
         if (!BeforeUse()) return false;
-        if (hero.isStunned) return false;
-        if (hero.hasAttacked || !ColorPointCtrl.Get.RemoveColorPointsByColors(Costs)) return false;
         // 获取前方的 hero
         Hero targetHero = MethodsForSkills.GetFrontHero(hero.chessman.location);
         if (targetHero == null)

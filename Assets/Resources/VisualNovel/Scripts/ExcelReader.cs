@@ -46,10 +46,6 @@ public class ExcelReader
         
         // 构建完整路径（StreamingAssets专用）
         string filePath = Path.Combine(Application.streamingAssetsPath, Constants.STORY_PATH, fileName + Constants.EXCEL_FILE_EXTENSION);
-        Debug.Log(Application.streamingAssetsPath);
-        Debug.Log(Constants.STORY_PATH);
-        Debug.Log(fileName + Constants.EXCEL_FILE_EXTENSION);
-        Debug.Log(filePath);
         // 使用 UnityWebRequest 异步读取（同步方式需在协程中调用）
         using (UnityWebRequest www = UnityWebRequest.Get(filePath)) {
             www.SendWebRequest();

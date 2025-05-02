@@ -41,8 +41,6 @@ public class PowerAttack : Skill
     public override bool Use(Hero hero, Enemy target = null)
     {
         if (!BeforeUse()) return false;
-        if (hero.isStunned) return false;
-        if (hero.hasAttacked || !ColorPointCtrl.Get.RemoveColorPointsByColors(Costs)) return false;
         // 技能使用逻辑
         if (target == null)
         {

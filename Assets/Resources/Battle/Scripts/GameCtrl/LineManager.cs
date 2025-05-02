@@ -51,7 +51,6 @@ public class LineManager : MonoBehaviour
         if (lines != null)
         {
             characterLines[characterName] = lines;
-            Debug.Log($"成功加载角色台词：{characterName}，条目数：{lines.Count}");
         }
         else
         {

@@ -18,6 +18,9 @@ public class Square : MonoBehaviour
     public Sprite heroAttackImage;
     // 攻击范围图片
     public Sprite enemyAttackImage;
+    // 移动范围图片
+    public Sprite heroMoveImage;
+
     // 组件
     private Image image;
  
@@ -51,5 +54,10 @@ public class Square : MonoBehaviour
     {
         if (!isEnemy) image.sprite = isHighlighted ? heroAttackImage : originalImage;
         if (isEnemy) image.sprite = isHighlighted ? enemyAttackImage : originalImage;
+    }
+    // 新增：设置高亮状态
+    public void SetMoveRangeHighlight(bool isHighlighted)
+    {
+        image.sprite = isHighlighted ? heroMoveImage : originalImage;
     }
 }

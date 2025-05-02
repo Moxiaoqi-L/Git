@@ -7,7 +7,7 @@ public static class LineParser
 {
     public static List<CharacterLineData> LoadLines(string characterName)
     {
-        TextAsset jsonFile = Resources.Load<TextAsset>($"Battle/Lines/{characterName}");
+        TextAsset jsonFile = Resources.Load<TextAsset>($"General/BattleLines/{characterName}");
         if (jsonFile == null) return null;
         LinesData data = JsonUtility.FromJson<LinesData>(jsonFile.text);
         return data.lines;
