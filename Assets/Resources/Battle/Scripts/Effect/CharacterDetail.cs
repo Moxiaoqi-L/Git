@@ -132,16 +132,16 @@ private void UpdateMorePassiveSkillDisplay()
         // Debug.Log("开始监听了！");
         if (hero != null) 
         {
-            hero.OnHealthPointsChanged += UpdateHPDisplay;
-            hero.OnDefenseChanged += UpdateDefenseDisplay;
-            hero.OnAttackChanged += UpdateAttackDisplay;
+            hero.EventManager.OnHealthPointsChanged += UpdateHPDisplay;
+            hero.EventManager.OnDefenseChanged += UpdateDefenseDisplay;
+            hero.EventManager.OnAttackChanged += UpdateAttackDisplay;
             // hero.OnMDefenseChanged += UpdateMDefenseDisplay;
         }
         if (enemy != null) 
         {
-            enemy.OnHealthPointsChanged += UpdateHPDisplay;
-            enemy.OnDefenseChanged += UpdateDefenseDisplay;
-            enemy.OnAttackChanged += UpdateAttackDisplay;
+            enemy.EventManager.OnHealthPointsChanged += UpdateHPDisplay;
+            enemy.EventManager.OnDefenseChanged += UpdateDefenseDisplay;
+            enemy.EventManager.OnAttackChanged += UpdateAttackDisplay;
         }
     }
 
@@ -150,15 +150,15 @@ private void UpdateMorePassiveSkillDisplay()
         // Debug.Log("取消监听了！");
         if (hero != null) 
         {
-            hero.OnHealthPointsChanged -= UpdateHPDisplay;
-            hero.OnDefenseChanged -= UpdateDefenseDisplay;
-            hero.OnAttackChanged -= UpdateAttackDisplay;
+            hero.EventManager.OnHealthPointsChanged -= UpdateHPDisplay;
+            hero.EventManager.OnDefenseChanged -= UpdateDefenseDisplay;
+            hero.EventManager.OnAttackChanged -= UpdateAttackDisplay;
         }
         if (enemy != null) 
         {
-            enemy.OnHealthPointsChanged -= UpdateHPDisplay;
-            enemy.OnDefenseChanged -= UpdateDefenseDisplay;
-            enemy.OnAttackChanged -= UpdateAttackDisplay;
+            enemy.EventManager.OnHealthPointsChanged -= UpdateHPDisplay;
+            enemy.EventManager.OnDefenseChanged -= UpdateDefenseDisplay;
+            enemy.EventManager.OnAttackChanged -= UpdateAttackDisplay;
         }
     }
 

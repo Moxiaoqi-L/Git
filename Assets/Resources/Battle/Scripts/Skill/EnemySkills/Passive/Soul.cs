@@ -27,7 +27,7 @@ public class Soul : Skill
     public override void Init(SkillManager skillManager, BasicCharacter character)
     {
         base.Init(skillManager, character);
-        skillManager.character.BeforeLoseHp += DecreaseDamage;
+        skillManager.character.EventManager.OnBeforeTakeDamage += DecreaseDamage;
     }
 
     public float DecreaseDamage(float damage, DamageType damageType)

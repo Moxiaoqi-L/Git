@@ -40,7 +40,6 @@ public class PowerAttack : Skill
 
     public override bool Use(Hero hero, Enemy target = null)
     {
-        if (!BeforeUse()) return false;
         // 技能使用逻辑
         if (target == null)
         {
@@ -71,7 +70,7 @@ public class PowerAttack : Skill
         float damage = actualAttack * (attackDamageMultiplier / 100) * (1 + hero.characterAttributes.skillPower) * (1 + hero.characterAttributes.damagePower);
         target.Defend(damage, DamageType.Physical);
         target.AddBuff("眩晕", 1);
-        AudioManager.Get.PlaySound(skillAudio);
+        AudioManager.Instance.PlaySFX(skillAudio);
         hero.FinishAttack(target);
         return true;
     }

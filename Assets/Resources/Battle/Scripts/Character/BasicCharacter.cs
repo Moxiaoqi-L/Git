@@ -34,6 +34,8 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
     // 通过characterAttributes获取移动范围
     public List<Location> moveRange;
 
+    // 该回合是否已经攻击
+    public bool hasAttacked = false;
     // 禁止攻击
     public bool cantAttack = false;
     // 眩晕状态
@@ -48,30 +50,19 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
     public Sprite activeSkillImage;
     public Sprite passiveSkillImage;
 
-    // 自定义委托类型，支持ref参数修改治疗量
-    public delegate void HealingReceivedHandler(ref int healingAmount);
+    // 事件管理器实例
+    public CharacterEventManager EventManager { get; private set; }
 
-    // 监听血量变化事件
-    public event Action<BasicCharacter> OnHealthPointsChanged;
-    // 监听受到治疗事件
-    public event HealingReceivedHandler OnHealingReceived;
-    // 监听防御变化事件
-    public event Action<BasicCharacter> OnDefenseChanged;
-    // 监听攻击变化事件
-    public event Action<BasicCharacter> OnAttackChanged;
-    // 监听被攻击事件
-    public event Action<BasicCharacter> OnAttackedBy;
-    // 监听受伤前事件
-    public event Func<float, DamageType, float> BeforeLoseHp;
-
-
-    protected void Start() {
+    protected void Start()
+    {
         // 获取棋子自身
         chessman = GetComponent<Chessman>();
         // 初始化 BUFF 管理器
         buffManager = new BuffManager(this);
         // 初始化 Skill 管理器
         skillManager = new SkillManager(this);
+        // 初始化事件管理器
+        EventManager = new CharacterEventManager(this);
         // 初始化属性
         characterAttributes.InitAttributes();
         // 默认使用简单攻击动画
@@ -119,25 +110,6 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
         return attackLocations;
     }
 
-    // 获取移动范围
-    public List<Location> GetMoveRange()
-    {
-        List<Location> moveLocations = new List<Location>();
-        Location currentLocation = chessman.location;
-        
-        foreach (var location in moveRange)
-        {
-            Location targetLocation = new(
-                currentLocation.x + location.x,
-                currentLocation.y + location.y
-            );
-            if (targetLocation.IsValid())
-            {
-                moveLocations.Add(targetLocation);
-            }
-        }
-        return moveLocations;
-    }
     // 初始化人物属性
     public void CharacterAttributesInit()
     {
@@ -162,36 +134,46 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
         return attackLocations;
     }
 
-    // 通用防御方法，用于处理受到的伤害
-    public virtual void Defend(float incomingDamage,DamageType damageType, bool ignoreDefense = false, Color color = new(), BasicCharacter from = null)
+    /// <summary>
+    /// 通用防御方法，用于处理受到的伤害
+    /// </summary>
+    /// <param name="incomingDamage">即将承受的伤害</param>
+    /// <param name="damageType">伤害类型</param>
+    /// <param name="ignoreDefense">是否忽略防御</param>
+    /// <param name="color">展示伤害动画的颜色</param>
+    /// <param name="from">伤害来源</param>
+    public virtual void Defend(float incomingDamage, DamageType damageType, bool ignoreDefense = false, Color color = new(), BasicCharacter from = null)
     {
         float actualDamage;
-        if (ignoreDefense) actualDamage = incomingDamage;
-        else actualDamage = Mathf.Max(incomingDamage * 0.1f, 
-        incomingDamage * (GetActualDamageTakenMultiplier() / 100f) - (characterAttributes.defense + provisionalDefense));
+        if (ignoreDefense)
+        {
+            actualDamage = incomingDamage;
+        }
+        else
+        {
+            // 伤害计算（物理）：最少造成 10% 即将承受的伤害。最终伤害 = 到来伤害 * ( 承伤修改 / 100 ) - 防御
+            if (damageType == DamageType.Physical) actualDamage = Mathf.Max(incomingDamage * 0.1f, incomingDamage * (GetActualDamageTakenMultiplier() / 100f) - GetActualDefense());
+            // 伤害计算（精神）：最少造成 10% 即将承受的伤害。最终伤害 = 到来伤害 * ( 承伤修改 / 100 ) * ((100 - 精神防御) / 100);
+            else if (damageType == DamageType.Mental) actualDamage = Mathf.Max(incomingDamage * 0.1f, incomingDamage * (GetActualDamageTakenMultiplier() / 100f) * ((100 - GetActualMagicDefense()) / 100f));
+            // 其他情况
+            else actualDamage = incomingDamage;
+        }
         // 受伤震动
         GetDamageShake();
-        // 触发事件前，先复制当前订阅列表（避免触发过程中订阅被修改）
-        var currentEvent = BeforeLoseHp;
-        // 遍历所有订阅的处理函数，每个处理函数都可以修改伤害数值
-        // 这里示例按顺序应用每个处理函数的返回值，最终得到最终伤害
-        if (currentEvent != null)
-        {
-            foreach (var handler in currentEvent.GetInvocationList())
-            {
-                actualDamage = handler.DynamicInvoke(actualDamage, damageType) as float? ?? actualDamage;
-            }
-        }
+
+        // 受伤前事件触发
+        actualDamage = EventManager.TriggerBeforeTakeDamage(actualDamage, damageType);
+
         // 展示伤害动画
         ShowDamageNumber((int)actualDamage, color);
         // 被击中事件
-        if (from != null) OnAttackedBy?.Invoke(from);
+        if (from != null) EventManager.TriggerAttackedBy(from);
         // 血量减少
         currentHealthPoints -= (int)actualDamage;
         // 防止血量削减为 0 
         if (currentHealthPoints <= 0) currentHealthPoints = 0;
         // 受伤事件
-        OnHealthPointsChanged?.Invoke(this);
+        EventManager.TriggerHealthPointsChanged();
         if (currentHealthPoints <= 0)
         {
             // 死亡回调
@@ -206,26 +188,28 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
     public override void IncreaseAttack(int amount)
     {
         base.IncreaseAttack(amount);
-        OnAttackChanged?.Invoke(this);
+        EventManager.TriggerAttackChanged();
     }
 
     // 增加防御力的方法
     public override void IncreaseDefense(int amount)
     {
         base.IncreaseDefense(amount);
-        OnDefenseChanged?.Invoke(this);
+        EventManager.TriggerDefenseChanged();
     }
 
     // 增加生命值的方法
     public void IncreaseHealthPoints(int amount, Color color = new())
     {
-        if (amount > 0) OnHealingReceived?.Invoke(ref amount);
+        if (amount > 0) EventManager.TriggerBeforeHealing(ref amount);
         ShowDamageNumber(amount, color);
         // 增加英雄的生命值
         currentHealthPoints += amount;
         currentHealthPoints = currentHealthPoints > characterAttributes.maxHealthPoints ? characterAttributes.maxHealthPoints : currentHealthPoints;
         // 血量变化事件
-        OnHealthPointsChanged?.Invoke(this);
+        EventManager.TriggerHealthPointsChanged();
+        // 触发治疗后事件
+        EventManager.TriggerAfterHealing(amount);
     }
 
     // BUFF 添加方法
@@ -403,7 +387,9 @@ public abstract class BasicCharacter : CharacterProvisionalAttributes
         Destroy(text);
     }
 
-    private void OnDestroy() {
+    // 对象被摧毁时处理的函数
+    private void OnDestroy()
+    {
         StopAllCoroutines();
     }
     

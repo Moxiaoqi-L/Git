@@ -48,7 +48,6 @@ public class DelayedTreatment : Skill
 
     public override bool Use(Hero hero, Enemy target = null)
     {
-        if (!BeforeUse()) return false;
         // 获取前方的 hero
         Hero targetHero = MethodsForSkills.GetFrontHero(hero.chessman.location);
         if (targetHero == null)
@@ -62,7 +61,7 @@ public class DelayedTreatment : Skill
             targetHero.AddBuff("自愈", healPerLayer, layers);
             hero.IncreaseHealthPoints((int)(healPoints * 0.5), new Color(0.19f, 0.89f, 0.79f));
         }
-        AudioManager.Get.PlaySound(skillAudio);
+        AudioManager.Instance.PlaySFX(skillAudio);
         hero.FinishAttack(target);
         return true;
     }

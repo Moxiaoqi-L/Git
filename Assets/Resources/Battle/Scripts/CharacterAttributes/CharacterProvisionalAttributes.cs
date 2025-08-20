@@ -44,17 +44,6 @@ public class CharacterProvisionalAttributes : MonoBehaviour
         return characterAttributes.criticalDamageMultiplier + provisionalCriticalDamageMultiplier;
     }
 
-    // 命中率
-    public int provisionalAccuracy;
-    public virtual void IncreaseAccuracy(int amount)
-    {
-        provisionalAccuracy += amount;
-    }
-    public int GetActualAccuracy()
-    {
-        return characterAttributes.accuracy + provisionalAccuracy;
-    }
-
 
     // 技能增幅
     public int provisionalSkillPower;

@@ -62,7 +62,7 @@ public class ImageScrollAligner : MonoBehaviour
         // 展示详细
         ChapterDetailManager.Get.ShowStoryDetail(chapterName, chapterDetail);
         // 音效处理
-        AudioManager.Get.PlaySound(chapterChange);
+        AudioManager.Instance.PlaySFX(chapterChange);
     }
 
     private System.Collections.IEnumerator SmoothScrollTo(float targetY)

@@ -32,8 +32,6 @@ public abstract class CharacterAttributes : ScriptableObject
     public int criticalRate = 0;
     // 暴击伤害
     public int criticalDamageMultiplier = 150;
-    // 命中率
-    public int accuracy = 100;
     // 技能增幅
     public int skillPower = 0;
     // 伤害增幅
@@ -45,9 +43,9 @@ public abstract class CharacterAttributes : ScriptableObject
     public int defense;
     // 魔法防御力
     public int magicDefense;
-    // 闪避率
+    // 闪避率 （即将废弃）
     public int evasion = 0;
-    // 伤害修改
+    // 承伤修改
     public int damageTakenMultiplier = 100;
 
     // 最大生命值

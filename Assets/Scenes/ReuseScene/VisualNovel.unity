@@ -156,8 +156,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -500, y: 0}
-  m_SizeDelta: {x: 720, y: 1280}
+  m_AnchoredPosition: {x: -640, y: 0}
+  m_SizeDelta: {x: 1280, y: 1440}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &4837231
 MonoBehaviour:
@@ -1055,8 +1055,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Skip
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f5566ebea9cfd04db4f6e90f71f5915, type: 2}
-  m_sharedMaterial: {fileID: 1363698391779526780, guid: 8f5566ebea9cfd04db4f6e90f71f5915, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1960cba8abc12e543b2da20e3d7830b4, type: 2}
+  m_sharedMaterial: {fileID: -1400484246509459537, guid: 1960cba8abc12e543b2da20e3d7830b4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1423,8 +1423,8 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 1080}
-  m_ScreenMatchMode: 0
+  m_ReferenceResolution: {x: 2560, y: 1440}
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -2105,7 +2105,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 500, y: 0}
+  m_AnchoredPosition: {x: 640, y: 0}
   m_SizeDelta: {x: 720, y: 1280}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &778731138
@@ -2736,8 +2736,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f5566ebea9cfd04db4f6e90f71f5915, type: 2}
-  m_sharedMaterial: {fileID: 1363698391779526780, guid: 8f5566ebea9cfd04db4f6e90f71f5915, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1960cba8abc12e543b2da20e3d7830b4, type: 2}
+  m_sharedMaterial: {fileID: -1400484246509459537, guid: 1960cba8abc12e543b2da20e3d7830b4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2861,9 +2861,6 @@ MonoBehaviour:
   speakerContent: {fileID: 1625110756}
   typewriterEffect: {fileID: 1401295902}
   historyScrollView: {fileID: 734429066}
-  vocalAudio: {fileID: 0}
-  backgroundMusic: {fileID: 0}
-  soundAudio: {fileID: 0}
   avatarImage: {fileID: 802228419}
   backgroundImage: {fileID: 1445733812}
   characterImage1: {fileID: 4837231}
@@ -2880,6 +2877,7 @@ MonoBehaviour:
   autoButton: {fileID: 469459545}
   skipButton: {fileID: 1538428465}
   historyButton: {fileID: 334533506}
+  sceneLoaderWithAnimation: {fileID: 0}
 --- !u!1 &1248892428
 GameObject:
   m_ObjectHideFlags: 0
@@ -3660,8 +3658,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u8BF4\u8BDD\u7684\u5185\u5BB9\u7B2C\u4E00\u884C\n\u8BF4\u8BDD\u7684\u5185\u5BB9\u7B2C\u4E8C\u884C\n\u8BF4\u8BDD\u7684\u5185\u5BB9\u7B2C\u4E09\u884C\n\u8BF4\u8BDD\u7684\u5185\u5BB9\u7B2C\u56DB\u884C"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f5566ebea9cfd04db4f6e90f71f5915, type: 2}
-  m_sharedMaterial: {fileID: 1363698391779526780, guid: 8f5566ebea9cfd04db4f6e90f71f5915, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1960cba8abc12e543b2da20e3d7830b4, type: 2}
+  m_sharedMaterial: {fileID: -1400484246509459537, guid: 1960cba8abc12e543b2da20e3d7830b4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3928,8 +3926,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u59D3\u540D"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f5566ebea9cfd04db4f6e90f71f5915, type: 2}
-  m_sharedMaterial: {fileID: 1363698391779526780, guid: 8f5566ebea9cfd04db4f6e90f71f5915, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1960cba8abc12e543b2da20e3d7830b4, type: 2}
+  m_sharedMaterial: {fileID: -1400484246509459537, guid: 1960cba8abc12e543b2da20e3d7830b4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

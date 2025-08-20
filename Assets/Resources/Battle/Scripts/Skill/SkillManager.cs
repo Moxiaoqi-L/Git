@@ -27,8 +27,6 @@ public class SkillManager
 
         newSkill.Init(this, character);
 
-        
-
         if (newSkill.skillType == SkillType.Active) activeSkills.Add(newSkill);
         if (newSkill.skillType == SkillType.Passive) passiveSkills.Add(newSkill);
     }

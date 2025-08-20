@@ -16,18 +16,19 @@ public class PollutionBuff : Buff
     public override void Apply(BasicCharacter basicCharacter)
     {
         base.Apply(basicCharacter);
-        basicCharacter.OnHealingReceived += ReduceHealing;
+        basicCharacter.EventManager.OnBeforeHealing += ReduceHealing;
     }
 
     // 移除Buff时取消事件监听
     public override void Remove(BasicCharacter basicCharacter)
     {
-        basicCharacter.OnHealingReceived -= ReduceHealing;
+        basicCharacter.EventManager.OnBeforeHealing -= ReduceHealing;
     }
 
     // 治疗量降低逻辑
-    private void ReduceHealing(ref int healingAmount)
+    public int ReduceHealing(int healingAmount)
     {
         healingAmount = (int)(healingAmount * 0.5f); // 治疗量减半
+        return healingAmount;
     }
 }

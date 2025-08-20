@@ -12,7 +12,7 @@ public class Enemy : BasicCharacter
     public Hero targetHero;
     // 攻击完成事件（在造成伤害后触发）
     public event Action<Hero, Enemy> OnAttackCompleted;
-    // 攻击落空事件 （无目标或未命中）
+    // 攻击落空事件 （无目标）
     public event Action<Hero, Enemy> OnAttackMissed;
 
 
@@ -111,7 +111,8 @@ public class Enemy : BasicCharacter
     // 协程：延迟后执行攻击
     private IEnumerator WaitAndAttack(Location moveLocation, float delay)
     {
-        yield return new WaitForSeconds(delay); // 停顿指定时间
+        // 停顿指定时间
+        yield return new WaitForSeconds(delay); 
         
         // 重新获取移动后的攻击范围和目标
         List<Location> newAttackRange = GetAttackRangeFromLocation(moveLocation);
@@ -134,29 +135,26 @@ public class Enemy : BasicCharacter
     // 命令进攻
     private IEnumerator CalculateDamage(Hero targetHero)
     {
-        if (targetHero == null) yield break;
 
-        // 计算命中率
-        float hitRate = characterAttributes.accuracy / (characterAttributes.accuracy + targetHero.characterAttributes.evasion);
-        float randomValue = UnityEngine.Random.value;
-        if (randomValue <= hitRate)
+        // 触发攻击前事件（通过事件管理器）
+        EventManager.TriggerBeforeAttack(targetHero);
+
+        if (targetHero == null) yield break;
+        // 根据暴击率计算该次攻击是否暴击
+        bool isCritical = UnityEngine.Random.value * 100 <= GetActualCriticalRate();
+        // 计算攻击伤害。攻击伤害 = 实际攻击力 * ( 1 + 伤害增幅 / 100)
+        float damage = GetActualAttack() * (1 + GetActualDamagePower() / 100f);
+        if (isCritical)
         {
-            float actualattack = characterAttributes.attack + provisionalAttack;
-            bool isCritical = UnityEngine.Random.value * 100 <= characterAttributes.criticalRate;
-            float damage = actualattack * (1 + GetActualDamagePower() / 100f);
-            if (isCritical)
-            {
-                damage *= characterAttributes.criticalDamageMultiplier / 100;
-                Debug.Log(characterAttributes.name + " 暴击了！ ");
-            }
-            targetHero.Defend(damage, characterAttributes.damageType);
-            OnAttackCompleted?.Invoke(targetHero, this);
+            // 计算暴击伤害。暴击伤害 = 攻击伤害 * ( 暴击伤害修改 / 100 )
+            damage *= GetActualCriticalDamageMultiplier() / 100;
         }
-        else
-        {
-            Debug.Log(characterAttributes.name + " 攻击落空！ ");
-            OnAttackMissed?.Invoke(targetHero, this);
-        }
+        // 将最终伤害送给对方进行防御结算
+        targetHero.Defend(damage, characterAttributes.damageType, from : this);
+        // 触发攻击后事件
+        EventManager.TriggerAfterAttack(targetHero, damage);
+        // 攻击完成的回调函数
+        OnAttackCompleted?.Invoke(targetHero, this);
     }
 
     // 获取Enemy的有效移动位置
@@ -206,7 +204,9 @@ public class Enemy : BasicCharacter
         Attack(this);
     }
 
-    protected override void OnDeath(){
+    // 死亡台词
+    protected override void OnDeath()
+    {
         TriggerLine(LineEventType.Death);
     }
 }    

@@ -31,6 +31,7 @@ public class ChessmanMove : Button, IDragHandler, IBeginDragHandler, IEndDragHan
 
     public void OnBeginDrag(PointerEventData _)
     {
+        // 获取鼠标选择的棋子
         currentObject = _.pointerCurrentRaycast.gameObject;
         if (transform.parent == topOfUiT) return;
         beginParentTransform = transform.parent;
@@ -64,12 +65,12 @@ public class ChessmanMove : Button, IDragHandler, IBeginDragHandler, IEndDragHan
     public void OnEndDrag(PointerEventData _)
     {
         GameObject go = _.pointerCurrentRaycast.gameObject;
-        if(go == null || go.GetComponent<Square>()?.camp == Camp.Enemy){
+        if (go == null || currentObject.GetComponent<Hero>() == null || go.GetComponent<Square>()?.camp == Camp.Enemy){
             SetPosAndParent(transform, beginParentTransform);
             transform.GetComponent<Image>().raycastTarget = true;
             return;            
         }
-        if (go.tag == "Square" && currentObject.GetComponent<Hero>().GetMoveRange().Contains(go.GetComponent<Square>().location) && APMPManager.Get.ConsumeMP()) //如果当前拖动物体下是：格子 时     
+        if (go.tag == "Square") //如果当前拖动物体下是：格子 时     
         {
             SetPosAndParent(transform, go.transform);
             transform.GetComponent<Image>().raycastTarget = true;

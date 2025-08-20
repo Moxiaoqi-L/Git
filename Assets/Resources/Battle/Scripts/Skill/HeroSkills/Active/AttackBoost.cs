@@ -29,7 +29,6 @@ public class AttackBoost : Skill
     // 使用技能时添加BUFF
     public override bool Use(Hero hero, Enemy target = null)
     {
-        if (!BeforeUse()) return false;
         // 为自身添加攻击力提升BUFF（参数：百分比，持续回合数）
         hero.AddBuff("攻击力提升", attackIncreasePercentage, durationRounds);
         return true; // 技能使用成功

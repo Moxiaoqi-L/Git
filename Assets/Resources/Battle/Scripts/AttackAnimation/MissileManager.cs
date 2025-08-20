@@ -44,7 +44,7 @@ public class MissileManager : MonoBehaviour
         Instantiate(DefaultAttackPrefab[1], target.position, Quaternion.identity);
         onAnimationComplete?.Invoke();
         // 音效处理
-        AudioManager.Get.PlaySound(defaultAttackHit);
+        AudioManager.Instance.PlaySFX(defaultAttackHit);
     }
 
     public void Shoot(Transform attacker, Transform target, string attackType, Action onAnimationComplete = null)
@@ -52,7 +52,7 @@ public class MissileManager : MonoBehaviour
         if (getAttackAnime.TryGetValue(attackType, out int prefabIndex))
         {
             AudioClip clipHit = Resources.Load<AudioClip>(Constants.HIT_AUDIO_PATH + attackType + "Attack");
-            AudioManager.Get.PlaySound(clipHit);
+            AudioManager.Instance.PlaySFX(clipHit);
             GameObject projectile = Instantiate(Prefabs[prefabIndex], attacker.position, Quaternion.identity);
             ProjectileManager mover = projectile.GetComponent<ProjectileManager>();
 

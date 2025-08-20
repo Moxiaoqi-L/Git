@@ -5,9 +5,9 @@ using UnityEngine;
 public class SoulLoss : Skill
 {
     // 触发概率（百分比）
-    public int procChance = 33;
+    public int procChance = 100;
     // 附加的BUFF层数
-    public int buffLayers = 1;
+    public int buffLayers = 2;
 
     public override string SkillName
     {

@@ -12,31 +12,27 @@ public class Hero : BasicCharacter
     public event Action<Hero, Enemy> OnAttackCompleted;
 
     // 当对象启用时调用的方法，用于初始化和执行一些操作
-    private new void Start() {
+    private new void Start()
+    {
         base.Start();
         // 缓存图片
         characterImage = Resources.Load<Sprite>("General/Image/CharacterImage/" + characterAttributes.characterImage);
         // 初始化生命值
         currentHealthPoints = characterAttributes.maxHealthPoints;
         // 获取移动方式
-        chessmanMove = GetComponent<ChessmanMove>(); 
+        chessmanMove = GetComponent<ChessmanMove>();
         // 初始化技能列表
-        InitializeSkills();      
+        InitializeSkills();
     }
 
     // 英雄的攻击方法，用于对敌人造成伤害
     public IEnumerator Attack(Enemy target)
     {
         // 异常状态
-        if (isStunned || cantAttack) yield break;
-        // 检查行动点是否足够
-        if (!APMPManager.Get.ConsumeAP())
-        {
-            ShowText("行动点不足！", Constants.REDPOINT);
-            yield break;
-        }
+        if (hasAttacked || isStunned || cantAttack) yield break;
+        // 检查是否行动过 TODO
         // 获取攻击点数
-        ColorPointCtrl.Get.GetColorPoint(this.transform, this.chessman.location.y);
+        ColorPointCtrl.Get.GetColorPoint(transform, chessman.location.y);
         // 隐藏攻击范围
         chessman.HighlightAttackRange(this, false);
         // 取消选中
@@ -51,27 +47,47 @@ public class Hero : BasicCharacter
             characterAttributes.attackAnime,
             () => StartCoroutine(CalculateDamage(target)) // 动画完成后触发伤害计算
         );
-        yield return null; // 等待动画回调触发
+        // 行动完成
+        CompleteAction();
+        // 等待动画回调触发
+        yield return null; 
     }
 
+    // 行动完成（包括攻击或释放技能）
+    public void CompleteAction()
+    {
+        // 使头像变灰色
+        MakeImageGray();
+        // 禁止移动
+        chessmanMove.enabled = false;
+        // 完成攻击
+        hasAttacked = true;
+    }
+
+    // 玩家回合开始时会执行
     public void StartOfTurn()
     {
-        // TODO
+        // 恢复头像
+        RestoreImageColor();
+        // 允许攻击
+        hasAttacked = false;
+        // 恢复移动
+        chessmanMove.enabled = true;
     }
 
-    // 每回合结束时调用，
+    // 玩家回合结束时调用
     public override void EndOfRound()
     {
         base.EndOfRound();
-        // 恢复头像
-        RestoreImageColor();
     }
-
-    public void FinishAttack(Enemy targetEnemy = null){
-        // 攻击完成事件
+    
+    // 攻击完成事件
+    public void FinishAttack(Enemy targetEnemy = null)
+    {
         OnAttackCompleted?.Invoke(this, targetEnemy);
     }
 
+    // 重置自身状态（清除BUFF, 允许攻击, 允许移动）
     public override void RefreshSelf()
     {
         base.RefreshSelf();
@@ -79,49 +95,49 @@ public class Hero : BasicCharacter
         RestoreImageColor();
         // 恢复位移
         chessmanMove.enabled = true;
+        // 允许攻击
+        hasAttacked = false;
     }
 
-    // 图片变灰的方法
-    // private void MakeImageGray()
-    // {
-    //     Color grayColor = new Color(0.5f, 0.5f, 0.5f, 1f);
-    //     image.DOColor(grayColor, 0.5f);
-    // }
+    // 使头像变灰, 一般用于行动后
+    private void MakeImageGray()
+    {
+        Color grayColor = new Color(0.5f, 0.5f, 0.5f, 1f);
+        image.DOColor(grayColor, 0.5f);
+    }
 
-    // 图片恢复正常的方法
+    // 使头像恢复正常
     public void RestoreImageColor()
     {
         Color normalColor = Color.white;
         image.DOColor(normalColor, 0.5f);
     }
 
-    protected override void OnDeath(){
+    // 触发死亡台词
+    protected override void OnDeath()
+    {
         TriggerLine(LineEventType.Death);
     }
 
     // 攻击方法协程
     private IEnumerator CalculateDamage(Enemy target)
     {
-        Debug.Log("进入攻击方法协程");
-        // 计算命中率
-        float hitRate = characterAttributes.accuracy / (characterAttributes.accuracy + target.characterAttributes.evasion);
-        float randomValue = UnityEngine.Random.value;
-        if (randomValue <= hitRate)
+
+        // 触发攻击前事件
+        EventManager.TriggerBeforeAttack(target);
+
+        bool isCritical = UnityEngine.Random.value * 100 <= GetActualCriticalRate();
+        float damage = GetActualAttack() * (1 + GetActualDamagePower() / 100f);
+        if (isCritical)
         {
-            float actualattack = GetActualAttack();
-            bool isCritical = UnityEngine.Random.value * 100 <= characterAttributes.criticalRate;
-            float damage = actualattack * (1 + GetActualDamagePower() / 100f);
-            if (isCritical)
-            {
-                damage *= characterAttributes.criticalDamageMultiplier / 100;
-                Debug.Log(characterAttributes.name + " 暴击了！ ");
-            }
-            target.Defend(damage, characterAttributes.damageType, from : this);
+            // 计算暴击伤害。暴击伤害 = 攻击伤害 * ( 暴击伤害修改 / 100 )
+            damage *= GetActualCriticalDamageMultiplier() / 100;
         }
-        else
-        {
-            Debug.Log(characterAttributes.name + " 攻击落空！ ");
-        }
+        // 触发攻击时事件
+        // 将伤害送给目标进行防御结算
+        target.Defend(damage, characterAttributes.damageType, from : this);
+        // 触发攻击后事件
+        EventManager.TriggerAfterAttack(target, damage);
         // 完成攻击
         FinishAttack(target);
         yield return null;

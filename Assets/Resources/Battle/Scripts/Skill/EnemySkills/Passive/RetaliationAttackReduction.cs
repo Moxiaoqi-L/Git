@@ -27,7 +27,7 @@ public class RetaliationAttackReduction : Skill
         skillType = SkillType.Passive;
         
         // 订阅角色被攻击事件
-        skillManager.character.OnAttackedBy += OnAttacked; // 假设事件名为OnAttackedBy，参数为攻击者
+        skillManager.character.EventManager.OnAttackedBy += OnAttacked; // 假设事件名为OnAttackedBy，参数为攻击者
     }
 
     private void OnAttacked(BasicCharacter attacker)

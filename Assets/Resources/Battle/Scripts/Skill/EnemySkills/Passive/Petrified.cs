@@ -46,7 +46,7 @@ public class Petrified : Skill
             // 展示石化文字
             skillManager.character.ShowText("石化！", Color.white);
             // 音效
-            AudioManager.Get.PlaySound(skillAudio);
+            AudioManager.Instance.PlaySFX(skillAudio);
         }
     }
 

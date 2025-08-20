@@ -69,7 +69,7 @@ public class GameInit : MonoBehaviour
         levelData = JsonUtility.FromJson<LevelData>(jsonFile.text);
         // 播放背景音乐
         battleMusic = Resources.Load<AudioClip>(Constants.MUSIC_PATH + levelData.music);
-        AudioManager.Get.PlayBGM(battleMusic);
+        AudioManager.Instance.PlayBGM(battleMusic);
         stepData = levelData.steps;
         // 判断最大波次
         if (stepData.step4 == null) maxStepNum = 3;

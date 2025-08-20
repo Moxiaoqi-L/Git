@@ -15,10 +15,6 @@ public class VNManager : MonoBehaviour
     public TypewriterEffect typewriterEffect;
     public GameObject historyScrollView; 
 
-    private AudioSource vocalAudio;
-    private AudioSource backgroundMusic;
-    private AudioSource soundAudio;
-
     public Image avatarImage;
     public Image backgroundImage;
     public Image characterImage1;
@@ -68,7 +64,6 @@ public class VNManager : MonoBehaviour
     void Start()
     {
         topButtonsAddListener();
-        GetAudioSource();
         InitializeAndLoadStory(defaultStoryFileName);
     }
     // Update is called once per frame
@@ -81,17 +76,6 @@ public class VNManager : MonoBehaviour
                 DisplayNextLine();
             }
         }
-    }
-
-    // 获取音频
-    private void GetAudioSource()
-    {
-        vocalAudio = GameObject.Find("Vocal").GetComponent<AudioSource>();
-        backgroundMusic = GameObject.Find("BGM").GetComponent<AudioSource>();
-        soundAudio = GameObject.Find("Sound").GetComponent<AudioSource>();   
-        Debug.Log(vocalAudio);    
-        Debug.Log(backgroundMusic);   
-        Debug.Log(soundAudio);    
     }
 
     void RecordHistory(string speaker, string content)
@@ -146,10 +130,7 @@ public class VNManager : MonoBehaviour
             }
             if (storyData[currentLine].speakerName == Constants.END_OF_STORY)
             {
-                backgroundMusic.Stop();
-                vocalAudio.Stop();
-                soundAudio.Stop();
-                backgroundMusic.volume = 0.6f;
+                AudioManager.Instance.StopBGM();
                 sceneLoaderWithAnimation.LoadScene("MainMenu");
 
             }
@@ -248,17 +229,25 @@ public class VNManager : MonoBehaviour
     void PlayVocalAudio(string audioFileName)
     {
         string audioPath = Constants.VOCAL_PATH + audioFileName;
-        PlayAudio(audioPath, vocalAudio, false);
+        AudioClip audioClip = Resources.Load<AudioClip>(audioPath);
+        AudioManager.Instance.PlaySFX(audioClip);
     }
     void PlayBackgroundMusic(string musicFileName)
     {
-        string musicPath = Constants.MUSIC_PATH + musicFileName;
-        PlayAudio(musicPath, backgroundMusic, true);
+        if (musicFileName == "Stop" || musicFileName == "stop")
+        {
+            AudioManager.Instance.StopBGM();
+            return;
+        }
+        string audioPath = Constants.MUSIC_PATH + musicFileName;
+        AudioClip audioClip = Resources.Load<AudioClip>(audioPath);
+        AudioManager.Instance.PlayBGM(audioClip);
     }
     void PlaySoundAudio(string musicFileName)
     {
-        string musicPath = Constants.SOUND_PATH + musicFileName;
-        PlayAudio(musicPath, soundAudio, false);
+        string audioPath = Constants.SOUND_PATH + musicFileName;
+        AudioClip audioClip = Resources.Load<AudioClip>(audioPath);
+        AudioManager.Instance.PlaySFX(audioClip);
     }
     void UpdateAvatarImage(string imageFileName)
     {
@@ -287,7 +276,7 @@ public class VNManager : MonoBehaviour
             string imagePath = Constants.CHARACTER_PATH + imageFileName;
             var coordinates = action.Substring(9, action.Length - 10).Split(',');
             float x = float.Parse(coordinates[0]);
-            float y = float.Parse(coordinates[1]);
+            float y = float.Parse(coordinates[1]) - 200;
             UpdateImage(imagePath, characterImage);
             var newPosition = new Vector2(x, y);
             characterImage.rectTransform.anchoredPosition = newPosition;
@@ -298,7 +287,7 @@ public class VNManager : MonoBehaviour
         {
             var coordinates = action.Substring(7, action.Length - 8).Split(',');
             float x = float.Parse(coordinates[0]);
-            float y = float.Parse(coordinates[1]);            
+            float y = float.Parse(coordinates[1]) - 200;            
             characterImage.rectTransform.DOAnchorPos(new Vector2(x, y), Constants.DURATION_TIME);
         }
         else if (action == Constants.DISAPPEAR)
@@ -344,12 +333,6 @@ public class VNManager : MonoBehaviour
             audioSource.DOFade(0, 2f);
         }
     }
-    void StopAllAudio()
-    {
-        vocalAudio.Stop();
-        backgroundMusic.Stop();
-        soundAudio.Stop();
-    }
     bool IsHittingTopButtons()
     {
         return RectTransformUtility.RectangleContainsScreenPoint(
@@ -371,7 +354,7 @@ public class VNManager : MonoBehaviour
     {
         // 弹出确认退出？
         sceneLoaderWithAnimation.LoadScene("Chapter 0");
-        StopAllAudio();
+        AudioManager.Instance.StopSFX();
     }
     void OnHistoryButtonClick()
     {

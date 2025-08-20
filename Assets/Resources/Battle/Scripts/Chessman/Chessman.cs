@@ -277,9 +277,7 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
         foreach (Square square in BoardCtrl.Get.squares)
         {
             bool shouldHighlightAttackRange = bs.GetAttackRange().Contains(square.location);
-            bool shouldHighlightMoveRange = bs.GetMoveRange().Contains(square.location);
             if (shouldHighlightAttackRange) square.SetAttackRangeHighlight(isActive, isEnemy);
-            if (shouldHighlightMoveRange && square.camp == Camp.Player) square.SetMoveRangeHighlight(isActive);
         }
     }
 
@@ -288,6 +286,7 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
     {
         StartCoroutine(WaitForExit());
     }
+    
     private IEnumerator WaitForExit()
     {
         yield return new WaitForSeconds(0.5f);
@@ -302,19 +301,21 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
             if (camp == Camp.Player)
             {
                 GameInit.Instance.OnHeroExitHandler(hero);
-                Destroy(gameObject);                
+                Destroy(gameObject);
             }
 
         });
     }
 
+    // 右键出现技能按钮逻辑
     private void ShowSkill(Hero hero)
     {
         // 销毁已存在的技能按钮（如果有）
         if (currentSkillButton != null)
         {
             // 让按钮出现在人物上方
-            currentSkillButton.transform.DOMoveY(transform.position.y, 0.2f).OnComplete(() =>{
+            currentSkillButton.transform.DOMoveY(transform.position.y, 0.2f).OnComplete(() =>
+            {
                 Destroy(currentSkillButton);
             });
             return;
@@ -345,7 +346,7 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
     private void UseSkill(Skill skill, Hero hero)
     {
         // 触发台词
-        if (skill.Use(hero)) hero.TriggerLine(LineEventType.SkillActive);
+        if (skill.Execute(hero)) hero.TriggerLine(LineEventType.SkillActive);
         // 隐藏技能菜单（点击后销毁按钮）
         Destroy(currentSkillButton);
     }

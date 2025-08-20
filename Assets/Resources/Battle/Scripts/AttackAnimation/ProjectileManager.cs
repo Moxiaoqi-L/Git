@@ -59,7 +59,7 @@ public class ProjectileManager : MonoBehaviour
         if (hit != null) 
         {
             Instantiate(hit, pos, rot);
-            if (hitClip != null) AudioManager.Get.PlaySound(hitClip);
+            if (hitClip != null) AudioManager.Instance.PlaySFX(hitClip);
         }
         if (flash != null) Instantiate(flash, pos, rot);
         Destroy(gameObject);

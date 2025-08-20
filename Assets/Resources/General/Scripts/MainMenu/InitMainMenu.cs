@@ -9,6 +9,6 @@ public class InitMainMenu : MonoBehaviour
 
     void Start()
     {
-        if (AudioManager.Get.BGM.clip != audioClip) AudioManager.Get.PlayBGM(audioClip);
+        if (AudioManager.Instance.bgmSourceA.clip != audioClip && AudioManager.Instance.bgmSourceB.clip != audioClip) AudioManager.Instance.PlayBGM(audioClip);
     }
 }
