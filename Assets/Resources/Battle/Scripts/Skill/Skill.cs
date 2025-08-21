@@ -16,7 +16,6 @@ public class Skill
     public SkillType skillType;
     // 技能等级
     public int skillLevel;
-
     // 技能关联的管理器
     public SkillManager skillManager;
 
@@ -39,8 +38,32 @@ public class Skill
     public virtual void Init(SkillManager skillManager, BasicCharacter character)
     {
         this.skillManager = skillManager;
-        skillAudio = Resources.Load<AudioClip>("General/Audio/Skill/" + GetType().ToString());
-        skillSprite = Resources.Load<Sprite>("General/Image/Skill/" + GetType().ToString());
+        // 通过全局协程管理器加载AB包资源
+        LoadSkillResourcesAsync();
+    }
+
+    // 异步加载技能资源（音频和图片）
+    private void LoadSkillResourcesAsync()
+    {
+        // 技能资源在AB包中的路径（假设AB包名为"skills"，资源名为类名）
+        string skillName = GetType().Name;
+        string abName = "ui/character/" + skillManager.character.characterAttributes.characterID.ToLower(); // 你的AB包名称
+
+        // 通过协程管理器启动加载图片的协程
+        CoroutineManager.Instance.StartCoroutineEx(
+            ABLoader.LoadAssetAsync<Sprite>(abName, skillName, sprite => 
+            {
+                skillSprite = sprite; // 加载完成后赋值
+            })
+        );
+
+        // 同理加载音效（如果需要）
+        CoroutineManager.Instance.StartCoroutineEx(
+            ABLoader.LoadAssetAsync<AudioClip>(abName, skillName, audio => 
+            {
+                skillAudio = audio;
+            })
+        );
     }
 
     // 使用方法

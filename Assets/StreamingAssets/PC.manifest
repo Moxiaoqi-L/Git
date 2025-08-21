@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 1338975191
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: ui/buff/a000_buff
+      Dependencies: {}
+    Info_1:
+      Name: ui/character/a000_e_slime_0
+      Dependencies: {}
+    Info_2:
+      Name: ui/character/a000_e_slime_1
+      Dependencies: {}
+    Info_3:
+      Name: ui/character/a000_e_slime_2
+      Dependencies: {}
+    Info_4:
+      Name: ui/character/a000_h_tianyichen
+      Dependencies: {}

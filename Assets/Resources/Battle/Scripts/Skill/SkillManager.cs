@@ -15,7 +15,7 @@ public class SkillManager
     public SkillManager(BasicCharacter character)
     {
         this.character = character;
-        // 初始化时注册所有支持的 BUFF 类型（可通过反射自动扫描）
+        // 初始化时注册所有支持的 Skill 类型（可通过反射自动扫描）
         skillTypeRegistry = SkillRegistry.Get.GetSkillTypeRegistry;
     }
 
@@ -31,7 +31,7 @@ public class SkillManager
         if (newSkill.skillType == SkillType.Passive) passiveSkills.Add(newSkill);
     }
 
-    // 创建 BUFF 实例
+    // 创建 技能 实例
     private Skill CreateSkillInstance(Type skill)
     {
         try

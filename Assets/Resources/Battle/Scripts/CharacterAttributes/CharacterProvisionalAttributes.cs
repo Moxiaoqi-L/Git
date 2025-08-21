@@ -97,17 +97,6 @@ public class CharacterProvisionalAttributes : MonoBehaviour
         return characterAttributes.magicDefense;
     }
 
-    // 闪避率
-    public int provisionalEvasion;
-    public virtual void IncreaseEvasion(int amount)
-    {
-        provisionalEvasion += amount;
-    }
-    public int GetActualEvasion()
-    {
-        return characterAttributes.evasion + provisionalEvasion;
-    }
-
     // 伤害修改
     public int provisionalDamageTakenMultiplier;
     public virtual void IncreaseDamageTakenMultiplier(int amount)

@@ -44,7 +44,8 @@ public class SkillRegistry : MonoBehaviour
                         !type.IsInterface)
                     {
                         // 提取技能名称（这里使用类名，可通过特性自定义名称）
-                        string skillName = type.Name; 
+                        string skillName = type.Name;
+                        Debug.Log("注册技能：" + skillName);
                         
                         // 注册到字典（可添加重复检查）
                         if (!SkillTypeRegistry.ContainsKey(skillName))

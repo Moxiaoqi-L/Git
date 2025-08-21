@@ -19,8 +19,6 @@ public class Enemy : BasicCharacter
     // 当对象启用时调用的方法，用于初始化和执行一些操作
     private new void Start() {
         base.Start();
-        // 缓存图片
-        characterImage = Resources.Load<Sprite>("General/Image/CharacterImage/" + characterAttributes.characterImage);
         // 初始化生命值
         currentHealthPoints = characterAttributes.maxHealthPoints;
         // 初始化技能列表

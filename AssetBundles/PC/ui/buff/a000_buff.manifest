@@ -1,0 +1,27 @@
+ManifestFileVersion: 0
+CRC: 2664692286
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: eb5b66f8726a13b41abe66c187fc9a59
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2d8df09e698f722ada1caa03d3413830
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: eb5b66f8726a13b41abe66c187fc9a59
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Resources/General/Image/Buff/AttackReductionBuff.png
+- Assets/Resources/General/Image/Buff/DefenseReductionBuff.png
+- Assets/Resources/General/Image/Buff/StunBuff.png
+- Assets/Resources/General/Image/Buff/HealBuff.png
+- Assets/Resources/General/Image/Buff/PoisonBuff.png
+- Assets/Resources/General/Image/Buff/SoulLossBuff.png
+Dependencies: []

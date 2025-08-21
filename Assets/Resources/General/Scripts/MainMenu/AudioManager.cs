@@ -102,8 +102,6 @@ public class AudioManager : MonoBehaviour
     public void PlayBGM(AudioClip newClip, float crossFadeTime = 1.5f)
     {
         if (newClip == null) return;
-
-        Debug.Log(activeBgmSource.isPlaying);
         // 如果当前没有播放BGM，直接淡入新BGM
         if (!activeBgmSource.isPlaying)
         {

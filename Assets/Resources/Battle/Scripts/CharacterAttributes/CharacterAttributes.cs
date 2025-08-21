@@ -5,8 +5,12 @@ using UnityEngine;
 // 角色属性基类（Hero/Enemy通用）
 public abstract class CharacterAttributes : ScriptableObject
 {
+    // AB包名
+    public string AssetBundlePath;
     // 姓名
     public string characterName = "Default";
+    // ID
+    public string characterID;
     // 立绘
     public string characterImage;
     // 头像
@@ -43,8 +47,6 @@ public abstract class CharacterAttributes : ScriptableObject
     public int defense;
     // 魔法防御力
     public int magicDefense;
-    // 闪避率 （即将废弃）
-    public int evasion = 0;
     // 承伤修改
     public int damageTakenMultiplier = 100;
 
@@ -65,20 +67,12 @@ public abstract class CharacterAttributes : ScriptableObject
     public List<string> passiveSkills = new List<string>{};
     // 大招
     // TODO
-    // 移动范围
-    public MoveRangeType moveRangeType;
 
     // 攻击范围
     public List<Location> attackRange;
 
     // 初始化属性（子类实现具体逻辑）
     public abstract void InitAttributes();
-    public static Dictionary<MoveRangeType, List<Location>> MoveRange = new()
-    {
-        { MoveRangeType.SquareA , new List<Location>(){new(0,1), new(0,-1), new(-1,0), new(1,0), new(-1,1), new(-1,-1), new(1,1), new(1,-1)} },
-        { MoveRangeType.XA , new List<Location>(){new(-1,1), new(-1,-1), new(1,1), new(1,-1)} },
-        { MoveRangeType.AddA , new List<Location>(){new(0,1), new(0,-1), new(-1,0), new(1,0)} }
-    };
 }
 
 public enum DamageType

@@ -15,6 +15,7 @@ public class CharacterDetail : MonoBehaviour
 
     // 静态改变
     public Image characterImage;
+    public Image characterImageShader;
     public Image damageTypeImage;
     public Image passiveSkillImage;
     public Image activeSkillImage;
@@ -79,36 +80,36 @@ public class CharacterDetail : MonoBehaviour
         }
     }
 
-private void UpdateMorePassiveSkillDisplay()
-{
-    morePassiveButtonPool.ReturnAll(); // 回收所有按钮
-    if (enemy == null || enemy.passiveSkill.Count == 0) return;
-
-    // 创建临时列表存储按钮，按技能顺序管理
-    List<GameObject> buttons = new List<GameObject>();
-    int index = 1;
-
-    foreach (Skill currentSkill in enemy.passiveSkill)
+    private void UpdateMorePassiveSkillDisplay()
     {
-        GameObject button = morePassiveButtonPool.Get();
-        button.GetComponentInChildren<TextMeshProUGUI>().text = index.ToString();
-        buttons.Add(button); // 按顺序添加到列表
+        morePassiveButtonPool.ReturnAll(); // 回收所有按钮
+        if (enemy == null || enemy.passiveSkill.Count == 0) return;
 
-        // 捕获当前技能和索引
-        button.GetComponent<Button>().onClick.AddListener(() => {
-            passiveSkillName.text = currentSkill.SkillName;
-            passiveSkillDetail.text = currentSkill.SkillDetail;
-            passiveSkillImage.sprite = currentSkill.skillSprite;
-        });
-        index++;
-    }
+        // 创建临时列表存储按钮，按技能顺序管理
+        List<GameObject> buttons = new List<GameObject>();
+        int index = 1;
 
-    // 确保按钮按生成顺序排列（若布局组件导致顺序混乱，可强制排序）
-    for (int i = 0; i < buttons.Count; i++)
-    {
-        buttons[i].transform.SetSiblingIndex(i); // 按索引设置层级顺序
+        foreach (Skill currentSkill in enemy.passiveSkill)
+        {
+            GameObject button = morePassiveButtonPool.Get();
+            button.GetComponentInChildren<TextMeshProUGUI>().text = index.ToString();
+            buttons.Add(button); // 按顺序添加到列表
+
+            // 捕获当前技能和索引
+            button.GetComponent<Button>().onClick.AddListener(() => {
+                passiveSkillName.text = currentSkill.SkillName;
+                passiveSkillDetail.text = currentSkill.SkillDetail;
+                passiveSkillImage.sprite = currentSkill.skillSprite;
+            });
+            index++;
+        }
+
+        // 确保按钮按生成顺序排列（若布局组件导致顺序混乱，可强制排序）
+        for (int i = 0; i < buttons.Count; i++)
+        {
+            buttons[i].transform.SetSiblingIndex(i); // 按索引设置层级顺序
+        }
     }
-}
     
     private void Update()
     {
@@ -213,7 +214,7 @@ private void UpdateMorePassiveSkillDisplay()
             damageTypeImage.sprite = hero.damageTypeImage;
 
             characterName.text = hero.characterAttributes.name;
-            characterImage.sprite = hero.characterImage;
+            characterImageShader.sprite = characterImage.sprite = hero.characterImage;
             spriteChanged?.Invoke();
             if (hero.activeSkill.Count > 0)
             {
@@ -242,8 +243,8 @@ private void UpdateMorePassiveSkillDisplay()
 
             // 静态属性仅在选中时更新一次
             damageTypeImage.sprite = enemy.damageTypeImage;
-            characterName.text = enemy.characterAttributes.name;
-            characterImage.sprite = enemy.characterImage;
+            characterName.text = enemy.characterAttributes.characterName;
+            characterImageShader.sprite = characterImage.sprite = enemy.characterImage;
             spriteChanged?.Invoke();
             if (enemy.activeSkill.Count > 0)
             {

@@ -1,0 +1,25 @@
+ManifestFileVersion: 0
+CRC: 4224851089
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 8787279c40a3fc37c209cdb96542e017
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2d8df09e698f722ada1caa03d3413830
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 8787279c40a3fc37c209cdb96542e017
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Resources/General/Image/Character/A000_E_Slime_1/A000_E_Slime_0_1_Avatar.png
+- Assets/Resources/General/Image/Character/A000_E_Slime_1/A000_E_Slime_1_1.png
+- Assets/Resources/General/Image/Character/A000_E_Slime_1/A000_E_Slime_0_1.png
+- Assets/Resources/General/Image/Character/A000_E_Slime_1/A000_E_Slime_1_1_Avatar.png
+Dependencies: []

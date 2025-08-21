@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d822985c61bd904381d24749844e5e9, type: 3}
   m_Name: "\u72D0\u5149\u7FBD"
   m_EditorClassIdentifier: 
+  AssetBundlePath: ui/character/A000_H_HuGuangYu
   characterName: "\u72D0\u5149\u7FBD"
-  characterImage: "\u72D0\u5149\u7FBD"
-  avatarImage: "\u72D0\u5149\u7FBD"
+  characterID: A000_H_HuGuangYu
+  characterImage: A000_H_HuGuangYu_0_0
+  avatarImage: A000_H_HuGuangYu_0_Avatar
   level: 1
   maxLevel: 45
   rank: 0
@@ -24,12 +26,11 @@ MonoBehaviour:
   damageType: 0
   criticalRate: 0
   criticalDamageMultiplier: 0
-  accuracy: 100
   skillPower: 0
   damagePower: 0
+  armor: 0
   defense: 0
   magicDefense: 0
-  evasion: 0
   damageTakenMultiplier: 100
   maxHealthPoints: 40
   attackGrowth: 0
@@ -39,7 +40,6 @@ MonoBehaviour:
   - DelayedTreatment
   passiveSkills:
   - PinkAndBlack
-  moveRangeType: 2
   attackRange:
   - x: 0
     y: 1

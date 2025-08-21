@@ -17,6 +17,8 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
     public Square Square => BoardCtrl.Get[location];
     // 选择边框
     private Image selectionBorder;
+    // 原始本地位置（用于复位）
+    private Vector3 originalLocalPosition; 
 
     public Hero hero;
     public Enemy enemy;
@@ -52,6 +54,8 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
         InitMove(location);
         selectionBorder = GameObject.Find("Rarity").GetComponentInChildren<Image>();
         topUI = GameObject.Find("Canvas/TopUI").transform;
+        // 记录初始位置
+        originalLocalPosition = transform.localPosition; 
     }
 
     // 点击事件
@@ -205,6 +209,8 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
             SelectCore.Selection.hero != null)
         {
             Hero selectedHero = SelectCore.Selection.hero;
+            // 头像复位
+            SelectCore.Selection.transform.DOLocalMoveY(originalLocalPosition.y, 0.2f);
             if (selectedHero.GetAttackRange().Contains(location))
             {
                 StartCoroutine(selectedHero.Attack(enemy)); // 执行攻击
@@ -224,11 +230,16 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
     private void SelectSelf()
     {
 
-        if (SelectCore.Selection != null && SelectCore.Selection.camp == Camp.Enemy && camp == Camp.Enemy) 
+        if (SelectCore.Selection != null && SelectCore.Selection.camp == Camp.Enemy && camp == Camp.Enemy)
         {
             HighlightAttackRange(SelectCore.Selection.enemy, false);
-            HighlightAttackRange(enemy, true); // 显示敌人攻击范围
+            // 显示敌人攻击范围
+            HighlightAttackRange(enemy, true); 
+            // 复位动画
+            SelectCore.Selection.transform.DOLocalMoveY(originalLocalPosition.y, 0.2f);
             SelectCore.TrySelect(this);
+            // 上移动画
+            transform.DOLocalMoveY(originalLocalPosition.y + 5f, 0.2f);
             return;
         }
 
@@ -238,8 +249,10 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
             if (SelectCore.Selection.enemy) HighlightAttackRange(SelectCore.Selection.enemy, false);
         }
 
+        // 复位
+        if (SelectCore.Selection != null) SelectCore.Selection.transform.DOLocalMoveY(originalLocalPosition.y, 0.2f);
         SelectCore.TrySelect(this);
-        
+
         if (camp == Camp.Player && hero != null)
         {
             HighlightAttackRange(hero, true); // 显示玩家攻击范围
@@ -249,13 +262,16 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
         {
             HighlightAttackRange(enemy, true); // 显示敌人攻击范围
         }
+        
+        // 上移动画
+        transform.DOLocalMoveY(originalLocalPosition.y + 5f, 0.2f);
     }
 
     // 取消选择
     private void DeselectSelf()
     {
         SelectCore.DropSelect();
-        
+
         if (camp == Camp.Player && hero != null)
         {
             HighlightAttackRange(hero, false); // 隐藏攻击范围
@@ -264,6 +280,8 @@ public class Chessman : MonoBehaviour, IPointerClickHandler
         {
             HighlightAttackRange(enemy, false); // 隐藏攻击范围
         }
+        // 复位动画
+        transform.DOLocalMoveY(originalLocalPosition.y, 0.2f);
     }
 
     // 高亮显示攻击范围

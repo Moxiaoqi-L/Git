@@ -123,17 +123,24 @@ public class GameInit : MonoBehaviour
         Square targetSquare = BoardCtrl.Get[new Location(enemy.locationX, enemy.locationY)];
         // 实例化预制体
         GameObject enemyChessmanInstance = Instantiate(enemyChessmanPrefab);
+        // 获取怪物实例的Enemy组件
+        Enemy enemyComponent = enemyChessmanInstance.GetComponent<Enemy>();
         // 设置父物体
         enemyChessmanInstance.transform.SetParent(targetSquare.transform, false);
         // 设置 Chessman Location
         enemyChessmanInstance.GetComponent<Chessman>().location = targetSquare.location;
         // 设置 Enemy Attributes
-        enemyChessmanInstance.GetComponent<Enemy>().characterAttributes = enemyAttributes;
+        enemyComponent.characterAttributes = enemyAttributes;
         // 设置Enemy等级与阶级
-        enemyChessmanInstance.GetComponent<Enemy>().characterAttributes.level = enemy.level;
-        enemyChessmanInstance.GetComponent<Enemy>().characterAttributes.rank = enemy.rank;
+        enemyComponent.characterAttributes.level = enemy.level;
+        enemyComponent.characterAttributes.rank = enemy.rank;
         // 设置头像图片
-        enemyChessmanInstance.transform.Find("Avatar").GetComponent<Image>().sprite = avatarSprite;
+        StartCoroutine(
+            ABLoader.LoadAssetAsync<Sprite>(enemyAttributes.AssetBundlePath.ToLower(), enemyAttributes.avatarImage, sprite =>
+            {
+                enemyChessmanInstance.transform.Find("Avatar").GetComponent<Image>().sprite = sprite; // 加载完成后赋值
+            })
+        );   
         // 设置稀有度图片
         enemyChessmanInstance.transform.Find("Rarity").GetComponent<Image>().sprite = raritySprite;
     }

@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 133, y: 133}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2234361352779923477
 CanvasRenderer:
@@ -316,7 +316,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 96, y: 96}
+  m_SizeDelta: {x: 133, y: 133}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8105876816953352727
 CanvasRenderer:
@@ -393,9 +393,9 @@ MonoBehaviour:
   provisionalDamageType: 0
   provisionalCriticalRate: 0
   provisionalCriticalDamageMultiplier: 0
-  provisionalAccuracy: 0
   provisionalSkillPower: 0
   provisionalDamagePower: 0
+  provisionalArmor: 0
   provisionalDefense: 0
   provisionalMagicDefense: 0
   provisionalEvasion: 0
@@ -406,8 +406,9 @@ MonoBehaviour:
   image: {fileID: 3987374663784930148}
   damageNumberPrefab: {fileID: 3645883595803365000, guid: 6b3256218880d07439d67f8438cd3044, type: 3}
   attackRange: []
-  cantAttack: 0
+  moveRange: []
   hasAttacked: 0
+  cantAttack: 0
   isStunned: 0
   cantUseSkills: 0
   damageTypeImage: {fileID: 0}
@@ -516,8 +517,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 5, y: -10}
-  m_SizeDelta: {x: 110, y: 20}
+  m_AnchoredPosition: {x: 0, y: -10}
+  m_SizeDelta: {x: 13, y: 20}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &5840252328780315711
 MonoBehaviour:
@@ -605,7 +606,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 133, y: 133}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8727012588533897482
 CanvasRenderer:

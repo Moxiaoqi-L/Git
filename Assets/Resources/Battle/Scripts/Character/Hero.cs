@@ -15,8 +15,6 @@ public class Hero : BasicCharacter
     private new void Start()
     {
         base.Start();
-        // 缓存图片
-        characterImage = Resources.Load<Sprite>("General/Image/CharacterImage/" + characterAttributes.characterImage);
         // 初始化生命值
         currentHealthPoints = characterAttributes.maxHealthPoints;
         // 获取移动方式
